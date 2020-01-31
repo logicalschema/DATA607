@@ -2,5 +2,44 @@
 title: "607 Assignment 1"
 author: "Sung Lee"
 date: "1/30/2020"
-output: html_document
+output: 
+ html_document: 
+   df_print: paged
 ---
+[Week 1 Assignment on RPubs](http://rpubs.com/logicalschema/data607_week1 "Sung's Week 1 Assignment Data 607")
+
+## Introduction
+The article I selected is [*Marriage Isn't Dead — Yet*](https://fivethirtyeight.com/features/marriage-isnt-dead-yet/) by Ben Casselman. The article reports on the decline of marriage in America by utlizing marriage rates by variables such as gender, education, children, and race.
+
+```{r}
+#Reads data from Github 
+marriageData <- read.csv("https://raw.githubusercontent.com/logicalschema/DATA607/master/week1/data/both_sexes.csv")
+
+head(marriageData)
+```
+<br>
+
+### Variable Names
+There are `r ncol(marriageData)` variable names. These are the names of the variables (column names for the data set):
+```{r}
+names(marriageData)
+
+```
+Note: "Variable names are as follows. Number in variable names are age ranges, so all_2534 is the marriage rate for everyone ages 25 to 34."
+
+<br>
+
+### Subset of Data
+Now, I do not need all of the columns as I will create a subset of the data and provide columns names for the ones selected. I am interested in examining the rates of marriage in each of the U.S regions (New England, Mid-Atlantic, Midwest, South, Montain, and Pacific) for the age range of 25 to 34.
+
+```{r}
+subset_marriageData <- subset(marriageData, select=c(year, NE_2534, MA_2534, Midwest_2534, South_2534, Mountain_2534, Pacific_2534))
+
+head(subset_marriageData)
+
+```
+
+
+
+
+
