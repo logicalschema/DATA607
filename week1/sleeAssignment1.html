@@ -1644,6 +1644,8 @@ summary {
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
 <p>The article I selected is <a href="https://fivethirtyeight.com/features/marriage-isnt-dead-yet/"><em>Marriage Isn’t Dead — Yet</em></a> by Ben Casselman. The article reports on the decline of marriage in America by utlizing marriage rates by variables such as gender, education, children, and race.</p>
+<pre class="r"><code>require(plyr)</code></pre>
+<pre><code>## Loading required package: plyr</code></pre>
 <pre class="r"><code>#Reads data from Github 
 marriageData &lt;- read.csv(&quot;https://raw.githubusercontent.com/logicalschema/DATA607/master/week1/data/both_sexes.csv&quot;)
 
@@ -1683,12 +1685,16 @@ head(marriageData)</code></pre>
 <div id="subset-of-data" class="section level3">
 <h3>Subset of Data</h3>
 <p>Now, I do not need all of the columns as I will create a subset of the data and provide columns names for the ones selected. I am interested in examining the rates of marriage in each of the U.S regions (New England, Mid-Atlantic, Midwest, South, Montain, and Pacific) for the age range of 25 to 34.</p>
-<pre class="r"><code>subset_marriageData &lt;- subset(marriageData, select=c(year, NE_2534, MA_2534, Midwest_2534, South_2534, Mountain_2534, Pacific_2534))
+<pre class="r"><code>#Creates a subset of the data
+subset_marriageData &lt;- subset(marriageData, select=c(year, NE_2534, MA_2534, Midwest_2534, South_2534, Mountain_2534, Pacific_2534))
+
+#Renames the columns
+subset_marriageData &lt;- rename(subset_marriageData, c(&quot;year&quot; = &quot;Year&quot;, &quot;NE_2534&quot; = &quot;New England&quot;, &quot;MA_2534&quot; = &quot;Mid-Atlantic&quot;, &quot;Midwest_2534&quot; = &quot;Midwest&quot;, &quot;South_2534&quot; = &quot;South&quot;, &quot;Mountain_2534&quot; = &quot;Mountain West&quot;, &quot;Pacific_2534&quot; = &quot;Pacific&quot; ))
 
 head(subset_marriageData)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["year"],"name":[1],"type":["int"],"align":["right"]},{"label":["NE_2534"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["MA_2534"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Midwest_2534"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["South_2534"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["Mountain_2534"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pacific_2534"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"1960","2":"0.1504184","3":"0.1628934","4":"0.1121467","5":"0.1090562","6":"0.09152117","7":"0.1198758","_rn_":"1"},{"1":"1970","2":"0.1517231","3":"0.1640680","4":"0.1153741","5":"0.1126220","6":"0.10293602","7":"0.1374964","_rn_":"2"},{"1":"1980","2":"0.2414327","3":"0.2505925","4":"0.1828339","5":"0.1688435","6":"0.17434230","7":"0.2334279","_rn_":"3"},{"1":"1990","2":"0.3500384","3":"0.3623321","4":"0.2755046","5":"0.2639794","6":"0.25264326","7":"0.3319579","_rn_":"4"},{"1":"2000","2":"0.4091852","3":"0.4175565","4":"0.3308022","5":"0.3099712","6":"0.30621032","7":"0.3753061","_rn_":"5"},{"1":"2001","2":"0.4200581","3":"0.4294281","4":"0.3344332","5":"0.3182688","6":"0.30980779","7":"0.3844799","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Year"],"name":[1],"type":["int"],"align":["right"]},{"label":["New England"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Mid-Atlantic"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Midwest"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["South"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["Mountain West"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Pacific"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"1960","2":"0.1504184","3":"0.1628934","4":"0.1121467","5":"0.1090562","6":"0.09152117","7":"0.1198758","_rn_":"1"},{"1":"1970","2":"0.1517231","3":"0.1640680","4":"0.1153741","5":"0.1126220","6":"0.10293602","7":"0.1374964","_rn_":"2"},{"1":"1980","2":"0.2414327","3":"0.2505925","4":"0.1828339","5":"0.1688435","6":"0.17434230","7":"0.2334279","_rn_":"3"},{"1":"1990","2":"0.3500384","3":"0.3623321","4":"0.2755046","5":"0.2639794","6":"0.25264326","7":"0.3319579","_rn_":"4"},{"1":"2000","2":"0.4091852","3":"0.4175565","4":"0.3308022","5":"0.3099712","6":"0.30621032","7":"0.3753061","_rn_":"5"},{"1":"2001","2":"0.4200581","3":"0.4294281","4":"0.3344332","5":"0.3182688","6":"0.30980779","7":"0.3844799","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>

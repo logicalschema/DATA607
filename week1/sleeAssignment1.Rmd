@@ -12,6 +12,8 @@ output:
 The article I selected is [*Marriage Isn't Dead — Yet*](https://fivethirtyeight.com/features/marriage-isnt-dead-yet/) by Ben Casselman. The article reports on the decline of marriage in America by utlizing marriage rates by variables such as gender, education, children, and race.
 
 ```{r}
+require(plyr)
+
 #Reads data from Github 
 marriageData <- read.csv("https://raw.githubusercontent.com/logicalschema/DATA607/master/week1/data/both_sexes.csv")
 
@@ -33,7 +35,11 @@ Note: "Variable names are as follows. Number in variable names are age ranges, s
 Now, I do not need all of the columns as I will create a subset of the data and provide columns names for the ones selected. I am interested in examining the rates of marriage in each of the U.S regions (New England, Mid-Atlantic, Midwest, South, Montain, and Pacific) for the age range of 25 to 34.
 
 ```{r}
+#Creates a subset of the data
 subset_marriageData <- subset(marriageData, select=c(year, NE_2534, MA_2534, Midwest_2534, South_2534, Mountain_2534, Pacific_2534))
+
+#Renames the columns
+subset_marriageData <- rename(subset_marriageData, c("year" = "Year", "NE_2534" = "New England", "MA_2534" = "Mid-Atlantic", "Midwest_2534" = "Midwest", "South_2534" = "South", "Mountain_2534" = "Mountain West", "Pacific_2534" = "Pacific" ))
 
 head(subset_marriageData)
 
