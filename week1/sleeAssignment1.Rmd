@@ -8,11 +8,14 @@ output:
 ---
 [Week 1 Assignment on RPubs](http://rpubs.com/logicalschema/data607_week1 "Sung's Week 1 Assignment Data 607")
 
+[Rmd on Github](https://github.com/logicalschema/DATA607/blob/master/week1/sleeAssignment1.Rmd "Sung's Week 1 Assignment Github")
+
 ## Introduction
 The article I selected is [*Marriage Isn't Dead — Yet*](https://fivethirtyeight.com/features/marriage-isnt-dead-yet/) by Ben Casselman. The article reports on the decline of marriage in America by utlizing marriage rates by variables such as gender, education, children, and race.
 
 ```{r}
 require(plyr)
+
 
 #Reads data from Github 
 marriageData <- read.csv("https://raw.githubusercontent.com/logicalschema/DATA607/master/week1/data/both_sexes.csv")
@@ -32,20 +35,46 @@ Note: "Variable names are as follows. Number in variable names are age ranges, s
 <br>
 
 ### Subset of Data
-Now, I do not need all of the columns as I will create a subset of the data and provide columns names for the ones selected. I am interested in examining the rates of marriage in each of the U.S regions (New England, Mid-Atlantic, Midwest, South, Montain, and Pacific) for the age range of 25 to 34.
+Now, I do not need all of the columns as I will create a subset of the data and provide columns names for the ones selected. I am interested in examining the rates of marriage in each of the U.S regions (New England, Mid-Atlantic, Midwest, South, Montain, and Pacific) for the age range of 25 to 34. In addition, the values represents the "share of the relevant population that has never been married" so we have to reverse this by subtracting the value from 1 to get the share that has been married.
 
 ```{r}
 #Creates a subset of the data
 subset_marriageData <- subset(marriageData, select=c(year, NE_2534, MA_2534, Midwest_2534, South_2534, Mountain_2534, Pacific_2534))
 
 #Renames the columns
-subset_marriageData <- rename(subset_marriageData, c("year" = "Year", "NE_2534" = "New England", "MA_2534" = "Mid-Atlantic", "Midwest_2534" = "Midwest", "South_2534" = "South", "Mountain_2534" = "Mountain West", "Pacific_2534" = "Pacific" ))
+subset_marriageData <- rename(subset_marriageData, c("year" = "Year", "NE_2534" = "New_England", "MA_2534" = "Mid-Atlantic", "Midwest_2534" = "Midwest", "South_2534" = "South", "Mountain_2534" = "Mountain_West", "Pacific_2534" = "Pacific" ))
+
+
+subset_marriageData[-1] <- (subset_marriageData[-1] * (-1)) + 1
 
 head(subset_marriageData)
 
+subset_marriageData[-1]
 ```
 
+<br>
 
+### Plotting the graphs
+The graph shows the subset of those in the 25-34 age bracket who have been married by region.
 
+```{r}
+require(ggplot2)
+plot(subset_marriageData[,c("Year", "New_England")],type = "l", col="red")
+lines(subset_marriageData[,c("Year", "Mid-Atlantic")], col="orange")
+lines(subset_marriageData[,c("Year", "Midwest")], col="yellow")
+lines(subset_marriageData[,c("Year", "South")], col="green")
+lines(subset_marriageData[,c("Year", "Mountain_West")], col="blue")
+lines(subset_marriageData[,c("Year", "Pacific")], col="violet")
+
+legend("topleft",
+c("New_England","Mid-Atlantic", "Midwest", "South", "Mountain_West", "Pacific" ),
+fill=c("red", "orange", "yellow", "green", "blue", "violet"))
+
+```
+
+<br>
+
+### Conclusions
+There has been a decline in marriage for the 25-34 age bracket across the country. Next steps would possibly be to obtain additional information from decades before 1960 to see if the decline could be observed in addition or to compare to other countries.
 
 
