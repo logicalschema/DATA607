@@ -1,0 +1,11 @@
+---
+title: "Sung Lee Assignment 2: SQL and R"
+author: "Sung Lee"
+date: "2/6/2020"
+output: html_document
+---
+
+## Setup: Recreating the database
+The database created for this assignment is called movies. A `mysqldump` of the database was taken from a MariaDB Server 5.5.64. However, the dump would be compatible with a MySQL server. To recreate the database, one would only need to create a new database `CREATE DATABASE my_new_db` (where `my_new_db` is the name of your desired database) with an account that has privileges to create databases and import the database scheme and data by executing the command `mysql -u my_username -p my_new_db < movie.sql` (where `my_username` is a user account that has privileges for `my_new_db`). This will recreate the database in `my_new_db`. 
+
+
