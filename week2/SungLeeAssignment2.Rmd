@@ -9,3 +9,22 @@ output: html_document
 The database created for this assignment is called movies. A `mysqldump` of the database was taken from a MariaDB Server 5.5.64. However, the dump would be compatible with a MySQL server. To recreate the database, one would only need to create a new database `CREATE DATABASE my_new_db` (where `my_new_db` is the name of your desired database) with an account that has privileges to create databases and import the database scheme and data by executing the command `mysql -u my_username -p my_new_db < movie.sql` (where `my_username` is a user account that has privileges for `my_new_db`). This will recreate the database in `my_new_db`. 
 
 
+## E-R Diagram: Movies Database
+![](https://raw.githubusercontent.com/logicalschema/DATA607/master/week2/er.png)
+
+
+``` {r}
+library(RMySQL)
+
+db_user <- 'sslee'
+db_password <- 'password#2020'
+db_name <- 'movies'
+db_host <- '192.168.148.128'
+db_port <- 3306
+
+
+mydb <- dbConnect(MySQL(), user = db_user, password = db_password, dbname = db_name, host = db_host, port = db_port)
+
+summary(mydb)
+
+```
