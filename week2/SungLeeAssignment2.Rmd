@@ -2,8 +2,14 @@
 title: "Sung Lee Assignment 2: SQL and R"
 author: "Sung Lee"
 date: "2/6/2020"
-output: html_document
+output: 
+ html_document: 
+  df_print: paged
 ---
+
+[Assignment on RPubs](https://rpubs.com/logicalschema/data607_week2 "Sung's Week 2 Assignment Rpubs")
+<br>
+[Rmd on Github](https://github.com/logicalschema/DATA607/blob/master/week2/SungLeeAssignment2.Rmd "Sung's Week 2 Assignment Github")
 
 ## Setup: Recreating the database
 The database created for this assignment is called movies. A `mysqldump` of the database was taken from a MariaDB Server 5.5.64. However, the dump would be compatible with a MySQL server. To recreate the database, one would only need to create a new database `CREATE DATABASE my_new_db` (where `my_new_db` is the name of your desired database) with an account that has privileges to create databases and import the database scheme and data by executing the command `mysql -u my_username -p my_new_db < movie.sql` (where `my_username` is a user account that has privileges for `my_new_db`). This will recreate the database in `my_new_db`. 
@@ -12,9 +18,13 @@ The database created for this assignment is called movies. A `mysqldump` of the 
 ## E-R Diagram: Movies Database
 ![](https://raw.githubusercontent.com/logicalschema/DATA607/master/week2/er.png)
 
+## R MySQL Connection and Loading the Data
+
+The following code calls the RMySQL library and creates a connection to a locally hosted MySQL database. After the connection is created, it loads the data into an R dataframe. If a moviegoer has not seen a movie, I stored the value as `NULL` on MySQL. When the data is imported into R, the `NULL` is listed as an `NA`.
 
 ``` {r}
 library(RMySQL)
+
 
 db_user <- 'sslee'
 db_password <- 'password#2020'
@@ -25,6 +35,36 @@ db_port <- 3306
 
 mydb <- dbConnect(MySQL(), user = db_user, password = db_password, dbname = db_name, host = db_host, port = db_port)
 
-summary(mydb)
+
+ratingsData <- dbGetQuery(mydb, 
+                          "SELECT A.userId, A.review, B.movieTitle 
+                           FROM Movie AS B RIGHT JOIN Review AS A 
+                           ON A.movieId = B.movieId"
+                          )
+
+ratingsData
 
 ```
+
+## Visualization of the Reviews
+
+``` {r}
+library(ggplot2)
+
+qplot(review, movieTitle, data = ratingsData, facets = ~userId)
+
+
+
+ggplot(ratingsData, aes(x=movieTitle, y=review)) + 
+  geom_bar(stat = "identity") +
+  coord_flip()
+
+
+
+```
+
+
+## Final Observations
+
+The `NA` data did throw warnings in functions when analyzing the movie review dataframe. Overall, the individuals I surveyed rarely had a chance or demonstrated interest in watching all of the movies listed. I can only conjecture that the population surveyed did not watch all of the movies because of lack of time, lack of interest, or were not interested in watching movies in theaters.
+
