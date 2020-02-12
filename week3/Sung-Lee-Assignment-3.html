@@ -1642,22 +1642,19 @@ summary {
 
 <p><a href="https://rpubs.com/logicalschema/data607_week3" title="Sung&#39;s Week 2 Assignment Rpubs">Assignment on RPubs</a> <br> <a href="https://github.com/logicalschema/DATA607/blob/master/week3/Sung%20Lee%20Assignment%203.Rmd" title="Sung&#39;s Week 3 Assignment Github">Rmd on Github</a></p>
 <ol style="list-style-type: decimal">
-<li>Using the 173 majors listed in fivethirtyeight.com’s College Majors dataset [<a href="https://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/" class="uri">https://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/</a>], provide code that identifies the majors that contain either “DATA” or “STATISTICS”</li>
-</ol>
+<li><p>Using the 173 majors listed in fivethirtyeight.com’s College Majors dataset [<a href="https://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/" class="uri">https://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/</a>], provide code that identifies the majors that contain either “DATA” or “STATISTICS”</p>
 <pre class="r"><code> library(stringr)
 
  majorCSV &lt;- read.csv(&quot;https://raw.githubusercontent.com/logicalschema/DATA607/master/week3/majors-list.csv&quot;)
 
 
  #The following code uses a regular expression DATA or STATISTICS and searches through the Major field of the data.
- grep(&#39;DATA|STATISTICS&#39;, majorCSV$Major,  value = TRUE)</code></pre>
+grep(&#39;DATA|STATISTICS&#39;, majorCSV$Major,  value = TRUE)</code></pre>
 <pre><code>## [1] &quot;MANAGEMENT INFORMATION SYSTEMS AND STATISTICS&quot;
 ## [2] &quot;COMPUTER PROGRAMMING AND DATA PROCESSING&quot;     
 ## [3] &quot;STATISTICS AND DECISION SCIENCE&quot;</code></pre>
-<p><br></p>
-<ol start="2" style="list-style-type: decimal">
-<li>Write code that transforms the data below:</li>
-</ol>
+<p><br></p></li>
+<li><p>Write code that transforms the data below:</p>
 <pre class="r"><code>[1] &quot;bell pepper&quot;  &quot;bilberry&quot;     &quot;blackberry&quot;   &quot;blood orange&quot;
 
 [5] &quot;blueberry&quot;    &quot;cantaloupe&quot;   &quot;chili pepper&quot; &quot;cloudberry&quot;  
@@ -1679,13 +1676,18 @@ combined &lt;- c(w, x, y, z)
 print(combined)</code></pre>
 <pre><code>##  [1] &quot;bell pepper&quot;  &quot;bilberry&quot;     &quot;blackberry&quot;   &quot;blood orange&quot; &quot;blueberry&quot;   
 ##  [6] &quot;cantaloupe&quot;   &quot;chili pepper&quot; &quot;cloudberry&quot;   &quot;elderberry&quot;   &quot;lime&quot;        
-## [11] &quot;lychee&quot;       &quot;mulberry&quot;     &quot;olive&quot;        &quot;salal berry&quot;</code></pre>
+## [11] &quot;lychee&quot;       &quot;mulberry&quot;     &quot;olive&quot;        &quot;salal berry&quot;</code></pre></li>
+</ol>
 <p><br></p>
-<div id="the-two-exercises-below-are-taken-from-r-for-data-science-14.3.5.1-in-the-on-line-version" class="section level3">
-<h3>The two exercises below are taken from R for Data Science, 14.3.5.1 in the on-line version:</h3>
+<div id="the-two-exercises-below-are-taken-from-r-for-data-science-14.3.5.1-in-the-on-line-version" class="section level4">
+<h4>The two exercises below are taken from R for Data Science, 14.3.5.1 in the on-line version:</h4>
 <ol start="3" style="list-style-type: decimal">
 <li><p>Describe, in words, what these expressions will match:</p>
-<p>(.)\1\1 “(.)(.)\2\1” (..)\1 “(.).\1.\1” &quot;(.)(.)(.).*\3\2\1&quot;</p></li>
+<p>(.)\1\1<br />
+“(.)(.)\2\1”<br />
+(..)\1<br />
+“(.).\1.\1”<br />
+&quot;(.)(.)(.).*\3\2\1&quot;</p></li>
 </ol>
 </div>
 

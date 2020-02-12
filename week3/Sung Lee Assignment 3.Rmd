@@ -13,60 +13,63 @@ output:
 
 1. Using the 173 majors listed in fivethirtyeight.com’s College Majors dataset [https://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/], provide code that identifies the majors that contain either "DATA" or "STATISTICS"  
 
-```{r, question1}
- library(stringr)
+    ```{r, question1}
+     library(stringr)
 
- majorCSV <- read.csv("https://raw.githubusercontent.com/logicalschema/DATA607/master/week3/majors-list.csv")
+     majorCSV <- read.csv("https://raw.githubusercontent.com/logicalschema/DATA607/master/week3/majors-list.csv")
 
 
- #The following code uses a regular expression DATA or STATISTICS and searches through the Major field of the data.
- grep('DATA|STATISTICS', majorCSV$Major,  value = TRUE)
+     #The following code uses a regular expression DATA or STATISTICS and searches through the Major field of the data.
+    grep('DATA|STATISTICS', majorCSV$Major,  value = TRUE)
 
-```
+    ```
 <br>
 
 2. Write code that transforms the data below:  
 
-```{r, eval=FALSE}
-[1] "bell pepper"  "bilberry"     "blackberry"   "blood orange"
+    ```{r, eval=FALSE}
+    [1] "bell pepper"  "bilberry"     "blackberry"   "blood orange"
 
-[5] "blueberry"    "cantaloupe"   "chili pepper" "cloudberry"  
+    [5] "blueberry"    "cantaloupe"   "chili pepper" "cloudberry"  
 
-[9] "elderberry"   "lime"         "lychee"       "mulberry"    
+    [9] "elderberry"   "lime"         "lychee"       "mulberry"    
 
-[13] "olive"        "salal berry"
-```
+    [13] "olive"        "salal berry"
+    ```
 
-Into a format like this:
+    Into a format like this:
 
-```{r, eval=FALSE}
-c("bell pepper", "bilberry", "blackberry", "blood orange", "blueberry", "cantaloupe", "chili pepper", "cloudberry", "elderberry", "lime", "lychee", "mulberry", "olive", "salal berry")
-```
+    ```{r, eval=FALSE}
+    c("bell pepper", "bilberry", "blackberry", "blood orange", "blueberry", "cantaloupe", "chili pepper", "cloudberry", "elderberry", "lime", "lychee", "mulberry", "olive", "salal berry")
+    ```
+    
+    <br>
+
+    ```{r, question2}
+    w <- c("bell pepper","bilberry","blackberry","blood orange")
+    x <- c("blueberry","cantaloupe","chili pepper","cloudberry") 
+    y <- c("elderberry","lime","lychee","mulberry") 
+    z <- c("olive","salal berry")
+
+
+    combined <- c(w, x, y, z)
+
+    print(combined)
+
+    ```
+    
 <br>
 
-```{r, question2}
-w <- c("bell pepper","bilberry","blackberry","blood orange")
-x <- c("blueberry","cantaloupe","chili pepper","cloudberry") 
-y <- c("elderberry","lime","lychee","mulberry") 
-z <- c("olive","salal berry")
-
-
-combined <- c(w, x, y, z)
-
-print(combined)
-
-```
-<br>
-
-### The two exercises below are taken from R for Data Science, 14.3.5.1 in the on-line version:  
+#### The two exercises below are taken from R for Data Science, 14.3.5.1 in the on-line version:  
 
 3. Describe, in words, what these expressions will match:
 
-    (.)\1\1
-    "(.)(.)\\2\\1"
-    (..)\1
-    "(.).\\1.\\1"
+    (.)\1\1  
+    "(.)(.)\\2\\1"  
+    (..)\1  
+    "(.).\\1.\\1"  
     "(.)(.)(.).*\\3\\2\\1"  
+    
     
     
 
