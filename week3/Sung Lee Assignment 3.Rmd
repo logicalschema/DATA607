@@ -7,26 +7,70 @@ output:
     df_print: paged
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+[Assignment on RPubs](https://rpubs.com/logicalschema/data607_week3 "Sung's Week 2 Assignment Rpubs")
+<br>
+[Rmd on Github](https://github.com/logicalschema/DATA607/blob/master/week3/Sung%20Lee%20Assignment%203.Rmd "Sung's Week 3 Assignment Github")
+
+1. Using the 173 majors listed in fivethirtyeight.com’s College Majors dataset [https://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/], provide code that identifies the majors that contain either "DATA" or "STATISTICS"  
+
+```{r, question1}
+ library(stringr)
+
+ majorCSV <- read.csv("https://raw.githubusercontent.com/logicalschema/DATA607/master/week3/majors-list.csv")
+
+
+ #The following code uses a regular expression DATA or STATISTICS and searches through the Major field of the data.
+ grep('DATA|STATISTICS', majorCSV$Major,  value = TRUE)
+
+```
+<br>
+
+2. Write code that transforms the data below:  
+
+```{r, eval=FALSE}
+[1] "bell pepper"  "bilberry"     "blackberry"   "blood orange"
+
+[5] "blueberry"    "cantaloupe"   "chili pepper" "cloudberry"  
+
+[9] "elderberry"   "lime"         "lychee"       "mulberry"    
+
+[13] "olive"        "salal berry"
 ```
 
-## R Markdown
+Into a format like this:
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r, eval=FALSE}
+c("bell pepper", "bilberry", "blackberry", "blood orange", "blueberry", "cantaloupe", "chili pepper", "cloudberry", "elderberry", "lime", "lychee", "mulberry", "olive", "salal berry")
 ```
+<br>
 
-## Including Plots
+```{r, question2}
+w <- c("bell pepper","bilberry","blackberry","blood orange")
+x <- c("blueberry","cantaloupe","chili pepper","cloudberry") 
+y <- c("elderberry","lime","lychee","mulberry") 
+z <- c("olive","salal berry")
 
-You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+combined <- c(w, x, y, z)
+
+print(combined)
+
 ```
+<br>
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+### The two exercises below are taken from R for Data Science, 14.3.5.1 in the on-line version:  
+
+3. Describe, in words, what these expressions will match:
+
+    (.)\1\1
+    "(.)(.)\\2\\1"
+    (..)\1
+    "(.).\\1.\\1"
+    "(.)(.)(.).*\\3\\2\\1"  
+    
+    
+
+
+
+
+
