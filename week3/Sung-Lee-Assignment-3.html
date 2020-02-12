@@ -1683,11 +1683,80 @@ print(combined)</code></pre>
 <h4>The two exercises below are taken from R for Data Science, 14.3.5.1 in the on-line version:</h4>
 <ol start="3" style="list-style-type: decimal">
 <li><p>Describe, in words, what these expressions will match:</p>
-<p>(.)\1\1<br />
-“(.)(.)\2\1”<br />
-(..)\1<br />
-“(.).\1.\1”<br />
-&quot;(.)(.)(.).*\3\2\1&quot;</p></li>
+<p><strong>(.)\1\1</strong><br />
+This expression matches on characters, except line breaks, that is followed by a “\1\1”. Examples would be “b\1\1”, “c\1\1”, or “5\1\1”.</p>
+<pre class="r"><code>x &lt;- c(&quot;b\1\1&quot;, &quot;c\1\1&quot;, &quot;hello\1\1&quot;, &quot;yellow&quot;)
+str_match(x, &#39;(.)\1\1&#39;)  </code></pre>
+<pre><code>##      [,1]        [,2]
+## [1,] &quot;b\001\001&quot; &quot;b&quot; 
+## [2,] &quot;c\001\001&quot; &quot;c&quot; 
+## [3,] &quot;o\001\001&quot; &quot;o&quot; 
+## [4,] NA          NA</code></pre>
+<p><strong>“(.)(.)\2\1”</strong><br />
+This expression matches strings that contain pairs of characters, excluding line breaks, that are followed by a reverse of their order. Examples would be “abba”, “0101”, or “daad”.</p>
+<pre class="r"><code>x &lt;- c(&quot;abba&quot;, &quot;0110&quot;, &quot;ACTGGTCA&quot;, &quot;yellow&quot;)
+str_match(x, &quot;(.)(.)\\2\\1&quot;)  </code></pre>
+<pre><code>##      [,1]   [,2] [,3]
+## [1,] &quot;abba&quot; &quot;a&quot;  &quot;b&quot; 
+## [2,] &quot;0110&quot; &quot;0&quot;  &quot;1&quot; 
+## [3,] &quot;TGGT&quot; &quot;T&quot;  &quot;G&quot; 
+## [4,] NA     NA   NA</code></pre>
+<p><strong>(..)\1</strong><br />
+This expression matches strings that have a couple of characters, excluding line breaks, that are followed by a “\1”. Examples would be “ab\1”, “54\1”, or “11\1”.</p>
+<pre class="r"><code>x &lt;- c(&quot;ab\1&quot;, &quot;red&quot;, &quot;A\1&quot;, &quot;AABBCC\1&quot;)
+str_match(x, &#39;(..)\1&#39;)  </code></pre>
+<pre><code>##      [,1]     [,2]
+## [1,] &quot;ab\001&quot; &quot;ab&quot;
+## [2,] NA       NA  
+## [3,] NA       NA  
+## [4,] &quot;CC\001&quot; &quot;CC&quot;</code></pre>
+<p><strong>“(.).\1.\1”</strong> This expression matches strings that contain a character that repeats in the 2 and 4 places over from its first occurrence. Examples would be “a0a1a”, “c1d1e1”, and “-1-2-3”.</p>
+<pre class="r"><code>x &lt;- c(&quot;a0a1a&quot;, &quot;blue&quot;, &quot;c1d1e1&quot;, &quot;-1-2-3&quot;)
+str_match(x, &quot;(.).\\1.\\1&quot;)</code></pre>
+<pre><code>##      [,1]    [,2]
+## [1,] &quot;a0a1a&quot; &quot;a&quot; 
+## [2,] NA      NA  
+## [3,] &quot;1d1e1&quot; &quot;1&quot; 
+## [4,] &quot;-1-2-&quot; &quot;-&quot;</code></pre>
+<p>**(.)(.)(.).*\3\2\1** This expression matches any sequence of strings that are encapsulated by 3 characters, excluding line breaks, where the end string is a reverse order of those 3 characters. Examples would be “abcjfkdjkfjicba”, “0110Middleofthestring110”.</p>
+<pre class="r"><code>x &lt;- c(&quot;abcjfkdjkfjicba&quot;, &quot;redyellow001middle100kdlskdls&quot;, &quot;beginbegin1middlegebend&quot;, &quot;98&amp;^A&quot;)
+str_match(x, &quot;(.)(.)(.).*\\3\\2\\1&quot;)  #Note the \ needs to be escaped in the expression.</code></pre>
+<pre><code>##      [,1]                   [,2] [,3] [,4]
+## [1,] &quot;abcjfkdjkfjicba&quot;      &quot;a&quot;  &quot;b&quot;  &quot;c&quot; 
+## [2,] &quot;001middle100&quot;         &quot;0&quot;  &quot;0&quot;  &quot;1&quot; 
+## [3,] &quot;beginbegin1middlegeb&quot; &quot;b&quot;  &quot;e&quot;  &quot;g&quot; 
+## [4,] NA                     NA   NA   NA</code></pre></li>
+</ol>
+<p><br></p>
+<ol start="4" style="list-style-type: decimal">
+<li><p>Construct regular expressions to match words that</p>
+<p>Start and end with the same character:<br />
+&quot;^(.)(.*)\1$&quot;</p>
+<pre class="r"><code>x &lt;- c(&quot;amiddleofthestringa&quot;, &quot;0red,yellow,green0&quot;, &quot;red&quot;, &quot;9*&amp;^(^Hjshjshf9&quot;)
+str_match(x, &quot;^(.)(.*)\\1$&quot;)  #Note the \ needs to be escaped in the expression.</code></pre>
+<pre><code>##      [,1]                  [,2] [,3]               
+## [1,] &quot;amiddleofthestringa&quot; &quot;a&quot;  &quot;middleofthestring&quot;
+## [2,] &quot;0red,yellow,green0&quot;  &quot;0&quot;  &quot;red,yellow,green&quot; 
+## [3,] NA                    NA   NA                 
+## [4,] &quot;9*&amp;^(^Hjshjshf9&quot;     &quot;9&quot;  &quot;*&amp;^(^Hjshjshf&quot;</code></pre>
+<p>Contain a repeated pair of letters (e.g. “church” contains “ch” repeated twice.):<br />
+&quot;(..)(.*)\1&quot;</p>
+<pre class="r"><code>x &lt;- c(&quot;church&quot;, &quot;blue&quot;, &quot;red&quot;, &quot;abracadabra&quot;)
+str_match(x, &quot;(..)(.*)\\1&quot;)  #Note the \ needs to be escaped in the expression.</code></pre>
+<pre><code>##      [,1]        [,2] [,3]   
+## [1,] &quot;church&quot;    &quot;ch&quot; &quot;ur&quot;   
+## [2,] NA          NA   NA     
+## [3,] NA          NA   NA     
+## [4,] &quot;abracadab&quot; &quot;ab&quot; &quot;racad&quot;</code></pre>
+<p>Contain one letter repeated in at least three places (e.g. “eleven” contains three “e”s.)<br />
+“(.)(.<em>)\1(.</em>)\1”</p>
+<pre class="r"><code>x &lt;- c(&quot;eleven&quot;, &quot;blue&quot;, &quot;010001001010&quot;, &quot;yellow submarine light&quot;)
+str_match(x, &quot;(.)(.*)\\1(.*)\\1&quot;)  #Note the \ needs to be escaped in the expression.</code></pre>
+<pre><code>##      [,1]               [,2] [,3]       [,4]           
+## [1,] &quot;eleve&quot;            &quot;e&quot;  &quot;l&quot;        &quot;v&quot;            
+## [2,] NA                 NA   NA         NA             
+## [3,] &quot;010001001010&quot;     &quot;0&quot;  &quot;10001001&quot; &quot;1&quot;            
+## [4,] &quot;llow submarine l&quot; &quot;l&quot;  &quot;&quot;         &quot;ow submarine &quot;</code></pre></li>
 </ol>
 </div>
 
