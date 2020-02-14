@@ -1643,7 +1643,8 @@ summary {
 <p><a href="https://rpubs.com/logicalschema/data607_project1" title="Sung&#39;s Project 1 Assignment Rpubs">Project on RPubs</a> <br> <a href="https://github.com/logicalschema/DATA607/blob/master/Project%201/Sung%20Lee%20Project%201.Rmd" title="Sung&#39;s Project 1 Assignment Github">Rmd on Github</a></p>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>This project will read the Chess tournament text file hosted on Github at <a href="https://raw.githubusercontent.com/logicalschema/DATA607/master/Project%201/tournamentinfo.txt" class="uri">https://raw.githubusercontent.com/logicalschema/DATA607/master/Project%201/tournamentinfo.txt</a> and will generate a CSV file. The following format will be the CSV file tjat will be exported:</p>
+<p>This project will read the Chess tournament text file hosted on Github at <a href="https://raw.githubusercontent.com/logicalschema/DATA607/master/Project%201/tournamentinfo.txt" class="uri">https://raw.githubusercontent.com/logicalschema/DATA607/master/Project%201/tournamentinfo.txt</a> and will generate a CSV file. We will only be interested in the player’s wins, losses, and draws with other opponents.</p>
+<p>The following format will be the CSV file that will be exported:</p>
 <table>
 <colgroup>
 <col width="12%"></col>
@@ -1671,7 +1672,7 @@ summary {
 </tr>
 </tbody>
 </table>
-<p>I will add another column named Player’s ID. This is for internal purposes.</p>
+<p>I will add other columns named player’s ID, player’s number of games, and player’s opponents. These are for internal purposes.</p>
 <pre class="r"><code>library(stringr)
 
 options(warn=-1) # Turning off warnings with reading the text file
@@ -1679,40 +1680,86 @@ options(warn=-1) # Turning off warnings with reading the text file
 textFile &lt;- readLines(&quot;https://raw.githubusercontent.com/logicalschema/DATA607/master/Project%201/tournamentinfo.txt&quot;)
 options(warn=0) # Turning warnings back on
 
-head(textFile)</code></pre>
-<pre><code>## [1] &quot;-----------------------------------------------------------------------------------------&quot; 
-## [2] &quot; Pair | Player Name                     |Total|Round|Round|Round|Round|Round|Round|Round| &quot;
-## [3] &quot; Num  | USCF ID / Rtg (Pre-&gt;Post)       | Pts |  1  |  2  |  3  |  4  |  5  |  6  |  7  | &quot;
-## [4] &quot;-----------------------------------------------------------------------------------------&quot; 
-## [5] &quot;    1 | GARY HUA                        |6.0  |W  39|W  21|W  18|W  14|W   7|D  12|D   4|&quot; 
-## [6] &quot;   ON | 15445895 / R: 1794   -&gt;1817     |N:2  |W    |B    |W    |B    |W    |B    |W    |&quot;</code></pre>
-<pre class="r"><code>i &lt;- 5  # Skipping the header rows and lines that have --------------------
+head(textFile, 13)</code></pre>
+<pre><code>##  [1] &quot;-----------------------------------------------------------------------------------------&quot; 
+##  [2] &quot; Pair | Player Name                     |Total|Round|Round|Round|Round|Round|Round|Round| &quot;
+##  [3] &quot; Num  | USCF ID / Rtg (Pre-&gt;Post)       | Pts |  1  |  2  |  3  |  4  |  5  |  6  |  7  | &quot;
+##  [4] &quot;-----------------------------------------------------------------------------------------&quot; 
+##  [5] &quot;    1 | GARY HUA                        |6.0  |W  39|W  21|W  18|W  14|W   7|D  12|D   4|&quot; 
+##  [6] &quot;   ON | 15445895 / R: 1794   -&gt;1817     |N:2  |W    |B    |W    |B    |W    |B    |W    |&quot; 
+##  [7] &quot;-----------------------------------------------------------------------------------------&quot; 
+##  [8] &quot;    2 | DAKSHESH DARURI                 |6.0  |W  63|W  58|L   4|W  17|W  16|W  20|W   7|&quot; 
+##  [9] &quot;   MI | 14598900 / R: 1553   -&gt;1663     |N:2  |B    |W    |B    |W    |B    |W    |B    |&quot; 
+## [10] &quot;-----------------------------------------------------------------------------------------&quot; 
+## [11] &quot;    3 | ADITYA BAJAJ                    |6.0  |L   8|W  61|W  25|W  21|W  11|W  13|W  12|&quot; 
+## [12] &quot;   MI | 14959604 / R: 1384   -&gt;1640     |N:2  |W    |B    |W    |B    |W    |B    |W    |&quot; 
+## [13] &quot;-----------------------------------------------------------------------------------------&quot;</code></pre>
+<pre class="r"><code>#Create internal dataframe
+playerData &lt;- data.frame(matrix(ncol = 7, nrow = 0))
+playerInfo &lt;- c(&quot;ID&quot;, &quot;Name&quot;, &quot;State&quot;, &quot;totalPoints&quot; ,&quot;preRating&quot;, &quot;NumberofGames&quot;, &quot;Opponents&quot;)
+colnames(playerData) &lt;- playerInfo
+
+
+
+i &lt;- 5  # Skipping the header rows and lines that have --------------------
 while (i &lt;= length(textFile)) {
   row1 &lt;- unlist(strsplit(textFile[i], split=&#39;|&#39;, fixed=TRUE))
   row2 &lt;- unlist(strsplit(textFile[i + 1],  split =&#39;|&#39;, fixed=TRUE))
   
+  #Get the player&#39;s id
+  playerID &lt;- as.numeric(str_trim(row1[1]))
 
+  #Get the player&#39;s name
+  playerName &lt;- str_trim(row1[2])
+
+  #Get the player&#39;s state
+  playerState &lt;- str_trim(row2[1])
+
+  #Get the player&#39;s total number of points
+  playertotalPoints &lt;- as.numeric(str_trim(row1[3]))
+
+  #Get the player&#39;s pre-rating
+  playerpreRating &lt;- str_match(str_trim(row2[2]), &quot;R:(.*?)-&gt;&quot;)[,2]    #Grab the text between R: and the -&gt;
+  playerpreRating &lt;- as.numeric(str_remove(str_trim(playerpreRating), &#39;P(.*)$&#39;)) #Remove non-numeric characters
+
+  #Get the player&#39;s number of games played in the tournament: counting only wins, losses, and draws
+  #Also, get the player&#39;s opponents
+  playerNumberofGames &lt;- 0
+  playerOpponents &lt;- &quot;&quot;
+
+  for (j in 4:10) {
+   rowValue &lt;- row1[j]
+   if ( grepl(&#39;W&#39;, rowValue) || grepl(&#39;L&#39;, rowValue) || grepl(&#39;D&#39;, rowValue)) {
+     playerNumberofGames &lt;- playerNumberofGames + 1
+   }
+   
+   playerOpponents &lt;- paste(playerOpponents, str_match(rowValue, &#39;\\d+&#39;), sep = &quot;,&quot;)
+  }
+
+  playerOpponents &lt;- str_remove(playerOpponents, &#39;^,&#39;) #Remove leading ,
+
+  
+#  playerData (&quot;ID&quot;, &quot;Name&quot;, &quot;State&quot;, &quot;totalPoints&quot; ,&quot;preRating&quot;, &quot;NumberofGames&quot;, &quot;Opponents&quot;)
+  
+  
+  newRow &lt;- data.frame(playerID, playerName, playerState, playertotalPoints, playerpreRating, playerNumberofGames, playerOpponents)
+  playerData &lt;- rbind(playerData, newRow)
+  
+  #playerData
   
   i &lt;- i + 3
 }
 
-#Get the player&#39;s id
-playerID &lt;- str_trim(row1[1])
-
-#Get the player&#39;s name
-playerName &lt;- str_trim(row1[2])
-print(playerName)</code></pre>
-<pre><code>## [1] &quot;BEN LI&quot;</code></pre>
-<pre class="r"><code>playerState &lt;- str_trim(row2[1])
-print(playerState)</code></pre>
-<pre><code>## [1] &quot;MI&quot;</code></pre>
-<pre class="r"><code>playertotalPoints &lt;- as.numeric(str_trim(row1[3]))
-print(playertotalPoints)</code></pre>
-<pre><code>## [1] 1</code></pre>
-<pre class="r"><code>playerpreRating &lt;- str_match(str_trim(row2[2]), &quot;R:(.*?)-&gt;&quot;)[,2]
-playerpreRating &lt;- as.numeric(str_remove(str_trim(playerpreRating), &#39;P(.*)$&#39;))
-print(playerpreRating)</code></pre>
-<pre><code>## [1] 1163</code></pre>
+head(playerData, 10)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["playerID"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["playerName"],"name":[2],"type":["fctr"],"align":["left"]},{"label":["playerState"],"name":[3],"type":["fctr"],"align":["left"]},{"label":["playertotalPoints"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["playerpreRating"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["playerNumberofGames"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["playerOpponents"],"name":[7],"type":["fctr"],"align":["left"]}],"data":[{"1":"1","2":"GARY HUA","3":"ON","4":"6.0","5":"1794","6":"7","7":"39,21,18,14,7,12,4","_rn_":"1"},{"1":"2","2":"DAKSHESH DARURI","3":"MI","4":"6.0","5":"1553","6":"7","7":"63,58,4,17,16,20,7","_rn_":"2"},{"1":"3","2":"ADITYA BAJAJ","3":"MI","4":"6.0","5":"1384","6":"7","7":"8,61,25,21,11,13,12","_rn_":"3"},{"1":"4","2":"PATRICK H SCHILLING","3":"MI","4":"5.5","5":"1716","6":"7","7":"23,28,2,26,5,19,1","_rn_":"4"},{"1":"5","2":"HANSHI ZUO","3":"MI","4":"5.5","5":"1655","6":"7","7":"45,37,12,13,4,14,17","_rn_":"5"},{"1":"6","2":"HANSEN SONG","3":"OH","4":"5.0","5":"1686","6":"7","7":"34,29,11,35,10,27,21","_rn_":"6"},{"1":"7","2":"GARY DEE SWATHELL","3":"MI","4":"5.0","5":"1649","6":"7","7":"57,46,13,11,1,9,2","_rn_":"7"},{"1":"8","2":"EZEKIEL HOUGHTON","3":"MI","4":"5.0","5":"1641","6":"7","7":"3,32,14,9,47,28,19","_rn_":"8"},{"1":"9","2":"STEFANO LEE","3":"ON","4":"5.0","5":"1411","6":"7","7":"25,18,59,8,26,7,20","_rn_":"9"},{"1":"10","2":"ANVIT RAO","3":"MI","4":"5.0","5":"1365","6":"7","7":"16,19,55,31,6,25,18","_rn_":"10"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="average-pre-chess-rating-of-opponents" class="section level2">
+<h2>Average Pre-chess Rating of Opponents</h2>
+<p>With the player information dataframe created. Next, I will create the column average pre-chess rating of opponents for each player.</p>
 </div>
 
 
