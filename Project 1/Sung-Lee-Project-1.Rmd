@@ -1,0 +1,214 @@
+---
+title: "Sung Lee Project 1"
+author: "Sung Lee"
+date: "2/13/2020"
+output: 
+ html_document: 
+  df_print: paged
+---
+
+[Project on RPubs](https://rpubs.com/logicalschema/data607_project1 "Sung's Project 1 Assignment Rpubs")
+<br>
+[Rmd on Github](https://github.com/logicalschema/DATA607/blob/master/Project%201/Sung%20Lee%20Project%201.Rmd "Sung's Project 1 Assignment Github")
+
+
+## Introduction  
+This project will read the Chess tournament text file hosted on Github at https://raw.githubusercontent.com/logicalschema/DATA607/master/Project%201/tournamentinfo.txt and will generate a CSV file. We will only be interested in the player's wins, losses, and draws with other opponents. 
+
+The following format will be the CSV file that will be exported:
+
+
+Player's Name | Player's State | Total Number of Points | Player's Pre-Rating | Average Pre-Chess Rating of Opponents
+--------------|----------------|------------------------|---------------------|---------------------------------------
+Gary Hua      | ON             | 6.0                    | 1794                | 1605
+
+I will add other columns named player's ID, player's number of games, and player's opponents. These are for internal purposes.
+
+```{r}
+library(stringr)
+
+options(warn=-1) # Turning off warnings with reading the text file
+
+textFile <- readLines("https://raw.githubusercontent.com/logicalschema/DATA607/master/Project%201/tournamentinfo.txt")
+options(warn=0) # Turning warnings back on
+
+head(textFile, 13)
+
+#Create internal dataframe
+playerData <- data.frame(matrix(ncol = 7, nrow = 0))
+names(playerData) <- c("ID", "Name", "State", "totalPoints" ,"preRating", "NumberofGames", "Opponents")
+
+
+
+i <- 5  # Skipping the header rows and lines that have --------------------
+while (i <= length(textFile)) {
+  row1 <- unlist(strsplit(textFile[i], split='|', fixed=TRUE))
+  row2 <- unlist(strsplit(textFile[i + 1],  split ='|', fixed=TRUE))
+  
+  #Get the player's id
+  playerID <- as.numeric(str_trim(row1[1]))
+
+  #Get the player's name
+  playerName <- str_trim(row1[2])
+
+  #Get the player's state
+  playerState <- str_trim(row2[1])
+
+  #Get the player's total number of points
+  playertotalPoints <- as.numeric(str_trim(row1[3]))
+
+  #Get the player's pre-rating
+  playerpreRating <- str_match(str_trim(row2[2]), "R:(.*?)->")[,2]    #Grab the text between R: and the ->
+  playerpreRating <- as.numeric(str_remove(str_trim(playerpreRating), 'P(.*)$')) #Remove non-numeric characters
+
+  #Get the player's number of games played in the tournament: counting only wins, losses, and draws
+  #Also, get the player's opponents
+  playerNumberofGames <- 0
+  playerOpponents <- vector()
+
+  for (j in 4:10) {
+   rowValue <- row1[j]
+   if ( grepl('W', rowValue) || grepl('L', rowValue) || grepl('D', rowValue)) {
+     playerNumberofGames <- playerNumberofGames + 1
+   }
+   
+   #playerOpponents <- paste(playerOpponents, str_match(rowValue, '\\d+'), sep = ",")
+   playerOpponents <- c(playerOpponents, as.numeric(str_match(rowValue, '\\d+')))
+  }
+
+  #playerOpponents <- str_remove(playerOpponents, '^,') #Remove leading ,
+  
+
+  #"ID", "Name", "State", "totalPoints" ,"preRating", "NumberofGames", "Opponents"
+  
+  newRow <- data.frame(playerID, playerName, playerState, playertotalPoints, playerpreRating, playerNumberofGames, playerOpponents)
+  playerData <- rbind(playerData, newRow)
+  
+  i <- i + 3
+}
+
+head(playerData, 10)
+
+```
+
+---
+title: "Sung Lee Project 1"
+author: "Sung Lee"
+date: "2/13/2020"
+output: 
+ html_document: 
+  df_print: paged
+---
+
+[Project on RPubs](https://rpubs.com/logicalschema/data607_project1 "Sung's Project 1 Assignment Rpubs")
+<br>
+[Rmd on Github](https://github.com/logicalschema/DATA607/blob/master/Project%201/Sung%20Lee%20Project%201.Rmd "Sung's Project 1 Assignment Github")
+
+
+## Introduction  
+This project will read the Chess tournament text file hosted on Github at https://raw.githubusercontent.com/logicalschema/DATA607/master/Project%201/tournamentinfo.txt and will generate a CSV file. We will only be interested in the player's wins, losses, and draws with other opponents. 
+
+The following format will be the CSV file that will be exported:
+
+
+Player's Name | Player's State | Total Number of Points | Player's Pre-Rating | Average Pre-Chess Rating of Opponents
+--------------|----------------|------------------------|---------------------|---------------------------------------
+Gary Hua      | ON             | 6.0                    | 1794                | 1605
+
+I will add other columns named player's ID, player's number of games, and player's opponents. These are for internal purposes.
+
+```{r}
+library(stringr)
+
+options(warn=-1) # Turning off warnings with reading the text file
+
+textFile <- readLines("https://raw.githubusercontent.com/logicalschema/DATA607/master/Project%201/tournamentinfo.txt")
+options(warn=0) # Turning warnings back on
+
+head(textFile, 13)
+
+#Create internal dataframe
+playerData <- data.frame(matrix(ncol = 7, nrow = 0))
+playerInfo <- c("ID", "Name", "State", "totalPoints" ,"preRating", "NumberofGames", "Opponents")
+colnames(playerData) <- playerInfo
+
+
+
+i <- 5  # Skipping the header rows and lines that have --------------------
+while (i <= length(textFile)) {
+  row1 <- unlist(strsplit(textFile[i], split='|', fixed=TRUE))
+  row2 <- unlist(strsplit(textFile[i + 1],  split ='|', fixed=TRUE))
+  
+  #Get the player's id
+  playerID <- as.numeric(str_trim(row1[1]))
+
+  #Get the player's name
+  playerName <- str_trim(row1[2])
+
+  #Get the player's state
+  playerState <- str_trim(row2[1])
+
+  #Get the player's total number of points
+  playertotalPoints <- as.numeric(str_trim(row1[3]))
+
+  #Get the player's pre-rating
+  playerpreRating <- str_match(str_trim(row2[2]), "R:(.*?)->")[,2]    #Grab the text between R: and the ->
+  playerpreRating <- as.numeric(str_remove(str_trim(playerpreRating), 'P(.*)$')) #Remove non-numeric characters
+
+  #Get the player's number of games played in the tournament: counting only wins, losses, and draws
+  #Also, get the player's opponents
+  playerNumberofGames <- 0
+  playerOpponents <- ""
+
+  for (j in 4:10) {
+   rowValue <- row1[j]
+   if ( grepl('W', rowValue) || grepl('L', rowValue) || grepl('D', rowValue)) {
+     playerNumberofGames <- playerNumberofGames + 1
+   }
+   
+   playerOpponents <- paste(playerOpponents, str_match(rowValue, '\\d+'), sep = ",")
+  }
+
+  playerOpponents <- str_remove(playerOpponents, '^,') #Remove leading ,
+
+  
+#  playerData ("ID", "Name", "State", "totalPoints" ,"preRating", "NumberofGames", "Opponents")
+  
+  
+  newRow <- data.frame(playerID, playerName, playerState, playertotalPoints, playerpreRating, playerNumberofGames, playerOpponents)
+  playerData <- rbind(playerData, newRow)
+  
+  #playerData
+  
+  i <- i + 3
+}
+
+head(playerData, 10)
+
+```
+## Average Pre-chess Rating of Opponents
+
+With the player information dataframe created. Next, I will create the column average pre-chess rating of opponents for each player.
+
+```{r}
+
+#playerData ("playerID", "playerName", "playerState", "playertotalPoints" ,"playerpreRating", "playerNumberofGames", "playerOpponents")
+colnames(playerData)
+nrow(playerData)
+
+for (i in 1:nrow(playerData)) {
+    row <- playerData[i,]
+    sum <- 0
+    
+#    opponents <- row[7]
+#    for (value in opponents) {
+#       if (is.na(value) == FALSE) {
+#         sum <- sum + playerData[which(playerData$playerID == value), 5]
+#       }
+#    }
+    
+#    print(sum / row[6])
+}
+
+```
+
