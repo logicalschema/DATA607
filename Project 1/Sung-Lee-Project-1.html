@@ -1643,7 +1643,7 @@ summary {
 <p><a href="https://rpubs.com/logicalschema/data607_project1" title="Sung&#39;s Project 1 Assignment Rpubs">Project on RPubs</a> <br> <a href="https://github.com/logicalschema/DATA607/blob/master/Project%201/Sung%20Lee%20Project%201.Rmd" title="Sung&#39;s Project 1 Assignment Github">Rmd on Github</a></p>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>This project will read the Chess tournament text file hosted on Github at <a href="https://raw.githubusercontent.com/logicalschema/DATA607/master/Project%201/tournamentinfo.txt" class="uri">https://raw.githubusercontent.com/logicalschema/DATA607/master/Project%201/tournamentinfo.txt</a> and will generate a CSV file. The following format will be the CSV file:</p>
+<p>This project will read the Chess tournament text file hosted on Github at <a href="https://raw.githubusercontent.com/logicalschema/DATA607/master/Project%201/tournamentinfo.txt" class="uri">https://raw.githubusercontent.com/logicalschema/DATA607/master/Project%201/tournamentinfo.txt</a> and will generate a CSV file. The following format will be the CSV file tjat will be exported:</p>
 <table>
 <colgroup>
 <col width="12%"></col>
@@ -1671,6 +1671,7 @@ summary {
 </tr>
 </tbody>
 </table>
+<p>I will add another column named Player’s ID. This is for internal purposes.</p>
 <pre class="r"><code>library(stringr)
 
 options(warn=-1) # Turning off warnings with reading the text file
@@ -1692,16 +1693,26 @@ while (i &lt;= length(textFile)) {
   
 
   
-  
-  
   i &lt;- i + 3
 }
 
- 
-length(row1)</code></pre>
-<pre><code>## [1] 10</code></pre>
-<pre class="r"><code>print(row1[1])</code></pre>
-<pre><code>## [1] &quot;   64 &quot;</code></pre>
+#Get the player&#39;s id
+playerID &lt;- str_trim(row1[1])
+
+#Get the player&#39;s name
+playerName &lt;- str_trim(row1[2])
+print(playerName)</code></pre>
+<pre><code>## [1] &quot;BEN LI&quot;</code></pre>
+<pre class="r"><code>playerState &lt;- str_trim(row2[1])
+print(playerState)</code></pre>
+<pre><code>## [1] &quot;MI&quot;</code></pre>
+<pre class="r"><code>playertotalPoints &lt;- as.numeric(str_trim(row1[3]))
+print(playertotalPoints)</code></pre>
+<pre><code>## [1] 1</code></pre>
+<pre class="r"><code>playerpreRating &lt;- str_match(str_trim(row2[2]), &quot;R:(.*?)-&gt;&quot;)[,2]
+playerpreRating &lt;- as.numeric(str_remove(str_trim(playerpreRating), &#39;P(.*)$&#39;))
+print(playerpreRating)</code></pre>
+<pre><code>## [1] 1163</code></pre>
 </div>
 
 

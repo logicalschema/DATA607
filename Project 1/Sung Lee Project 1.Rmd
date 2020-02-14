@@ -13,13 +13,14 @@ output:
 
 
 ## Introduction  
-This project will read the Chess tournament text file hosted on Github at https://raw.githubusercontent.com/logicalschema/DATA607/master/Project%201/tournamentinfo.txt and will generate a CSV file. The following format will be the CSV file:
+This project will read the Chess tournament text file hosted on Github at https://raw.githubusercontent.com/logicalschema/DATA607/master/Project%201/tournamentinfo.txt and will generate a CSV file. The following format will be the CSV file tjat will be exported:
 
 
 Player's Name | Player's State | Total Number of Points | Player's Pre-Rating | Average Pre-Chess Rating of Opponents
 --------------|----------------|------------------------|---------------------|---------------------------------------
 Gary Hua      | ON             | 6.0                    | 1794                | 1605
 
+I will add another column named Player's ID. This is for internal purposes.
 
 ```{r}
 library(stringr)
@@ -38,16 +39,28 @@ while (i <= length(textFile)) {
   
 
   
-  
-  
   i <- i + 3
 }
 
- 
-length(row1)
-print(row1[1])
+#Get the player's id
+playerID <- str_trim(row1[1])
 
+#Get the player's name
+playerName <- str_trim(row1[2])
+print(playerName)
 
+#Get the player's state
+playerState <- str_trim(row2[1])
+print(playerState)
+
+#Get the player's total number of points
+playertotalPoints <- as.numeric(str_trim(row1[3]))
+print(playertotalPoints)
+
+#Get the player's pre-rating
+playerpreRating <- str_match(str_trim(row2[2]), "R:(.*?)->")[,2]    #Grab the text between R: and the ->
+playerpreRating <- as.numeric(str_remove(str_trim(playerpreRating), 'P(.*)$')) #Remove non-numeric characters
+print(playerpreRating)
 
 
 ```
