@@ -104,14 +104,16 @@ for (i in 1:nrow(playerData)) {
     row <- playerData[i,]
     sum <- 0
     
-    opponents <-  as.integer(str_split(row[7], ",")[[1]])
+#    opponents <-  as.integer(str_split(row[7], ",")[[1]])
+    opponents <- unlist(str_split(row$Opponents, ","))
     for (value in opponents) {
        if (is.na(value) == FALSE) {
-         sum <- sum + playerData[which(playerData$ID == value), 5]
+         sum <- sum + playerData[value, 5]
        }
     }
     
-    newRow <- data.frame((sum / row[6]))
+
+    newRow <- data.frame(round(sum / row[6], digits = 0))
     x <- c("averageOpponents")
     names(newRow) <- x
     avgOpponent <- rbind(avgOpponent, newRow)
