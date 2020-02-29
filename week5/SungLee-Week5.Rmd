@@ -18,10 +18,11 @@ This assignment's purpose is to tidy and transform the flights wide format table
 
 
 ```{r}
-#Calling the stringr, tidyr, and dplyr libraries
+#Calling the stringr, tidyr, dplyr, ggplot2 libraries
 library(stringr)
 library(tidyr)
 library(dplyr)
+library(ggplot2)
 
 #Reading the airlines.csv file
 flights <- read.csv("https://raw.githubusercontent.com/logicalschema/DATA607/master/week5/airlines.csv", 
@@ -29,6 +30,57 @@ flights <- read.csv("https://raw.githubusercontent.com/logicalschema/DATA607/mas
                     header = TRUE)
 
 ```
+
+```{r, echo =FALSE}
+
+# From the web page: http://www.cookbook-r.com/Graphs/Multiple_graphs_on_one_page_(ggplot2)/
+# Multiple plot function
+#
+# ggplot objects can be passed in ..., or to plotlist (as a list of ggplot objects)
+# - cols:   Number of columns in layout
+# - layout: A matrix specifying the layout. If present, 'cols' is ignored.
+#
+# If the layout is something like matrix(c(1,2,3,3), nrow=2, byrow=TRUE),
+# then plot 1 will go in the upper left, 2 will go in the upper right, and
+# 3 will go all the way across the bottom.
+#
+multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
+  library(grid)
+
+  # Make a list from the ... arguments and plotlist
+  plots <- c(list(...), plotlist)
+
+  numPlots = length(plots)
+
+  # If layout is NULL, then use 'cols' to determine layout
+  if (is.null(layout)) {
+    # Make the panel
+    # ncol: Number of columns of plots
+    # nrow: Number of rows needed, calculated from # of cols
+    layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),
+                    ncol = cols, nrow = ceiling(numPlots/cols))
+  }
+
+ if (numPlots==1) {
+    print(plots[[1]])
+
+  } else {
+    # Set up the page
+    grid.newpage()
+    pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout))))
+
+    # Make each plot, in the correct location
+    for (i in 1:numPlots) {
+      # Get the i,j matrix positions of the regions that contain this subplot
+      matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
+
+      print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
+                                      layout.pos.col = matchidx$col))
+    }
+  }
+}
+```
+
 <br>
 Here is an initial view of the csv imported data.
 
@@ -42,9 +94,14 @@ The data as is is not ready to be used and needs to be cleaned up and converted 
 ```{r}
 names(flights)
 
-#Rename the columns "i.." and "X" 
+#Rename the columns "i..", "X", "Log.Angeles", "San.Diego", and "San.Francisco" 
 flights <- rename(flights, Airline = "ï..")
 flights <- rename(flights, Status = "X")
+flights <- rename(flights, "Los Angeles" = "Los.Angeles")
+flights <- rename(flights, "San Diego" = "San.Diego")
+flights <- rename(flights, "San Francisco" = "San.Francisco")
+
+
 
 #Remove empty rows
 flights <- flights %>% na.omit()
@@ -59,11 +116,75 @@ flights <- flights %>% mutate_if(is.factor, as.character)
 flights <- flights %>% mutate_all(na_if,"")
 flights <- flights %>% fill(Airline)
 
-flights <- flights %>% 
-  gather(city, number, 3:length(flights)) %>%   # Transfer 'city' variable into a column
-  spread(Status, number)                         # Split 'delayed'/'on time' variables into 2 columns
-
-names(flights)
 head(flights)
+
+
+#Convert the columns from "Los Angeles to Seattle" as data values of a new column City with new column called Number
+flights <- gather(flights, key = "Destination", value = "Number", "Los Angeles":"Seattle" )
+
+#Split the Column Status into columns according to its distinct values and store the number
+flights <- spread(flights, Status, Number)
+flights <- rename(flights, On_Time = "on time")
+flights <- rename(flights, Delayed = "delayed")
+
+```
+<br><br>
+## Data is Read for Use
+
+Let's see the new data columns and values after cleanup.
+
+```{r}
+names(flights)
+flights
 ```
 
+## Comparing the Data
+
+Now, we are ready to utilize the data. 
+
+
+
+```{r, warning=FALSE}
+
+los_angeles <- flights %>% filter(Destination == "Los Angeles")
+phoenix <- flights %>% filter(Destination == "Phoenix")
+san_diego <- flights %>% filter(Destination == "San Diego")
+san_francisco <- flights %>% filter(Destination == "San Francisco")
+seattle <- flights %>% filter(Destination == "Seattle")
+
+p1 <- ggplot(los_angeles, aes( x= Airline, y=Delayed/(Delayed + On_Time), fill = Airline)) + 
+  geom_histogram(alpha = .5, stat="identity", position=position_dodge(), colour="black") +
+  ylab("Los Angeles")+
+  theme(text = element_text(size = 8))
+
+p2 <- ggplot(phoenix, aes( x= Airline, y=Delayed/(Delayed + On_Time), fill = Airline)) + 
+  geom_histogram(alpha = .5, stat="identity", position=position_dodge(), colour="black") +
+  ylab("Phoenix")+
+  theme(text = element_text(size = 8))
+
+p3 <- ggplot(san_diego, aes( x= Airline, y=Delayed/(Delayed + On_Time), fill = Airline)) + 
+  geom_histogram(alpha = .5, stat="identity", position=position_dodge(), colour="black") +
+  ylab("San Diego") +
+  theme(text = element_text(size = 8))
+
+p4 <- ggplot(san_francisco, aes( x= Airline, y=Delayed/(Delayed + On_Time), fill = Airline)) + 
+  geom_histogram(alpha = .5, stat="identity", position=position_dodge(), colour="black") +
+  ylab("San Francisco") +
+  theme(text = element_text(size = 8))
+
+p5 <- ggplot(seattle, aes( x= Airline, y=Delayed/(Delayed + On_Time), fill = Airline)) + 
+  geom_histogram(alpha = .5, stat="identity", position=position_dodge(), colour="black") +
+  ylab("Seattle") +
+  theme(text = element_text(size = 8))
+```
+
+## Proportion of Delays for Each City
+
+```{r}
+multiplot(p1, p2, p3, p4, p5, cols=2)
+
+```
+
+## Conclusion
+
+Overall, it seems that AM West has a higher proportion of delays than Alaska across the 5 cities with San Francisco, out of the cities recorded, having the highest rate for delays. If catching a connecting flight, schedule more lag time if the connecting flight is from San Francisco.
