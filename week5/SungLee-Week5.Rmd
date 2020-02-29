@@ -10,3 +10,15 @@ output:
 [Assignment on RPubs](https://rpubs.com/logicalschema/data607_week5 "Sung's Week 5 Assignment Rpubs")
 <br>
 [Rmd on Github](https://github.com/logicalschema/DATA607/blob/master/week5/SungLee-Week5.Rmd "Sung's Week 5 Assignment Github")
+
+## Introduction
+This assignment's purpose is to tidy and transform the flights wide format table below through the use of `tidyr` and `dplyr`. The wide format of the table has been created beforehand as a csv file named `airlines.csv`.
+
+
+
+
+
+
+```{r}
+
+```
