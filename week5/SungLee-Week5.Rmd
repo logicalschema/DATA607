@@ -14,6 +14,24 @@ output:
 ## Introduction
 This assignment's purpose is to tidy and transform the flights wide format table below through the use of `tidyr` and `dplyr`. The wide format of the table has been created beforehand as a csv file named `airlines.csv`.
 
+![](https://raw.githubusercontent.com/logicalschema/DATA607/master/week5/flights.png)
+
+```{r}
+#Calling the stringr, tidyr, and dplyr libraries
+library(stringr)
+library(tidyr)
+library(dplyr)
+
+#Reading the airlines.csv file
+flights <- read.csv("https://raw.githubusercontent.com/logicalschema/DATA607/master/week5/airlines.csv", sep = ",", header = FALSE)
+
+head(flights)
+
+
+
+```
+
+
 
 
 
