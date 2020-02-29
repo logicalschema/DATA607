@@ -16,6 +16,7 @@ This assignment's purpose is to tidy and transform the flights wide format table
 
 ![](https://raw.githubusercontent.com/logicalschema/DATA607/master/week5/flights.png)
 
+
 ```{r}
 #Calling the stringr, tidyr, and dplyr libraries
 library(stringr)
@@ -23,20 +24,46 @@ library(tidyr)
 library(dplyr)
 
 #Reading the airlines.csv file
-flights <- read.csv("https://raw.githubusercontent.com/logicalschema/DATA607/master/week5/airlines.csv", sep = ",", header = FALSE)
-
-head(flights)
-
-
+flights <- read.csv("https://raw.githubusercontent.com/logicalschema/DATA607/master/week5/airlines.csv", 
+                    sep = ",", 
+                    header = TRUE)
 
 ```
-
-
-
-
-
-
+<br>
+Here is an initial view of the csv imported data.
 
 ```{r}
-
+head(flights)
 ```
+
+## Tidying the Data
+The data as is is not ready to be used and needs to be cleaned up and converted for analysis. There are column names that need to be changed, a class type that needs to be changed, and empty values need to be filled.
+
+```{r}
+names(flights)
+
+#Rename the columns "i.." and "X" 
+flights <- rename(flights, Airline = "ï..")
+flights <- rename(flights, Status = "X")
+
+#Remove empty rows
+flights <- flights %>% na.omit()
+
+#Check the class of the Airline Column
+class(flights$Airline)
+
+#Converts factor columns to character
+flights <- flights %>% mutate_if(is.factor, as.character) 
+
+#Fill empty characters with NA an then fill with NA values in Airline with the previous non-NA value
+flights <- flights %>% mutate_all(na_if,"")
+flights <- flights %>% fill(Airline)
+
+flights <- flights %>% 
+  gather(city, number, 3:length(flights)) %>%   # Transfer 'city' variable into a column
+  spread(Status, number)                         # Split 'delayed'/'on time' variables into 2 columns
+
+names(flights)
+head(flights)
+```
+

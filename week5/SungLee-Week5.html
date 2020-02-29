@@ -1658,12 +1658,50 @@ library(dplyr)</code></pre>
 ## 
 ##     intersect, setdiff, setequal, union</code></pre>
 <pre class="r"><code>#Reading the airlines.csv file
-flights &lt;- read.csv(&quot;https://raw.githubusercontent.com/logicalschema/DATA607/master/week5/airlines.csv&quot;, sep = &quot;,&quot;, header = FALSE)
-
-head(flights)</code></pre>
+flights &lt;- read.csv(&quot;https://raw.githubusercontent.com/logicalschema/DATA607/master/week5/airlines.csv&quot;, 
+                    sep = &quot;,&quot;, 
+                    header = TRUE)</code></pre>
+<p><br> Here is an initial view of the csv imported data.</p>
+<pre class="r"><code>head(flights)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["V1"],"name":[1],"type":["fctr"],"align":["left"]},{"label":["V2"],"name":[2],"type":["fctr"],"align":["left"]},{"label":["V3"],"name":[3],"type":["fctr"],"align":["left"]},{"label":["V4"],"name":[4],"type":["fctr"],"align":["left"]},{"label":["V5"],"name":[5],"type":["fctr"],"align":["left"]},{"label":["V6"],"name":[6],"type":["fctr"],"align":["left"]},{"label":["V7"],"name":[7],"type":["fctr"],"align":["left"]}],"data":[{"1":"ï»¿","2":"","3":"Los Angeles","4":"Phoenix","5":"San Diego","6":"San Francisco","7":"Seattle","_rn_":"1"},{"1":"Alaska","2":"on time","3":"497","4":"221","5":"212","6":"503","7":"1841","_rn_":"2"},{"1":"","2":"delay","3":"62","4":"12","5":"20","6":"102","7":"305","_rn_":"3"},{"1":"","2":"","3":"","4":"","5":"","6":"","7":"","_rn_":"4"},{"1":"AM West","2":"on time","3":"694","4":"4840","5":"383","6":"320","7":"201","_rn_":"5"},{"1":"","2":"delayed","3":"117","4":"415","5":"65","6":"129","7":"61","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["ï.."],"name":[1],"type":["fctr"],"align":["left"]},{"label":["X"],"name":[2],"type":["fctr"],"align":["left"]},{"label":["Los.Angeles"],"name":[3],"type":["int"],"align":["right"]},{"label":["Phoenix"],"name":[4],"type":["int"],"align":["right"]},{"label":["San.Diego"],"name":[5],"type":["int"],"align":["right"]},{"label":["San.Francisco"],"name":[6],"type":["int"],"align":["right"]},{"label":["Seattle"],"name":[7],"type":["int"],"align":["right"]}],"data":[{"1":"Alaska","2":"on time","3":"497","4":"221","5":"212","6":"503","7":"1841","_rn_":"1"},{"1":"","2":"delay","3":"62","4":"12","5":"20","6":"102","7":"305","_rn_":"2"},{"1":"","2":"","3":"NA","4":"NA","5":"NA","6":"NA","7":"NA","_rn_":"3"},{"1":"AM West","2":"on time","3":"694","4":"4840","5":"383","6":"320","7":"201","_rn_":"4"},{"1":"","2":"delayed","3":"117","4":"415","5":"65","6":"129","7":"61","_rn_":"5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div id="tidying-the-data" class="section level2">
+<h2>Tidying the Data</h2>
+<p>The data as is is not ready to be used and needs to be cleaned up and converted for analysis. There are column names that need to be changed, a class type that needs to be changed, and empty values need to be filled.</p>
+<pre class="r"><code>names(flights)</code></pre>
+<pre><code>## [1] &quot;ï..&quot;           &quot;X&quot;             &quot;Los.Angeles&quot;   &quot;Phoenix&quot;      
+## [5] &quot;San.Diego&quot;     &quot;San.Francisco&quot; &quot;Seattle&quot;</code></pre>
+<pre class="r"><code>#Rename the columns &quot;i..&quot; and &quot;X&quot; 
+flights &lt;- rename(flights, Airline = &quot;ï..&quot;)
+flights &lt;- rename(flights, Status = &quot;X&quot;)
+
+#Remove empty rows
+flights &lt;- flights %&gt;% na.omit()
+
+#Check the class of the Airline Column
+class(flights$Airline)</code></pre>
+<pre><code>## [1] &quot;factor&quot;</code></pre>
+<pre class="r"><code>#Converts factor columns to character
+flights &lt;- flights %&gt;% mutate_if(is.factor, as.character) 
+
+#Fill empty characters with NA an then fill with NA values in Airline with the previous non-NA value
+flights &lt;- flights %&gt;% mutate_all(na_if,&quot;&quot;)
+flights &lt;- flights %&gt;% fill(Airline)
+
+flights &lt;- flights %&gt;% 
+  gather(city, number, 3:length(flights)) %&gt;%   # Transfer &#39;city&#39; variable into a column
+  spread(Status, number)                         # Split &#39;delayed&#39;/&#39;on time&#39; variables into 2 columns
+
+names(flights)</code></pre>
+<pre><code>## [1] &quot;Airline&quot; &quot;city&quot;    &quot;delay&quot;   &quot;delayed&quot; &quot;on time&quot;</code></pre>
+<pre class="r"><code>head(flights)</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Airline"],"name":[1],"type":["chr"],"align":["left"]},{"label":["city"],"name":[2],"type":["chr"],"align":["left"]},{"label":["delay"],"name":[3],"type":["int"],"align":["right"]},{"label":["delayed"],"name":[4],"type":["int"],"align":["right"]},{"label":["on time"],"name":[5],"type":["int"],"align":["right"]}],"data":[{"1":"Alaska","2":"Los.Angeles","3":"62","4":"NA","5":"497","_rn_":"1"},{"1":"Alaska","2":"Phoenix","3":"12","4":"NA","5":"221","_rn_":"2"},{"1":"Alaska","2":"San.Diego","3":"20","4":"NA","5":"212","_rn_":"3"},{"1":"Alaska","2":"San.Francisco","3":"102","4":"NA","5":"503","_rn_":"4"},{"1":"Alaska","2":"Seattle","3":"305","4":"NA","5":"1841","_rn_":"5"},{"1":"AM West","2":"Los.Angeles","3":"NA","4":"117","5":"694","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
