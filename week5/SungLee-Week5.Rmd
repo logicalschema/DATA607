@@ -1,0 +1,12 @@
+---
+title: "Data 607 Week 5 Assignment"
+author: "Sung Lee"
+date: "2/28/2020"
+output: 
+  html_document: 
+    df_print: paged
+---
+
+[Assignment on RPubs](https://rpubs.com/logicalschema/data607_week5 "Sung's Week 5 Assignment Rpubs")
+<br>
+[Rmd on Github](https://github.com/logicalschema/DATA607/blob/master/week5/SungLee-Week5.Rmd "Sung's Week 5 Assignment Github")
