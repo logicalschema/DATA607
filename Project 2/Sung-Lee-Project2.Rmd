@@ -1,0 +1,42 @@
+---
+title: "Sung Lee Project 2"
+author: "Sung Lee"
+date: "3/2/2020"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    toc_collapsed: true
+    toc_depth: 3
+number_sections: true
+theme: lumen
+---
+
+
+
+
+# Introduction
+ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus quam quam, molestie ac justo quis, aliquet fringilla quam. Fusce at hendrerit tellus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam pretium mauris et ultricies laoreet. Curabitur sodales ex ac odio congue tempus. Mauris sodales eget tellus eu volutpat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris eget hendrerit tortor.
+
+Mauris volutpat tincidunt sodales. Vestibulum a sem lacinia, blandit risus id, vehicula massa. Vestibulum vehicula pharetra velit et semper. Nullam non rhoncus massa. Pellentesque laoreet mauris ac metus lobortis dictum. Praesent quis egestas nisi. Nulla quis nunc et quam hendrerit dignissim sit amet id augue. Fusce et nisi et tortor efficitur ullamcorper sed ut justo. Vestibulum luctus ultrices dictum. Ut suscipit quam erat, eu consequat lectus laoreet sit amet. Vestibulum rhoncus arcu vestibulum imperdiet elementum. 
+
+## Quarterly Results {.tabset}
+ Phasellus viverra turpis lacinia sem auctor, ut porta augue feugiat. Sed maximus erat non finibus fringilla. Integer id magna at sapien luctus pulvinar. Curabitur posuere facilisis tellus in pretium. Praesent in purus nunc. Etiam elementum, massa ac hendrerit rutrum, nibh eros varius libero, ut molestie urna dolor sit amet urna. Sed volutpat ligula urna, in suscipit orci consequat ac. Phasellus luctus placerat molestie.
+
+
+
+### By Product
+
+Fusce venenatis arcu at risus scelerisque, eget viverra massa aliquet. Nam eu gravida enim. Donec et fringilla tortor, vehicula viverra nulla. Donec molestie, sapien at bibendum sollicitudin, odio nisl faucibus augue, ut elementum ante eros sit amet turpis. Nulla sit amet accumsan magna, non fringilla ipsum. In cursus augue tincidunt nunc fringilla venenatis. Aliquam in lobortis tortor. Proin enim lorem, tempor ut elementum id, tempus sit amet dui. Aliquam pulvinar urna ut nibh pharetra consequat. Suspendisse sed dui ligula. Aliquam eget lacinia tortor. Phasellus leo magna, accumsan eu felis a, gravida dapibus urna. In molestie eleifend lobortis. Ut sed nulla semper, consequat libero ut, fermentum ipsum. 
+
+
+### By Region
+
+Fusce venenatis arcu at risus scelerisque, eget viverra massa aliquet. Nam eu gravida enim. Donec et fringilla tortor, vehicula viverra nulla. Donec molestie, sapien at bibendum sollicitudin, odio nisl faucibus augue, ut elementum ante eros sit amet turpis. Nulla sit amet accumsan magna, non fringilla ipsum. In cursus augue tincidunt nunc fringilla venenatis. Aliquam in lobortis tortor. Proin enim lorem, tempor ut elementum id, tempus sit amet dui. Aliquam pulvinar urna ut nibh pharetra consequat. Suspendisse sed dui ligula. Aliquam eget lacinia tortor. Phasellus leo magna, accumsan eu felis a, gravida dapibus urna. In molestie eleifend lobortis. Ut sed nulla semper, consequat libero ut, fermentum ipsum. 
+
+
+
+# Conclusion
+
+Fusce venenatis arcu at risus scelerisque, eget viverra massa aliquet. Nam eu gravida enim. Donec et fringilla tortor, vehicula viverra nulla. Donec molestie, sapien at bibendum sollicitudin, odio nisl faucibus augue, ut elementum ante eros sit amet turpis. Nulla sit amet accumsan magna, non fringilla ipsum. In cursus augue tincidunt nunc fringilla venenatis. Aliquam in lobortis tortor. Proin enim lorem, tempor ut elementum id, tempus sit amet dui. Aliquam pulvinar urna ut nibh pharetra consequat. Suspendisse sed dui ligula. Aliquam eget lacinia tortor. Phasellus leo magna, accumsan eu felis a, gravida dapibus urna. In molestie eleifend lobortis. Ut sed nulla semper, consequat libero ut, fermentum ipsum. 
+
