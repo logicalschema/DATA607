@@ -19,9 +19,21 @@ theme: lumen
 
 
 # Introduction
- Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus quam quam, molestie ac justo quis, aliquet fringilla quam. Fusce at hendrerit tellus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam pretium mauris et ultricies laoreet. Curabitur sodales ex ac odio congue tempus. Mauris sodales eget tellus eu volutpat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris eget hendrerit tortor.
+The purpose of this project is to work with three datasets, tidy the data, and repurpose for data analysis. The three datasets I will use are: Leo Yi's climate data from [https:/www.usclimatedata.com], Philip Tanofsky's Coronavirus data [https://github.com/CryptoKass/ncov-data/blob/master/world.latest.bno.csv], and Gehad Gad's Academic Advising data [https://raw.githubusercontent.com/logicalschema/DATA607/master/Project%202/Advising.png].
 
-Mauris volutpat tincidunt sodales. Vestibulum a sem lacinia, blandit risus id, vehicula massa. Vestibulum vehicula pharetra velit et semper. Nullam non rhoncus massa. Pellentesque laoreet mauris ac metus lobortis dictum. Praesent quis egestas nisi. Nulla quis nunc et quam hendrerit dignissim sit amet id augue. Fusce et nisi et tortor efficitur ullamcorper sed ut justo. Vestibulum luctus ultrices dictum. Ut suscipit quam erat, eu consequat lectus laoreet sit amet. Vestibulum rhoncus arcu vestibulum imperdiet elementum. 
+I will use the following R libraries.
+
+```{r}
+library(stringr)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(rvest)  #This R library allows you to scrap web pages
+```
+
+
+# Climate Data []
+
 
 # Quarterly Results {.tabset}
  Phasellus viverra turpis lacinia sem auctor, ut porta augue feugiat. Sed maximus erat non finibus fringilla. Integer id magna at sapien luctus pulvinar. Curabitur posuere facilisis tellus in pretium. Praesent in purus nunc. Etiam elementum, massa ac hendrerit rutrum, nibh eros varius libero, ut molestie urna dolor sit amet urna. Sed volutpat ligula urna, in suscipit orci consequat ac. Phasellus luctus placerat molestie.
