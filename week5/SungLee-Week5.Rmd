@@ -120,7 +120,7 @@ head(flights)
 
 
 #Convert the columns from "Los Angeles to Seattle" as data values of a new column City with new column called Number
-flights <- gather(flights, key = "Destination", value = "Number", "Los Angeles":"Seattle" )
+flights <- gather(flights, key = "", value = "Month", "Jan":"Dec" )
 
 #Split the Column Status into columns according to its distinct values and store the number
 flights <- spread(flights, Status, Number)

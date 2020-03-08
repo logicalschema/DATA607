@@ -4,6 +4,8 @@ author: "Sung Lee"
 date: "3/2/2020"
 output: 
   html_document:
+    code_folding: hide
+    df_print: paged
     toc: true
     toc_float: true
     toc_collapsed: true
@@ -19,11 +21,13 @@ theme: lumen
 
 
 # Introduction
-The purpose of this project is to work with three datasets, tidy the data, and repurpose for data analysis. The three datasets I will use are: Leo Yi's climate data from [https:/www.usclimatedata.com], Philip Tanofsky's Coronavirus data [https://github.com/CryptoKass/ncov-data/blob/master/world.latest.bno.csv], and Gehad Gad's Academic Advising data [https://raw.githubusercontent.com/logicalschema/DATA607/master/Project%202/Advising.png].
+The purpose of this project is to work with three datasets, tidy the data, and repurpose for data analysis. The three datasets I will use are: Leo Yi's climate data from https:/www.usclimatedata.com, Philip Tanofsky's Coronavirus data https://github.com/CryptoKass/ncov-data/blob/master/world.latest.bno.csv, and Gehad Gad's Academic Advising data https://raw.githubusercontent.com/logicalschema/DATA607/master/Project%202/Advising.png.
+
+If you wish to see the R code used, there is a `Code` button in each section to view the code.
 
 I will use the following R libraries.
 
-```{r}
+```{r, warning=FALSE}
 library(stringr)
 library(tidyr)
 library(dplyr)
@@ -32,7 +36,172 @@ library(rvest)  #This R library allows you to scrap web pages
 ```
 
 
-# Climate Data []
+# Climate Data
+
+The origina climate data comes from https:/www.usclimatedata.com for New York-La Guardia Airport New York. I saved the page as [html](https://raw.githubusercontent.com/logicalschema/DATA607/master/Project%202/usclimatedata.html "GitHub Climate Data") and saved in my Github account. Because the data is in HTML tables, I will scrap the data and reconstruct the data into a format that is usable. This will be done using the `rvest` library.
+
+
+## Importing
+```{r}
+climateHTML <- read_html("https://raw.githubusercontent.com/logicalschema/DATA607/master/Project%202/usclimatedata.html")
+
+#Read in the specific HTML nodes that have our data
+climateTableOne <- html_nodes(climateHTML, "#monthly_table_one") %>% html_table()
+climateTableTwo <- html_nodes(climateHTML, "#monthly_table_two") %>% html_table()
+
+```
+
+
+Here is a look at the imported data:
+```{r} 
+climateTableOne
+climateTableTwo
+```
+
+
+
+## Tidying
+Let's merge the two tables.
+```{r}
+climateData <- merge(climateTableOne, climateTableTwo)
+```
+
+Here is a view of the data. 
+```{r}
+climateData
+```
+
+Let's rename the columns: 
+```{r}
+#Rename the columns "JanJa" "FebFe" "MarMa" "AprAp" "MayMa" "JunJu" "JulJu" "AugAu" "SepSe" "OctOc" "NovNo" "DecDe" 
+climateData <- rename(climateData, "Jan" = "JanJa")
+climateData <- rename(climateData, "Feb" = "FebFe")
+climateData <- rename(climateData, "Mar" = "MarMa")
+climateData <- rename(climateData, "Apr" = "AprAp")
+climateData <- rename(climateData, "May" = "MayMa")
+climateData <- rename(climateData, "Jun" = "JunJu")
+climateData <- rename(climateData, "Jul" = "JulJu")
+climateData <- rename(climateData, "Aug" = "AugAu")
+climateData <- rename(climateData, "Sep" = "SepSe")
+climateData <- rename(climateData, "Oct" = "OctOc")
+climateData <- rename(climateData, "Nov" = "NovNo")
+climateData <- rename(climateData, "Dec" = "DecDe")
+```
+
+
+Let's convert the month columns to rows and the rows for column `Var.1` to individual columns. 
+```{r}
+
+#Convert the columns from Jan to Dec as row values and retain the value
+climateData <- gather(climateData, key = "Month", value = "Number", "Jan":"Dec" )
+
+#Convert the rows in the column Var.1 to column and retain the value
+climateData <- spread(climateData, "Var.1", "Number")
+
+#Rename the columns
+climateData <- rename(climateData, "Av Precip" = "Av. precipitation in inchAv. precip.Pre.")
+climateData <- rename(climateData, "Av Snowfall in inches" = "Av. snowfall in inchSnowfallSn")
+climateData <- rename(climateData, "Av High in ºF" = "Average high in ºFAv. highHi")
+climateData <- rename(climateData, "Av Low in ºF" = "Average low in ºFAv. lowLo")
+
+
+#Order rows by Month
+climateData <- climateData[order(factor(climateData$Month, levels = month.abb)), ]
+
+#Order the Month column: Needed for plot
+climateData$Month <- factor(climateData$Month, levels = month.abb)
+```
+
+Here is what the dataframe looks like now:
+```{r} 
+climateData
+```
+
+## Analysis {.tabset}
+Now our data is ready for analysis. Each tab contains a different plot of the data. 
+
+This is a summary of the data:
+
+```{r}
+summary(climateData)
+```
+
+This is a summary of the differences between the `Average High` and `Average Low` Temperature each month for the set: 
+```{r, echo=FALSE} 
+summary(climateData$"Av High in ºF" - climateData$"Av Low in ºF")
+```
+
+
+### Precipitation
+```{r}
+ggplot(climateData, aes(x=Month, y=climateData$"Av Precip")) + 
+  geom_bar(alpha = .5, 
+           stat = "identity", 
+           position = position_dodge(), 
+           fill="blue", 
+           width = 0.5,
+           colour="black") +
+  ylim(0, 6) +
+  ggtitle("Average Precipitation in Inches by Month") +
+  xlab("Month") +
+  ylab("Average Precipitation")
+
+```
+
+### Snowfall
+
+```{r}
+ggplot(climateData, aes(x=Month, y=climateData$"Av Snowfall in inches")) + 
+  geom_bar(alpha = .5, 
+           stat = "identity", 
+           position = position_dodge(), 
+           fill="azure", 
+           width = 0.5,
+           colour="black") +
+  ggtitle("Average Snowfall in Inches by Month") +
+  xlab("Month") +
+  ylab("Average Snowfall")
+
+```
+
+
+### High and Low Temperature
+
+```{r}
+
+ggplot(climateData, aes(x=Month)) + 
+  geom_bar(aes(y=climateData$"Av High in ºF"),
+           alpha = .5, 
+           stat = "identity", 
+           position = position_dodge(), 
+           fill="red", 
+           width = 0.5,
+           colour="black") +
+  geom_bar(aes(y=climateData$"Av Low in ºF"),
+           alpha = .5, 
+           stat = "identity", 
+           position = position_dodge(), 
+           fill="deepskyblue", 
+           width = 0.5,
+           colour="black") +
+  geom_bar(aes(y=climateData$"Av High in ºF" - climateData$"Av Low in ºF" ),
+           stat = "identity", 
+           position = position_dodge(), 
+           fill="#056644", 
+           width = 0.5,
+           colour="black") +
+  ggtitle("Average High and Low in ºF by Month") +
+  xlab("Month") +
+  ylab("Temperature in ºF")
+```
+
+
+**Key**:<br>
+<span style="color: red;">High Temperature</span>
+<span style="color: deepskyblue;">Low Temperature</span>
+<span style="color: #056644;">Difference between High and Low Temperature</span>
+
+
 
 
 # Quarterly Results {.tabset}
