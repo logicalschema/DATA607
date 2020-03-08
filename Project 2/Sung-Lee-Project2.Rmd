@@ -17,7 +17,7 @@ theme: lumen
 
 [Assignment on RPubs](https://rpubs.com/logicalschema/data607_project2 "Sung's Project 2 Rpubs")
 <br>
-[Rmd on Github](https://github.com/logicalschema/DATA607/blob/master/Project%202/Sung-Lee-Project2.Rmd "Sung's Project 2 Assignment Github")
+[Rmd on GitHub](https://github.com/logicalschema/DATA607/blob/master/Project%202/Sung-Lee-Project2.Rmd "Sung's Project 2 Assignment GitHub")
 
 
 # Introduction
@@ -38,7 +38,7 @@ library(rvest)  #This R library allows you to scrap web pages
 
 # Climate Data
 
-The origina climate data comes from https:/www.usclimatedata.com for New York-La Guardia Airport New York. I saved the page as [html](https://raw.githubusercontent.com/logicalschema/DATA607/master/Project%202/usclimatedata.html "GitHub Climate Data") and saved in my Github account. Because the data is in HTML tables, I will scrap the data and reconstruct the data into a format that is usable. This will be done using the `rvest` library.
+The original climate data comes from https:/www.usclimatedata.com for New York-La Guardia Airport New York. I saved the page as [html](https://raw.githubusercontent.com/logicalschema/DATA607/master/Project%202/usclimatedata.html "GitHub Climate Data") and saved in my GitHub account. Because the data is in HTML tables, I will scrap the data and reconstruct the data into a format that is usable. This will be done using the `rvest` library.
 
 
 ## Importing
@@ -204,12 +204,88 @@ ggplot(climateData, aes(x=Month)) +
 
 
 
-# Climate Data
+# Corona Virus Data
+The original corona virus data is from https://github.com/CryptoKass/ncov-data/blob/master/world.latest.bno.csv. I saved the csv to my GitHub account. Here is the [link.](https://raw.githubusercontent.com/logicalschema/DATA607/master/Project%202/corona.csv) The csv was straightforward except for the `notes` column which needs to be parsed with regular expressions. 
+
+
+## Importing
+Let's import the data from GitHub. A view of what is imported is below.
+
+```{r}
+coronaCSV <- read.csv("https://raw.githubusercontent.com/logicalschema/DATA607/master/Project%202/corona.csv")
+coronaCSV
+names(coronaCSV)
+```
+A note about the csv, for `notes`, if the value is empty, there is a 0 otherwise there will be a comma-delimited list of fields for `critical`, `serious`, and `recovered`.
+
+
+## Tidying
+With the present state of the corona data, we will need to search through the `coronaCSV$notes` column and extrapolate new column values for `critical`, `serious`, and `recovered`. The initial column names are below.
+
+```{r}
+newColumns <- data.frame(matrix(ncol = 3, nrow = 0))
+x <- c("critical", "serious", "recovered")
+names(newColumns) <- x
+
+#Declare variables for critical, serious, and recovered
+c <- 0
+s <- 0
+r <- 0
+
+
+colnames(coronaCSV)
+
+items <- coronaCSV$notes
+
+for (row in 1:length(items)){
+  item <- items[row]
+  
+  #If the notes is "0", create an empty row element
+  if (item == "0"){
+    newColumns <- add_row(newColumns, "critical" = 0, "serious" = 0, "recovered" = 0)
+  } else {
+    note <- unlist(str_split(item, ","))
+    
+    #Obtain the critical value
+    p <- grep("critical", note)
+    if ( length(p) > 0){
+      tempString <- note[p]
+      tempString <- str_trim(str_replace(tempString, "critical", ""))
+      c <- as.numeric(tempString)
+    } else {
+      c <- 0
+    }
+    
+    #Obtain the serious value
+    p <- grep("serious", note)
+      if ( length(p) > 0){
+      tempString <- note[p]
+      tempString <- str_trim(str_replace(tempString, "serious", ""))
+      s <- as.numeric(tempString)
+    } else {
+      s <- 0
+    }
+    
+    #Obtain the serious value
+    p <- grep("recovered", note)
+      if ( length(p) > 0){
+      tempString <- note[p]
+      tempString <- str_trim(str_replace(tempString, "recovered", ""))
+      r <- as.numeric(tempString)
+    } else {
+      r <- 0
+    }
+    
+    newColumns <- add_row(newColumns, "critical" = c,"serious" = s,"recovered" = r)
+  }
+}
+
+print(newColumns)
+```
 
 
 # Quarterly Results {.tabset}
  Phasellus viverra turpis lacinia sem auctor, ut porta augue feugiat. Sed maximus erat non finibus fringilla. Integer id magna at sapien luctus pulvinar. Curabitur posuere facilisis tellus in pretium. Praesent in purus nunc. Etiam elementum, massa ac hendrerit rutrum, nibh eros varius libero, ut molestie urna dolor sit amet urna. Sed volutpat ligula urna, in suscipit orci consequat ac. Phasellus luctus placerat molestie.
-
 
 
 ## By Product
