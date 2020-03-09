@@ -134,7 +134,7 @@ summary(climateData$"Av High in ºF" - climateData$"Av Low in ºF")
 
 ### Precipitation
 ```{r}
-ggplot(climateData, aes(x=Month, y=climateData$"Av Precip")) + 
+ggplot(climateData, aes(x=Month, y=`Av Precip`)) + 
   geom_bar(alpha = .5, 
            stat = "identity", 
            position = position_dodge(), 
@@ -366,7 +366,99 @@ Gehad Gad provided a data set for tidying related to academic advising. Below is
 
 ![](https://raw.githubusercontent.com/logicalschema/DATA607/master/Project%202/Advising.png)
 
-I converted the screenshot to a csv. 
+I converted the screenshot to a csv. This csv is available at https://raw.githubusercontent.com/logicalschema/DATA607/master/Project%202/academicadvising.csv. I manually typed it but this can be done by using OCR on Acrobat or some online free website. On first view, there is no `NA` data. There are only 13 cases in the screenshot so I will work with these. I did have some questions about the data as I was not sure if the advisor is represented or a student that is assigned the advisor. Regardless, I will assume that the advisor listed is the actual advisor.
+
+## Importing
+To begin, let's import the Academic Advising data using the GitHub file. Here is what the initial import looks like along with the column names.
+
+```{r}
+academicCSV <- read.csv("https://raw.githubusercontent.com/logicalschema/DATA607/master/Project%202/academicadvising.csv")
+academicCSV
+
+names(academicCSV)
+
+```
+
+
+## Tidying
+The imported data needs some cleanup to be used for analysis. The `ï..Advisor` column name needs to be fixed and as proposed by Gehad, we can gather the month and rank data into two new column names.
+
+Let's rename the `ï..Advisor` column.
+```{r}
+academicCSV <- rename(academicCSV, "Advisor" = "ï..Advisor")
+names(academicCSV)
+
+```
+
+Next, let's convert the month columns to rows with a new column named `Rank` for storing the values.
+```{r}
+academicCSV <- gather(academicCSV, key = "Month", value = "Rank", "January":"July")
+
+
+
+```
+Here is what the data looks like.
+```{r}
+academicCSV
+names(academicCSV)
+```
+
+## Analysis {.tabset}
+After our data has been cleaned, we can begin analysis. Here is a general summary of the data.
+
+```{r}
+summary(academicCSV %>%
+           select(-Advisor, -Month)
+)
+
+#Order the Months for plot
+academicCSV$Month <- factor(academicCSV$Month, levels = month.name)
+```
+
+Here is a breakdown of the data.
+
+### Advisor Rank
+
+```{r}
+advisors <- unique(academicCSV$Advisor)
+
+temp <- filter(academicCSV, Advisor == "Maria")
+summary(temp)
+for (advisor in advisors){
+
+#    temp <- filter(academicCSV, Advisor == stringMatch)
+#    summary(temp)
+}
+
+
+```
+
+
+```{r}
+ggplot(academicCSV, aes(x = Month, y = Rank, group = Advisor, color = Advisor)) +
+  geom_line() +
+  geom_point() +
+  theme_classic()
+```
+
+### Major and Average Rank
+Because each of the advisors is the unique advisor for the major, there is no noticeable difference from the plot for "Rank Over Time"
+
+```{r}
+meanMajor <- academicCSV %>%
+                  group_by(Major, Month) %>%
+                  summarise_at(vars(Rank),
+                        list(Average = mean))
+meanMajor
+
+ggplot(meanMajor, aes(x = Month, y = Average, group = Major, color = Major)) +
+  geom_line() +
+  geom_point() +
+  theme_classic()
+
+
+
+```
 
 
 # Conclusion
