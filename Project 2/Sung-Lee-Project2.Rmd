@@ -280,7 +280,84 @@ for (row in 1:length(items)){
   }
 }
 
-print(newColumns)
+#Creating a new column to match newColumns with coronaCSV
+id <- 0:25
+newColumns["X"] <- id
+coronaCSV <- merge(coronaCSV, newColumns)
+
+names(coronaCSV)
+#Reordering the columns for coronaCSV
+coronaCSV <- coronaCSV[c("X", 
+                         "country", 
+                         "cases", 
+                         "deaths", 
+                         "critical", 
+                         "serious", 
+                         "recovered", 
+                         "links", 
+                         "notes")]
+```
+
+After tidying the data, this is the new data.
+```{r}
+coronaCSV
+```
+
+## Analysis {.tabset}
+We have finished tidying up the data. Now we can conduct a simple analysis of the data for `cases`, `deaths`, `critical`, `serious`, and `recovered`. The data is very skewed as China has reported the largest number of cases and there are no notes about the numbers of critical, serious, and recovered cases. The lack of media does shine a glaring spotlight on China.
+
+```{r}
+summary( coronaCSV %>%
+           select(-links, -notes, -X)
+)
+
+```
+
+Following are bar charts of the Corona data by variable broken down by country.
+
+### Cases
+
+```{r}
+ggplot(coronaCSV, aes(x = country, y = cases, fill = country)) +
+    geom_bar(stat = "identity", width = 0.5) +
+    coord_flip() +
+    theme_classic()
+```
+
+### Deaths
+
+```{r}
+ggplot(coronaCSV, aes(x = country, y = deaths, fill = country)) +
+    geom_bar(stat = "identity", width = 0.5) +
+    coord_flip() +
+    theme_classic()
+```
+
+### Critical
+
+```{r}
+ggplot(coronaCSV, aes(x = country, y = critical, fill = country)) +
+    geom_bar(stat = "identity", width = 0.5) +
+    coord_flip() +
+    theme_classic()
+```
+
+### Serious
+
+```{r}
+ggplot(coronaCSV, aes(x = country, y = serious, fill = country)) +
+    geom_bar(stat = "identity", width = 0.5) +
+    coord_flip() +
+    theme_classic()
+```
+
+### Recovered
+
+```{r}
+ggplot(coronaCSV, aes(x = country, y = recovered, fill = country)) +
+    geom_bar(stat = "identity", width = 0.5) +
+    coord_flip() +
+    theme_classic()
 ```
 
 
