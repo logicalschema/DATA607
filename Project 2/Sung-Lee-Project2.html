@@ -3277,23 +3277,6 @@ academicCSV$Month &lt;- factor(academicCSV$Month, levels = month.name)</code></p
 <p>Here is a breakdown of the data.</p>
 <div id="advisor-rank" class="section level3">
 <h3>Advisor Rank</h3>
-<pre class="r"><code>advisors &lt;- unique(academicCSV$Advisor)
-
-temp &lt;- filter(academicCSV, Advisor == &quot;Maria&quot;)
-summary(temp)</code></pre>
-<pre><code>##     Advisor                  Major        Month        Rank      
-##  Maria  :7   Science            :7   January :1   Min.   :25.00  
-##  Allana :0   Accounting         :0   February:1   1st Qu.:32.50  
-##  Amina  :0   Chemistry          :0   March   :1   Median :35.00  
-##  Anna   :0   Community Health   :0   April   :1   Mean   :36.29  
-##  Ayanna :0   Economics          :0   May     :1   3rd Qu.:41.50  
-##  Carei  :0   Engineering Science:0   June    :1   Max.   :46.00  
-##  (Other):0   (Other)            :0   (Other) :1</code></pre>
-<pre class="r"><code>for (advisor in advisors){
-
-#    temp &lt;- filter(academicCSV, Advisor == stringMatch)
-#    summary(temp)
-}</code></pre>
 <pre class="r"><code>ggplot(academicCSV, aes(x = Month, y = Rank, group = Advisor, color = Advisor)) +
   geom_line() +
   geom_point() +
@@ -3323,7 +3306,7 @@ meanMajor</code></pre>
 </div>
 <div id="conclusion" class="section level1">
 <h1>Conclusion</h1>
-<p>Fusce venenatis arcu at risus scelerisque, eget viverra massa aliquet. Nam eu gravida enim. Donec et fringilla tortor, vehicula viverra nulla. Donec molestie, sapien at bibendum sollicitudin, odio nisl faucibus augue, ut elementum ante eros sit amet turpis. Nulla sit amet accumsan magna, non fringilla ipsum. In cursus augue tincidunt nunc fringilla venenatis. Aliquam in lobortis tortor. Proin enim lorem, tempor ut elementum id, tempus sit amet dui. Aliquam pulvinar urna ut nibh pharetra consequat. Suspendisse sed dui ligula. Aliquam eget lacinia tortor. Phasellus leo magna, accumsan eu felis a, gravida dapibus urna. In molestie eleifend lobortis. Ut sed nulla semper, consequat libero ut, fermentum ipsum.</p>
+<p>R has many libraries that can help to wrangle, tidy, dice, and prepare data for analysis. Now, I have to endeavor in how to properly display the data analysis.</p>
 </div>
 
 
