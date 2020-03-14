@@ -14,7 +14,7 @@ theme: yeti
 
 [Assignment on RPubs](https://rpubs.com/logicalschema/data607_week6 "Sung's Week 6 Assignment Rpubs")
 <br>
-[Rmd on Github](https://github.com/logicalschema/DATA607/blob/master/week6/SungLee-Week6.Rmd "Sung's Week 5 Assignment Github")
+[Rmd on Github](https://raw.githubusercontent.com/logicalschema/DATA607/master/week6/SungLee_Week6.Rmd "Sung's Week 6 Assignment Github")
 
 
 
