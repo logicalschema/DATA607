@@ -2787,7 +2787,7 @@ div.tocify {
 </div>
 
 
-<p><a href="https://rpubs.com/logicalschema/data607_week6" title="Sung&#39;s Week 6 Assignment Rpubs">Assignment on RPubs</a> <br> <a href="https://github.com/logicalschema/DATA607/blob/master/week6/SungLee_Week6.Rmd" title="Sung&#39;s Week 6 Assignment Github">Rmd on Github</a></p>
+<p><a href="https://rpubs.com/logicalschema/data607_week7" title="Sung&#39;s Week 7 Assignment Rpubs">Assignment on RPubs</a> <br> <a href="https://github.com/logicalschema/DATA607/blob/master/week7/SungLee_Week7.Rmd" title="Sung&#39;s Week 6 Assignment Github">Rmd on Github</a></p>
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
 <p>This week’s assignment is to work with the web uibiquitous forms of <code>html</code>, <code>xml</code>, and <code>json</code>. This assignment will work with and identify differences between three files: <code>books.html</code>, <code>books.xml</code>, and <code>books.json</code>. The books in the brief inventory are from the dystopian science fiction genre. One book <em>Looking Backward: 2000-1887</em> by Edward Bellamy has another author Sylvester Baxter writing an introduction. Each book entry has the fields: <code>Title</code>, <code>Authors</code>, <code>ISBN-13</code>, and <code>Pages</code>.</p>
@@ -2810,7 +2810,7 @@ library(jsonlite) # Used for json</code></pre>
 <p><br></p>
 <div id="html" class="section level2">
 <h2>HTML</h2>
-<p>The file for <code>books.html</code> is located <a href="https://raw.githubusercontent.com/logicalschema/DATA607/master/week6/books.html">here</a>. This will use the <code>rvest</code> library. There are no spans or malformed HTML in the file so parsing the html will be seamless.</p>
+<p>The file for <code>books.html</code> is located <a href="https://raw.githubusercontent.com/logicalschema/DATA607/master/week7/books.html">here</a>. This will use the <code>rvest</code> library. There are no spans or malformed HTML in the file so parsing the html will be seamless.</p>
 <p>This is `books.html:</p>
 <pre><code>&lt;table&gt;
     &lt;tr&gt;
@@ -2839,7 +2839,7 @@ library(jsonlite) # Used for json</code></pre>
     &lt;/tr&gt;
 &lt;/table&gt;</code></pre>
 <p><br> This is the R code to import the file.</p>
-<pre class="r"><code>booksHTML &lt;- read_html(&quot;https://raw.githubusercontent.com/logicalschema/DATA607/master/week6/books.html&quot;)
+<pre class="r"><code>booksHTML &lt;- read_html(&quot;https://raw.githubusercontent.com/logicalschema/DATA607/master/week7/books.html&quot;)
 
 
 # Uses the html_table function by grabbing the table node
@@ -2865,7 +2865,7 @@ sapply(bookdataHTML, class)</code></pre>
 </div>
 <div id="xml" class="section level2">
 <h2>XML</h2>
-<p>The file for books.xml is located <a href="https://raw.githubusercontent.com/logicalschema/DATA607/master/week6/books.xml">here</a>. The default function <code>xmlParse</code> function from the XML library had problems parsing <a href="https://" class="uri">https://</a> files. I used the library <code>RCurl</code> as a workaround by grabbing the file and then parsing the file.</p>
+<p>The file for books.xml is located <a href="https://raw.githubusercontent.com/logicalschema/DATA607/master/week7/books.xml">here</a>. The default function <code>xmlParse</code> function from the XML library had problems parsing <a href="https://" class="uri">https://</a> files. I used the library <code>RCurl</code> as a workaround by grabbing the file and then parsing the file.</p>
 <p>This is books.xml:</p>
 <pre><code>&lt;books&gt;
   &lt;book&gt;
@@ -2890,7 +2890,7 @@ sapply(bookdataHTML, class)</code></pre>
 <p><br> This is the code to import the xml file in R.</p>
 <pre class="r"><code># Store the url for the xml file on GitHub
 # The function xmlParse for the XML library had problems parsing https:// protocol files so I used the RCurl library
-urlFile &lt;- getURL(&quot;https://raw.githubusercontent.com/logicalschema/DATA607/master/week6/books.xml&quot;)
+urlFile &lt;- getURL(&quot;https://raw.githubusercontent.com/logicalschema/DATA607/master/week7/books.xml&quot;)
 xmlDocument &lt;- xmlParse(urlFile)
 
 #Convert the xml file to a dataframe starting at the root node
@@ -2914,7 +2914,7 @@ sapply(bookdataXML, class)</code></pre>
 </div>
 <div id="json" class="section level2">
 <h2>JSON</h2>
-<p>JSON stands for “<strong>J</strong>ava<strong>S</strong>cript <strong>O</strong>bject <strong>N</strong>otation”<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. The file for books.json is located <a href="https://raw.githubusercontent.com/logicalschema/DATA607/master/week6/books.json">here</a>.</p>
+<p>JSON stands for “<strong>J</strong>ava<strong>S</strong>cript <strong>O</strong>bject <strong>N</strong>otation”<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. The file for books.json is located <a href="https://raw.githubusercontent.com/logicalschema/DATA607/master/week7/books.json">here</a>.</p>
 <p>This is books.json:</p>
 <pre><code>{&quot;books&quot;:[
     {&quot;Title&quot;:&quot;Fahrenheit 451&quot;, &quot;Authors&quot;:&quot;Ray Bradbury&quot;, &quot;ISBN-13&quot;:&quot;978-1451673319&quot;, &quot;Pages&quot;:249},
@@ -2922,7 +2922,7 @@ sapply(bookdataXML, class)</code></pre>
     {&quot;Title&quot;:&quot;Looking Backward: 2000-1887&quot;, &quot;Authors&quot;:&quot;Edward Bellamy, Sylvester Baxter&quot;, &quot;ISBN-13&quot;:&quot;978-1420957686&quot;, &quot;Pages&quot;:162}
 ]}</code></pre>
 <p><br> This is the R code to import the JSON file.</p>
-<pre class="r"><code>jsonBooks &lt;- fromJSON(&quot;https://raw.githubusercontent.com/logicalschema/DATA607/master/week6/books.json&quot;) 
+<pre class="r"><code>jsonBooks &lt;- fromJSON(&quot;https://raw.githubusercontent.com/logicalschema/DATA607/master/week7/books.json&quot;) 
 
 # Convert to data frame
 bookdataJSON &lt;- jsonBooks  %&gt;% as.data.frame</code></pre>

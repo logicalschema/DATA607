@@ -12,9 +12,9 @@ output:
 theme: lumen
 ---
 
-[Assignment on RPubs](https://rpubs.com/logicalschema/data607_week6 "Sung's Week 6 Assignment Rpubs")
+[Assignment on RPubs](https://rpubs.com/logicalschema/data607_week7 "Sung's Week 7 Assignment Rpubs")
 <br>
-[Rmd on Github](https://github.com/logicalschema/DATA607/blob/master/week6/SungLee_Week6.Rmd "Sung's Week 6 Assignment Github")
+[Rmd on Github](https://github.com/logicalschema/DATA607/blob/master/week7/SungLee_Week7.Rmd "Sung's Week 6 Assignment Github")
 
 
 
@@ -48,7 +48,7 @@ library(jsonlite) # Used for json
 
 ## HTML
 
-The file for `books.html` is located [here](https://raw.githubusercontent.com/logicalschema/DATA607/master/week6/books.html). This will use the `rvest` library. There are no spans or malformed HTML in the file so parsing the html will be seamless.  
+The file for `books.html` is located [here](https://raw.githubusercontent.com/logicalschema/DATA607/master/week7/books.html). This will use the `rvest` library. There are no spans or malformed HTML in the file so parsing the html will be seamless.  
 
 This is `books.html:
 
@@ -85,7 +85,7 @@ This is the R code to import the file.
 
 ```{r}
 
-booksHTML <- read_html("https://raw.githubusercontent.com/logicalschema/DATA607/master/week6/books.html")
+booksHTML <- read_html("https://raw.githubusercontent.com/logicalschema/DATA607/master/week7/books.html")
 
 
 # Uses the html_table function by grabbing the table node
@@ -108,7 +108,7 @@ The HTML table was imported. I used a comma delimited string to represent `Autho
 
 ## XML
 
-The file for books.xml is located [here](https://raw.githubusercontent.com/logicalschema/DATA607/master/week6/books.xml). The default function `xmlParse` function from the XML library had problems parsing https:// files. I used the library `RCurl` as a workaround by grabbing the file and then parsing the file.
+The file for books.xml is located [here](https://raw.githubusercontent.com/logicalschema/DATA607/master/week7/books.xml). The default function `xmlParse` function from the XML library had problems parsing https:// files. I used the library `RCurl` as a workaround by grabbing the file and then parsing the file.
 
 This is books.xml:
 ```
@@ -142,7 +142,7 @@ This is the code to import the xml file in R.
 
 # Store the url for the xml file on GitHub
 # The function xmlParse for the XML library had problems parsing https:// protocol files so I used the RCurl library
-urlFile <- getURL("https://raw.githubusercontent.com/logicalschema/DATA607/master/week6/books.xml")
+urlFile <- getURL("https://raw.githubusercontent.com/logicalschema/DATA607/master/week7/books.xml")
 xmlDocument <- xmlParse(urlFile)
 
 #Convert the xml file to a dataframe starting at the root node
@@ -168,7 +168,7 @@ The initial use of the XML function `xmlToDataFrame` imports all of the data as 
 
 ## JSON
 
-JSON stands for "**J**ava**S**cript **O**bject **N**otation"^[*Automated Data Collection with R* p 68]. The file for books.json is located [here](https://raw.githubusercontent.com/logicalschema/DATA607/master/week6/books.json). 
+JSON stands for "**J**ava**S**cript **O**bject **N**otation"^[*Automated Data Collection with R* p 68]. The file for books.json is located [here](https://raw.githubusercontent.com/logicalschema/DATA607/master/week7/books.json). 
 
 This is books.json:
 ```
@@ -184,7 +184,7 @@ This is books.json:
 This is the R code to import the JSON file.
 
 ```{r}
-jsonBooks <- fromJSON("https://raw.githubusercontent.com/logicalschema/DATA607/master/week6/books.json") 
+jsonBooks <- fromJSON("https://raw.githubusercontent.com/logicalschema/DATA607/master/week7/books.json") 
 
 # Convert to data frame
 bookdataJSON <- jsonBooks  %>% as.data.frame
