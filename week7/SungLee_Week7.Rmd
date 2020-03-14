@@ -1,0 +1,220 @@
+---
+title: "Data 607 Assignment 7"
+author: "Sung Lee"
+date: "3/14/2020"
+output: 
+  html_document: 
+    df_print: paged
+    toc: true
+    toc_float: true
+    toc_collapsed: true
+    toc_depth: 3
+theme: lumen
+---
+
+[Assignment on RPubs](https://rpubs.com/logicalschema/data607_week6 "Sung's Week 6 Assignment Rpubs")
+<br>
+[Rmd on Github](https://github.com/logicalschema/DATA607/blob/master/week6/SungLee_Week6.Rmd "Sung's Week 6 Assignment Github")
+
+
+
+
+# Introduction
+
+This week's assignment is to work with the web uibiquitous forms of `html`, `xml`, and `json`. This assignment will work with and identify differences between three files: `books.html`, `books.xml`, and `books.json`. The books in the brief inventory are from the dystopian science fiction genre. One book *Looking Backward: 2000-1887* by Edward Bellamy has another author Sylvester Baxter writing an introduction. Each book entry has the fields: `Title`, `Authors`, `ISBN-13`, and `Pages`. 
+
+<br>
+<br>
+
+
+
+
+# Import {.tabset}
+
+Let's import the formats into R. Each tab will have the code on how to import the various formats.
+
+Let's setup the libraries we will use with the following code.
+
+```{r}
+library(xml2)   # Used by rvest
+library(rvest)  # This is a handy Tidyverse library for HTML parsing
+library(XML)    # Basic library ised for XML in Automated Data Collection with R
+library(RCurl)  # Used to obtain a url file for XML library related to https error
+library(jsonlite) # Used for json
+
+
+```
+<br>
+
+## HTML
+
+The file for `books.html` is located [here](https://raw.githubusercontent.com/logicalschema/DATA607/master/week6/books.html). This will use the `rvest` library. There are no spans or malformed HTML in the file so parsing the html will be seamless.  
+
+This is `books.html:
+
+```
+<table>
+	<tr>
+		<th>Title</th>
+		<th>Authors</th>
+		<th>ISBN-13</th>
+		<th>Pages</th>
+	</tr>
+	<tr>
+		<td>Fahrenheit 451</td>
+		<td>Ray Bradbury</td>
+		<td>978-1451673319</td>
+		<td>249</td>
+	</tr>
+	<tr>
+		<td>1984</td>
+		<td>George Orwell</td>
+		<td>978-1443434973</td>
+		<td>416</td>
+	</tr>
+	<tr>
+		<td>Looking Backward: 2000-1887</td>
+		<td>Edward Bellamy, Sylvester Baxter</td>
+		<td>978-1420957686</td>
+		<td>162</td>
+	</tr>
+</table>
+```
+<br>
+This is the R code to import the file.
+
+```{r}
+
+booksHTML <- read_html("https://raw.githubusercontent.com/logicalschema/DATA607/master/week6/books.html")
+
+
+# Uses the html_table function by grabbing the table node
+bookdataHTML <- booksHTML %>%
+                  html_node("table") %>%
+                  html_table()
+
+# Here is a look at the new R data frame bookdataHTML
+bookdataHTML 
+
+# Here are the column names for the data frame
+names(bookdataHTML)
+
+# Here are the datatypes of the columns
+sapply(bookdataHTML, class)
+```
+
+The HTML table was imported. I used a comma delimited string to represent `Authors` so additional work would be needed to convert the `Authors` column to another data structure. The initial datatypes for the columns is `character` and `Pages` is an `integer`.
+
+
+## XML
+
+The file for books.xml is located [here](https://raw.githubusercontent.com/logicalschema/DATA607/master/week6/books.xml). The default function `xmlParse` function from the XML library had problems parsing https:// files. I used the library `RCurl` as a workaround by grabbing the file and then parsing the file.
+
+This is books.xml:
+```
+<books>
+  <book>
+    <Title>Fahrenheit 451</Title>
+    <Authors>Ray Bradbury</Authors>
+    <ISBN-13>978-1451673319</ISBN-13>
+    <Pages>249</Pages>
+  </book>
+  <book>
+    <Title>1984</Title>
+    <Authors>George Orwell</Authors>
+    <ISBN-13>978-1443434973</ISBN-13>
+    <Pages>416</Pages>
+  </book>
+  <book>
+    <Title>Looking Backward: 2000-1887</Title>
+    <Authors>Edward Bellamy, Sylvester Baxter</Authors>
+    <ISBN-13>978-1420957686</ISBN-13>
+    <Pages>162</Pages>
+  </book>
+</books>
+```
+
+
+<br>
+This is the code to import the xml file in R.
+
+```{r}
+
+# Store the url for the xml file on GitHub
+# The function xmlParse for the XML library had problems parsing https:// protocol files so I used the RCurl library
+urlFile <- getURL("https://raw.githubusercontent.com/logicalschema/DATA607/master/week6/books.xml")
+xmlDocument <- xmlParse(urlFile)
+
+#Convert the xml file to a dataframe starting at the root node
+bookdataXML <- xmlToDataFrame(xmlRoot(xmlDocument))
+
+```
+
+This is the dataframe `bookdataXML`.
+```{r}
+
+# Initial look at the dataframe
+bookdataXML
+
+# The names of the columns
+names(bookdataXML)
+
+# The datatypes of the dataframe
+sapply(bookdataXML, class)
+
+```
+
+The initial use of the XML function `xmlToDataFrame` imports all of the data as `factor` datatypes. Additional converting would be needed to get the right fit.
+
+## JSON
+
+JSON stands for "**J**ava**S**cript **O**bject **N**otation"^[*Automated Data Collection with R* p 68]. The file for books.json is located [here](https://raw.githubusercontent.com/logicalschema/DATA607/master/week6/books.json). 
+
+This is books.json:
+```
+{"books":[
+	{"Title":"Fahrenheit 451", "Authors":"Ray Bradbury", "ISBN-13":"978-1451673319", "Pages":249},
+	{"Title":"1984", "Authors":"George Orwell", "ISBN-13":"978-1443434973", "Pages":416},
+	{"Title":"Looking Backward: 2000-1887", "Authors":"Edward Bellamy, Sylvester Baxter", "ISBN-13":"978-1420957686", "Pages":162}
+]}
+```
+
+
+<br>
+This is the R code to import the JSON file.
+
+```{r}
+jsonBooks <- fromJSON("https://raw.githubusercontent.com/logicalschema/DATA607/master/week6/books.json") 
+
+# Convert to data frame
+bookdataJSON <- jsonBooks  %>% as.data.frame
+```
+<br>
+Let's take a look at our import.
+
+```{r}
+# Initial view of the data frame
+bookdataJSON
+
+# The column names
+names(bookdataJSON)
+
+# The datatypes
+sapply(bookdataJSON, class)
+
+```
+
+The `jsonlite` package was handy in importing the JSON file.  
+
+
+<br>
+<br>
+
+# Conclusion
+
+`html`, `xml`, and `json` files can be imported as data frames into R. Depending upon the libraries employed, you will need to tidy the data. The import functions will not necessarily import the same way. I would say that `xml` and `json` are the cleanest to import as `html` can have many attributes that fill the html nodes. `json` seems to have the fewest libraries available to import.
+
+
+
+
+
