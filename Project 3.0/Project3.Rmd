@@ -17,7 +17,7 @@ library(wordcloud)
 library(RColorBrewer)
 library(stringr)
 
-library(tokenizers)
+
 
 
 jobs <- read.csv('data_scientist_united_states_job_postings_jobspikr.csv')
