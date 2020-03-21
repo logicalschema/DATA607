@@ -94,7 +94,7 @@ Initial problems and solutions:
 <br>
 **How did the data look in Azure?**
 
-When the data was imported into Microsoft's cloud service, we ran some initial tests on the data to look for patterns. Using Microsoft's Text Analytics tools the following is a word cloud of the keyphrases that were discovered by Microsoft's AI:
+When the data was imported into Microsoft's cloud service, we ran some initial tests on the data to look for patterns. Using Microsoft's Text Analytics^[https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-call-api] tools the following is a word cloud of the keyphrases that were discovered by Microsoft's AI:
 
 ![Word Cloud Courtesy of Azure](https://github.com/logicalschema/DATA607/raw/master/project3/images/powerbi_wordcloud.png)
 
