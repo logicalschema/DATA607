@@ -8,9 +8,12 @@ The purpose of this project is to answer the question, "Which are the most value
 ## Group Members for Team MPSV
 
 
-**M**att Mecoli
-**P**hilip Tanofsky
-**S**ung Lee
+**M**att Mecoli  
+
+**P**hilip Tanofsky  
+
+**S**ung Lee  
+
 **V**anita Thompson
 
 

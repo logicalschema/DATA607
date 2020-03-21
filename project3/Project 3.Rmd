@@ -22,7 +22,29 @@ theme: lumen
 # Introduction
 
 
+
+
+# Tools
+
+
+
+
+# Approach
+
+We had discussions about which sets of data to use. The internet is filled with a plethora of data, but few were of applicable use. Linkedin was not readily accessible. 
+
 # Importing
+
+The data we ended up using is from the web site https://data.world/jobspikr/10000-data-scientist-job-postings-from-the-usa. Phil was able to obtain the csv. The data was scraped using JobsPikr. The csv consists of 10,000 records and had the following as text fields: `crawl_timestamp`, `url`, `job_title`, `category`, `company_name`, `city`, `state`, `country`, `inferred_city`, `inferred_state`, `inferred_country`, `post_date`, `job_description`, `job_type`, `salary_offered`, `job_board`, `geo`, `cursor`, `contact_email`, `contact_phone_number`, `uniq_id`, and `html_job_desc`. 
+
+Initial problems: 
+1. The csv file is 48.5 MB and the character set had UTF-8 characters. 
+2. HTML code was left in the `job_description` field.
+3. Initial load of the csv into R would take time depending upon the hardware of the group member's system. Sung has a laptop with 16 GB RAM which was able to overcome many issues.
+
+
+
+
 
 
 # Analysis
