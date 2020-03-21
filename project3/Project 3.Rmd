@@ -100,10 +100,11 @@ When the data was imported into Microsoft's cloud service, we ran some initial t
 
 ![Word Cloud Courtesy of Azure](https://github.com/logicalschema/DATA607/raw/master/project3/images/powerbi_wordcloud.png)
 
-The key phrases were stored in the database. Because the use of Microsoft's service was limited, we found the need for persistent storage of the results. Sung had used up his $200 credit for one of his subscriptions within a week.
+The key phrases were stored in the database. Key phrases were extrapolated from the job descriptions for each of the jobs listed. Because the use of Microsoft's service was limited, we found the need for persistent storage of the results. Sung had used up his $200 credit for one of his subscriptions within a week of testing.  
 
 
 ```{r}
+#Form a connection to the MySQL database
 mydb <- dbConnect(MySQL(), 
                   user='data607@data607', 
                   password='student#2020',
@@ -111,13 +112,38 @@ mydb <- dbConnect(MySQL(),
                   host='data607.mysql.database.azure.com'
                   )
 
-#keyphrases is stored in the meta table of the database
+#Key phrases is stored in the meta table of the database
 rs <- dbSendQuery(mydb, "SELECT keyphrases FROM meta")
 dbRows <- dbFetch(rs)
+dbClearResult(rs)
 
-#This the 
-head(dbRows)
-kable(dbRows, caption = "Sample Key Phrases")
+#Job descriptions are stored in the job table of the database
+rs <- dbSendQuery(mydb, "SELECT job_description FROM job")
+descriptions <- dbFetch(rs)
+dbClearResult(rs)
+
+#This a sample of the Key Phrases from Azure
+kable(dbRows[1:5, ], 
+      caption = "Job Description Key Phrases", 
+      col.names = c("Key Phrases") 
+      )
+
+```
+
+*Initial Frequencies of Azure Key Phrases*  
+```{r}
+
+#Remove non ASCII characters
+dbRows <-  gsub("[^\x20-\x7E]", "", dbRows)
+dbRows <-  gsub("\"", "", dbRows)
+
+#Grab the unique keyphrases after some clean up: 
+keyphrases <- unique(unlist(str_split(dbRows, ",")))
+keyphrases <- str_replace_all(keyphrases, "^ ", "")
+keyphrases <- unique(keyphrases)
+keyphrases <- as.data.frame(keyphrases)
+
+
 
 ```
 
