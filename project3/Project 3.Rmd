@@ -16,7 +16,7 @@ theme: lumen
 
 [Assignment on RPubs](https://rpubs.com/logicalschema/data607_project3 "Data 607 Project 3 Rpubs")
 <br>
-
+[Rmd on GitHub](https://github.com/logicalschema/DATA607/blob/master/project3/Project%203.Rmd "Team MPSV Project 3 Assignment GitHub")
 
 
 # Introduction
