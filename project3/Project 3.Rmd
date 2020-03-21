@@ -40,7 +40,14 @@ The data we ended up using is from the web site https://data.world/jobspikr/1000
 Initial problems: 
 1. The csv file is 48.5 MB and the character set had UTF-8 characters. 
 2. HTML code was left in the `job_description` field.
-3. Initial load of the csv into R would take time depending upon the hardware of the group member's system. Sung has a laptop with 16 GB RAM which was able to overcome many issues.
+3. Initial load of the csv into R would take time depending upon the hardware of the group member's system.  
+4. How would we convert to a normalized database?
+
+
+
+
+
+
 
 
 
