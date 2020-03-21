@@ -19,13 +19,26 @@ theme: lumen
 [Rmd on GitHub](https://github.com/logicalschema/DATA607/blob/master/project3/Project%203.Rmd "Team MPSV Project 3 Assignment GitHub")
 
 <div style="margin-bottom:50px;"></div>
-# Introduction
+# Introduction  
 
 
 
-<div style="margin-bottom:50px;"></div>
-# Tools
 
+These are the libraries we will be using.
+```{r}
+
+library(tm)
+library(SnowballC)
+library(wordcloud)
+library(RColorBrewer)
+library(stringr)
+library(RWeka)
+library(ggplot2)
+library(tidytext)
+library(tidyverse)
+
+
+```
 
 
 <div style="margin-bottom:50px;"></div>
@@ -37,16 +50,46 @@ We had discussions about which sets of data to use. The internet is filled with 
 <div style="margin-bottom:50px;"></div>
 # Importing
 
-The data we ended up using is from the web site https://data.world/jobspikr/10000-data-scientist-job-postings-from-the-usa. Phil was able to obtain the csv. The data was scraped using JobsPikr. The csv consists of 10,000 records and had the following as text fields: `crawl_timestamp`, `url`, `job_title`, `category`, `company_name`, `city`, `state`, `country`, `inferred_city`, `inferred_state`, `inferred_country`, `post_date`, `job_description`, `job_type`, `salary_offered`, `job_board`, `geo`, `cursor`, `contact_email`, `contact_phone_number`, `uniq_id`, and `html_job_desc`. 
+The data we ended up using is from the web site https://data.world/jobspikr/10000-data-scientist-job-postings-from-the-usa. Phil was able to obtain the csv. The data was scraped using JobsPikr. The csv consists of 10,000 records and had the following as text fields: `crawl_timestamp`, `url`, `job_title`, `category`, `company_name`, `city`, `state`, `country`, `inferred_city`, `inferred_state`, `inferred_country`, `post_date`, `job_description`, `job_type`, `salary_offered`, `job_board`, `geo`, `cursor`, `contact_email`, `contact_phone_number`, `uniq_id`, and `html_job_desc`.  
 
-Initial problems: 
-1. The csv file is 48.5 MB and the character set had UTF-8 characters. 
-2. HTML code was left in the `job_description` field.
+This is the original csv with field names.
+
+![CSV Fieldnames](https://github.com/logicalschema/DATA607/raw/master/project3/images/data_original_csv.png)
+
+
+```{r}
+url <- "https://github.com/logicalschema/DATA607/raw/master/project3/data/data_scientist_united_states_job_postings_jobspikr.zip"
+
+
+jobs
+```
+
+
+Initial problems:  
+
+1. The csv file is 48.5 MB and the character set had UTF-8 characters.  
+
+2. HTML code was left in the `job_description` field.  
+
 3. Initial load of the csv into R would take time depending upon the hardware of the group member's system.  
-4. How would we convert to a normalized database?
-5. Some group member's machines did not have the same amount of RAM. Vanita's laptop had 8 GB RAM and Sung's laptop was running 16 GB.
+
+4. How would we convert to a normalized database?  
+
+5. Some group member's machines did not have the same amount of RAM. Vanita's laptop had 8 GB RAM and Sung's laptop was running 16 GB.  
 
 
+
+
+
+
+
+
+
+
+
+
+
+<br>
 <div style="margin-bottom 25px;"></div>
 ## Excursus {.tabset}
 
@@ -67,6 +110,8 @@ This connection is made public but is restricted by IP address. If you desire ac
 *Port*: 3306  
 *Username*: data607@data607  
 *Password*: student#2020  
+
+Default timeout settings for the database server had to be lengthened to enable longer processing.
 
 <br>
 
@@ -89,9 +134,16 @@ Power BI is a Microsoft product that is used to visualize data. It was employed 
 
 As an option to curtail the amount of time needed to process the 10,000 row csv, group members worked with a small subset of the file, tested code, and then would work with the larger data set. Some group members machines would complain about memory errors. 
 
+Files being worked on from Github were compressed to enable quicker transport across the network.
+
+This is an example of a memory error on Sung's laptop when trying to text mine on the job description data:
+![Memory Error](https://github.com/logicalschema/DATA607/raw/master/project3/images/memory_error.png)  
+
+
 
 
 <div style="margin-bottom:50px;"></div>
+
 # Tidying
 
 
