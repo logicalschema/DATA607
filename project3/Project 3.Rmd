@@ -4,11 +4,12 @@ author: "Sung Lee"
 date: "3/21/2020"
 output: 
   html_document:
-    code_folding: hide
+    code_folding: show
     df_print: paged
     toc: true
     toc_float: true
     toc_collapsed: true
+    smooth_scroll: false
     toc_depth: 3
 number_sections: true
 theme: lumen
@@ -26,7 +27,7 @@ theme: lumen
 
 These are the libraries we will be using.
 ```{r loadlib, echo=TRUE, results='hide', message=FALSE, warning=FALSE}
-
+library(RMySQL)
 library(tm)
 library(SnowballC)
 library(wordcloud)
@@ -36,6 +37,7 @@ library(RWeka)
 library(ggplot2)
 library(tidytext)
 library(tidyverse)
+library(knitr)
 
 
 ```
@@ -94,14 +96,30 @@ Initial problems and solutions:
 <br>
 **How did the data look in Azure?**
 
-When the data was imported into Microsoft's cloud service, we ran some initial tests on the data to look for patterns. Using Microsoft's Text Analytics^[https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-call-api] tools the following is a word cloud of the keyphrases that were discovered by Microsoft's AI:
+When the data was imported into Microsoft's cloud service, we ran some initial tests on the data to look for patterns. Using Microsoft's Text Analytics^[https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-call-api] tools the following is a word cloud^[Note the image was created with stop words on https://github.com/logicalschema/DATA607/raw/master/project3/images/stopwords.jpg] of the keyphrases that were discovered by Microsoft's AI:
 
 ![Word Cloud Courtesy of Azure](https://github.com/logicalschema/DATA607/raw/master/project3/images/powerbi_wordcloud.png)
 
-The keyphrases were stored on the database.
+The key phrases were stored in the database. Because the use of Microsoft's service was limited, we found the need for persistent storage of the results. Sung had used up his $200 credit for one of his subscriptions within a week.
 
 
+```{r}
+mydb <- dbConnect(MySQL(), 
+                  user='data607@data607', 
+                  password='student#2020',
+                  dbname='project3data607', 
+                  host='data607.mysql.database.azure.com'
+                  )
 
+#keyphrases is stored in the meta table of the database
+rs <- dbSendQuery(mydb, "SELECT keyphrases FROM meta")
+dbRows <- dbFetch(rs)
+
+#This the 
+head(dbRows)
+kable(dbRows, caption = "Sample Key Phrases")
+
+```
 
 
 
