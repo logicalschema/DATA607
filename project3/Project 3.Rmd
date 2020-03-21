@@ -25,7 +25,7 @@ theme: lumen
 
 
 These are the libraries we will be using.
-```{r}
+```{r loadlib, echo=TRUE, results='hide', message=FALSE, warning=FALSE}
 
 library(tm)
 library(SnowballC)
@@ -56,29 +56,46 @@ This is the original csv with field names.
 
 ![CSV Fieldnames](https://github.com/logicalschema/DATA607/raw/master/project3/images/data_original_csv.png)
 
+Inital import of the csv file.
 
-```{r}
-url <- "https://github.com/logicalschema/DATA607/raw/master/project3/data/data_scientist_united_states_job_postings_jobspikr.csv.gz"
+```{r, warning=FALSE}
 
+# Using read_csv as it allows for on the fly decompression of zip csv files
+jobs <- read_csv("https://github.com/logicalschema/DATA607/raw/master/project3/data/data_scientist_united_states_job_postings_jobspikr.csv.gz")
 
-jobs <- read_csv(url)
+# Look that the first group of imported rows
 head(jobs)
-
 
 ```
 
 
-Initial problems:  
+Initial problems and solutions:  
 
 1. The csv file is 48.5 MB and the character set had UTF-8 characters.  
 
-2. HTML code was left in the `job_description` field.  
+    The file was zipped up to reduce download time. When the file is imported into R, we will tidy the data.
+
+2. HTML code was left in the `job_description` field. Evidence of the HTML scrape of the data source.  
+
+    Invalid characters will be removed.
 
 3. Initial load of the csv into R would take time depending upon the hardware of the group member's system.  
 
+    With the zip file and cutting up the file into smaller pieces, this would reduce the need for additional RAM.
+
 4. How would we convert to a normalized database?  
 
+    The csv was converted to a MySQL script file. The header column names were encapsulated with `"` marks. Workbench was used to create a new table on the MySQL database. Subsequently, through SQL SELECT, we normalized the data.
+    
+    In addition, when the data was imported in a database, Sung ran Text Analytics on the `job_description` column to find key phrases. This information was used to create a new column called `keyphrases` in the normalized database.
+
 5. Some group member's machines did not have the same amount of RAM. Vanita's laptop had 8 GB RAM and Sung's laptop was running 16 GB.  
+
+<br>
+**How did the data look in Azure?**
+
+When the data was imported into Microsoft's cloud service, we ran some initial tests on the data to look for patterns. Using Microsoft's Text Analytics tools the following is a word cloud of the keyphrases that were discovered by Microsoft's AI:
+
 
 
 
@@ -128,10 +145,15 @@ This is a [link](https://github.com/logicalschema/DATA607/raw/master/project3/da
 
 ### Tools
 
-**Microsoft's Cognitive Text Analytics, Power BI, Slack, Github, and MySQL Workbench**
+**Microsoft's Cognitive Text Analytics, Power BI, Slack, GitHub, and MySQL Workbench**
 In addition to the database instance, he created, Sung created an instance for Azure's Cognitive Text Analytics to experiment to see what information Microsoft's AI can mine from our data. The tools were used to facilitate handling the data.
 
 Power BI is a Microsoft product that is used to visualize data. It was employed to work with Microsoft's Cognitive Text Analytics to extrapolate keyphrases from the `job_descriptions` of the data and to create a simple word cloud to compare with our later analysis.
+
+Slack and GitHub were used to collaborate. Files were exchanged via Slack. Code was edited via GitHub.
+
+MySQL Workbench was used to connect to the MySQL database.
+
 
 ### Data Management
 
