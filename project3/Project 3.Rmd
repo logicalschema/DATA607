@@ -58,10 +58,13 @@ This is the original csv with field names.
 
 
 ```{r}
-url <- "https://github.com/logicalschema/DATA607/raw/master/project3/data/data_scientist_united_states_job_postings_jobspikr.zip"
+url <- "https://github.com/logicalschema/DATA607/raw/master/project3/data/data_scientist_united_states_job_postings_jobspikr.csv.gz"
 
 
-jobs
+jobs <- read_csv(url)
+head(jobs)
+
+
 ```
 
 
