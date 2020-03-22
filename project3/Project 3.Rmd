@@ -1,6 +1,6 @@
 ---
 title: "Data 607 Project 3"
-author: "Sung Lee"
+author: "Matt Mecoli, Philip Tanofsky, Sung Lee, Vanita Thompson"
 date: "3/21/2020"
 output: 
   html_document:
@@ -22,10 +22,20 @@ theme: lumen
 <div style="margin-bottom:50px;"></div>
 # Introduction  
 
+The purpose of this assignment is to answer the question, "Which are the most valued data science skills?" Within the team we have had experiences applying for jobs, but we were each relatively new to the data science vernacular. For example, we have one seasoned programmer and a student with a background in chemical engineering. This project is our endeavor in how we answered this question. 
 
 
+<div style="margin-bottom:50px;"></div>
+# Approach
 
-These are the libraries we will be using.
+We had discussions about which sets of data to use. The internet is filled with a plethora of data, but few were of applicable use. Linkedin was not readily accessible. We worked from our experiences with applying for jobs and during some brainstorming over Zoom, we came up with searching government sites for available data, Kaggle, and the possibility of web scraping Monster or Indeed.
+
+*Jackson Pollock the Data*
+Our thinking was that if we obtain data science job listings, we would mine the text for words and phrases. In other words, if we splash the data in front of us, find some frequencies, perhaps a pattern would arise. 
+
+
+The following are the R libraries we will be using.  
+
 ```{r loadlib, echo=TRUE, results='hide', message=FALSE, warning=FALSE}
 library(RMySQL)
 library(tm)
@@ -38,17 +48,9 @@ library(ggplot2)
 library(tidytext)
 library(tidyverse)
 library(knitr)
-
-#Used for summary frequencies of the key phrases
 library(summarytools)
 
 ```
-
-
-<div style="margin-bottom:50px;"></div>
-# Approach
-
-We had discussions about which sets of data to use. The internet is filled with a plethora of data, but few were of applicable use. Linkedin was not readily accessible. 
 
 
 <div style="margin-bottom:50px;"></div>
@@ -235,8 +237,10 @@ keyphrases
 
 
 
-#freq(keyphrases$keyphrases, order = "freq")
-freq(keyphrases$keyphrases, order = "freq", style = "rmarkdown", rows = 1:50)
+#Frequency chart of the key phrases using the summary tools package
+freq(keyphrases$keyphrases, order = "freq", style = "rmarkdown", rows = 1:20)
+
+
 ```
 
 <br>
