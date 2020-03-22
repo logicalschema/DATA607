@@ -286,8 +286,8 @@ After we have imported and tidied our data, we can begin to perform tests to min
 ```{r}
 
 #Create a term document matrix based upon the variable descriptions
-dtm <- TermDocumentMatrix(descriptions)
-m <- as.matrix(dtm)
+tdm <- TermDocumentMatrix(descriptions)
+m <- as.matrix(tdm)
 v <- sort(rowSums(m),decreasing=TRUE)
 
 #Creates a frequency table for words
@@ -296,11 +296,17 @@ freqTable <- data.frame(word = names(v), freq=v)
 
 ```
 
+<br>
+Here is a frequency table and barplot for words found in job descriptions:  
 
-Here is a frequency table for words found in job descriptions:
-`r freqTable `
 
+```{r}
+freqTable
 
+#Bar plot of the 20 most common words
+barplot(v[1:20], col = "#003366", las = 2)
+
+```
 
 
 <div style="margin-bottom:25px;"></div>
