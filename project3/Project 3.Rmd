@@ -67,13 +67,13 @@ jobs <- read_csv("https://github.com/logicalschema/DATA607/raw/master/project3/d
 
 # Look that the first group of imported rows
 head(jobs)
-rm(jobs)
+
 ```
 
 ```{r, echo=FALSE}
 
 #To remove the large variable that was created
-
+rm(jobs)
 
 ```
 
@@ -210,7 +210,7 @@ kable(dbRows[1:5, ],
 ```
 
 <br>
-*Initial Frequencies of Azure Key Phrases*  
+*Azure Key Phrases*  
 
 Let's get the unique key phrases that Azure found.
 
@@ -227,10 +227,13 @@ keyphrases <- unique(keyphrases)
 keyphrases <- as.data.frame(keyphrases)
 
 #Some of the key phrases
-tail(keyphrases)
+head(keyphrases, n=50)
+
 ```
 
 <br>
+*Tidy the job descriptions*  
+
 Before we continue, we have to tidy the job descriptions. We will remove non-ASCII characters, remove some unecessary characters, stop words, make the text lowercase, and white space. Stop words are common words such as *the*, *is*, *at*, *which*, etc. This will be handy in our analysis.
 
 ```{r, warning=FALSE}
@@ -262,15 +265,6 @@ descriptions <- tm_map(descriptions, removePunctuation)
 #Remove whitespace
 descriptions <- tm_map(descriptions, stripWhitespace)
 
-
-dtm <- TermDocumentMatrix(descriptions)
-m <- as.matrix(dtm)
-v <- sort(rowSums(m),decreasing=TRUE)
-
-#Creates a frequency table for words
-d <- data.frame(word = names(v),freq=v)
-d
-
 ```
 
 
@@ -279,20 +273,54 @@ d
 
 
 <div style="margin-bottom:50px;"></div>
+# Text Mining {.tabset}
+
+
+After we have imported and tidied our data, we can begin to perform tests to mine it.
+
+
+<br>
+<div style="margin-bottom:25px;"></div>
+## Words by Frequency  
+
+```{r}
+
+#Create a term document matrix based upon the variable descriptions
+dtm <- TermDocumentMatrix(descriptions)
+m <- as.matrix(dtm)
+v <- sort(rowSums(m),decreasing=TRUE)
+
+#Creates a frequency table for words
+freqTable <- data.frame(word = names(v), freq=v)
+
+
+```
+
+
+Here is a frequency table for words found in job descriptions:
+`r freqTable `
+
+
+
+
+<div style="margin-bottom:25px;"></div>
+## Word Cloud  
+<br>
+*A Word Cloud Based Upon the Job Descriptions*^[Reference code was found here: http://www.sthda.com/english/wiki/text-mining-and-word-cloud-fundamentals-in-r-5-simple-steps-you-should-know]
+
+```{r}
+set.seed(1234)
+wordcloud(words = freqTable$word, freq = freqTable$freq, min.freq = 100,
+          max.words=200, random.order=FALSE, rot.per=0.35, 
+          colors=brewer.pal(8, "Dark2"))
+
+```
+
+
+<div style="margin-bottom:50px;"></div>
 # Analysis
 
 
-## Sections {.tabset}
-
-### Section 1
-
-### Section 2
-
-### Section 3
-
-
-
-
-
+<div style="margin-bottom:50px;"></div>
 # Conclusions
 
