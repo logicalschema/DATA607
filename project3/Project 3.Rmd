@@ -231,6 +231,10 @@ keyphrases <- as.data.frame(keyphrases)
 #Some of the key phrases
 keyphrases
 
+
+library(summarytools)
+summarytools::freq(keyphrases$keyphrases, order = "freq")
+
 ```
 
 <br>
