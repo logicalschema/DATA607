@@ -223,7 +223,7 @@ dbRows <-  gsub("\"", "", dbRows)
 #Grab the unique keyphrases after some clean up: 
 keyphrases <- unique(unlist(str_split(dbRows, ",")))
 keyphrases <- str_replace_all(keyphrases, "^ ", "")
-keyphrases <- unique(keyphrases)
+keyphrases <- unique(sort(keyphrases))
 keyphrases <- as.data.frame(keyphrases)
 
 #Some of the key phrases
@@ -321,6 +321,20 @@ wordcloud(words = freqTable$word, freq = freqTable$freq, min.freq = 100,
           colors=brewer.pal(8, "Dark2"))
 
 ```
+
+
+
+<div style="margin-bottom:50px;"></div>
+## Key Phrase Frequency
+
+```{r}
+keyphrases
+
+
+
+```
+
+
 
 
 <div style="margin-bottom:50px;"></div>
