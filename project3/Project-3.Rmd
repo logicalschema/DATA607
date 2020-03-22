@@ -34,8 +34,7 @@ We had discussions about which sets of data to use. The internet is filled with 
 
 Our thinking was that if we obtain data science job listings, we would mine the text for words and phrases. In other words, if we splash the data in front of us, find some frequencies, perhaps a pattern would arise. 
 
-![Jackson Pollock American Abstract Oil on Canvas](https://raw.githubusercontent.com/logicalschema/DATA607/master/project3/images/pollock.jpg)  
-
+![Jackson Pollock American Abstract Oil on Canvas](https://raw.githubusercontent.com/logicalschema/DATA607/master/project3/images/pollock.jpg){width=0.25}
 
 <br>
 After googling and searching, we settled on a data set that will be reviewed in the next section. However, little did we as a group realize how much cleaning and hours would be committed to having data that was accessible and usable for the entire team.  
