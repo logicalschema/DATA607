@@ -28,13 +28,18 @@ The purpose of this assignment is to answer the question, "Which are the most va
 <div style="margin-bottom:50px;"></div>
 # Approach
 
-We had discussions about which sets of data to use. The internet is filled with a plethora of data, but few were of applicable use. Linkedin was not readily accessible. We worked from our experiences with applying for jobs and during some brainstorming over Zoom, we came up with searching government sites for available data, Kaggle, and the possibility of web scraping Monster or Indeed.
+We had discussions about which sets of data to use. The internet is filled with a plethora of data, but few were of applicable use. Linkedin was not readily accessible. We worked from our experiences with applying for jobs and during some brainstorming over Zoom, we came up with searching government sites for available data, Kaggle, and the possibility of web scraping Monster or Indeed. True, we did have our own presuppositions about needed skills for a data scientist, but we wanted the data to speak for itself and hopefully challenge our presuppositions.
 
-*Jackson Pollock the Data*
+**Jackson Pollock the Data**  
+
 Our thinking was that if we obtain data science job listings, we would mine the text for words and phrases. In other words, if we splash the data in front of us, find some frequencies, perhaps a pattern would arise. 
 
+![Jackson Pollock American Abstract Oil on Canvas](https://github.com/logicalschema/DATA607/raw/master/project3/images/pollock.jpg){width=0.25}
 
-The following are the R libraries we will be using.  
+<br>
+After googling and searching, we settled on a data set that will be reviewed in the next section. However, little did we as a group realize how much cleaning and hours would be committed to having data that was accessible and usable for the entire team.  
+
+Continuing on, the following are the R libraries we will be using.  
 
 ```{r loadlib, echo=TRUE, results='hide', message=FALSE, warning=FALSE}
 library(RMySQL)
@@ -51,6 +56,8 @@ library(knitr)
 library(summarytools)
 
 ```
+
+`RMySQL` is used for working with a MySQL database. `tm` and `RWeka` were used for text mining. Packages `SnowballC`, `wordcloud`, and `RColorBrewer` were used for creating the word cloud in R. `stringr`, `tidytext`, and `tidyverse` were used for text manipulations. `ggplot2` was used for graphs and `knitr` was used for making some tables. `summarytools` provides a handy frequency function to find tally the occurrences in a column.
 
 
 <div style="margin-bottom:50px;"></div>
@@ -111,7 +118,8 @@ When the data was imported into Microsoft's cloud service, we ran some initial t
 
 ![Word Cloud Courtesy of Azure](https://github.com/logicalschema/DATA607/raw/master/project3/images/powerbi_wordcloud.png)
 
-The key phrases were stored in the database. Key phrases were extrapolated from the job descriptions for each of the jobs listed. Because the use of Microsoft's service was limited, we found the need for persistent storage of the results. Sung had used up his $200 credit for one of his subscriptions within a week of testing. 
+The key phrases were stored in the database. Key phrases were extrapolated from the job descriptions for each of the jobs listed. Because the use of Microsoft's service was limited, we found the need for persistent storage of the results. Sung had used up his $200 credit for one of his subscriptions within a week of testing. In working with the Azure Text Analytics API, there is an option to send data via JSON to have it analyzed.  
+
 
 
 <br>
@@ -150,7 +158,8 @@ This is a [link](https://github.com/logicalschema/DATA607/raw/master/project3/da
 
 ### Tools
 
-**Microsoft's Cognitive Text Analytics, Power BI, Slack, GitHub, and MySQL Workbench**
+**Microsoft's Cognitive Text Analytics, Power BI, Slack, GitHub, and MySQL Workbench**  
+
 In addition to the database instance, he created, Sung created an instance for Azure's Cognitive Text Analytics to experiment to see what information Microsoft's AI can mine from our data. The tools were used to facilitate handling the data.
 
 Power BI is a Microsoft product that is used to visualize data. It was employed to work with Microsoft's Cognitive Text Analytics to extrapolate keyphrases from the `job_descriptions` of the data and to create a simple word cloud to compare with our later analysis.
@@ -164,15 +173,17 @@ MySQL Workbench was used to connect to the MySQL database.
 
 As an option to curtail the amount of time needed to process the 10,000 row csv, group members worked with a small subset of the file, tested code, and then would work with the larger data set. Some group members machines would complain about memory errors. 
 
-Files being worked on from Github were compressed to enable quicker transport across the network.
+Files being worked on from Github were compressed to enable quicker transport across the network.  
 
 This is an example of a memory error on Sung's laptop when trying to text mine on the job description data:
 ![Memory Error](https://github.com/logicalschema/DATA607/raw/master/project3/images/memory_error.png)  
 
+To avert this problem, Sung modified his code to use the `Corpus` object instead of `VCorpus` for collections of text documents. A `VCorpus` is described as a *volatile* corpus that is "fully kept in memory".^[https://www.rdocumentation.org/packages/tm/versions/0.7-7/topics/VCorpus] 
+
+In addition, wherever possible, snippets of the data objects were viewed and knitted in R Markdown. So instead of viewing 10,000 rows, we did our best to display 10-20 rows of a data set.  
 
 
-
-
+<div style="margin-bottom:50px;"></div>
 # Tidying 
 
 Since we have imported our data into a database, we still need to clean up the job descriptions. We hope that we will be able to tidy the data such that we would be able to determine frequencies and see what picture the data paints for us.
@@ -216,7 +227,8 @@ kable(dbRows[1:5, ],
 <br>
 *Azure Key Phrases*  
 
-Let's get the unique key phrases that Azure found.
+Let's get the unique key phrases that Azure found.  
+
 
 ```{r, warning=FALSE}
 
@@ -242,6 +254,9 @@ freq(keyphrases$keyphrases, order = "freq", style = "rmarkdown", rows = 1:20)
 
 
 ```
+
+Briefly looking at the frequencies found in the key phrases, some skills started to appear such as Python (count: 6471), Computer Science (4441), and SQL (2672). However, some problems came us as the boiler plate for many job descriptions about diversity and Equal opportunity policies were appearing as evident by the frequency of such phrases as Religion (2746), Color (2675), and National Origin (2649).
+
 
 <br>
 *Tidy the job descriptions*  
@@ -290,7 +305,7 @@ descriptions <- tm_map(descriptions, stripWhitespace)
 # Text Mining {.tabset}
 
 
-After we have imported and tidied our data, we can begin to perform tests to mine it.
+After we have imported and tidied our data, we will perform tests to mine it.
 
 
 <br>
@@ -322,7 +337,7 @@ barplot(v[1:20], col = "#003366", las = 2)
 
 ```
 
-
+<br>
 <div style="margin-bottom:25px;"></div>
 ## Word Cloud  
 <br>
@@ -338,14 +353,73 @@ wordcloud(words = freqTable$word, freq = freqTable$freq, min.freq = 100,
 
 
 
-
-
-
-
+<br>
 <div style="margin-bottom:50px;"></div>
-# Analysis
+# Analysis  
 
+After mining the job descriptions of our data set, the team met again over Zoom to discuss the results of our Pollock method for looking at the data.  
 
+Observations:  
+
+1. The Equal Employment Opportunity (EEO) information for jobs was impacting the frequencies. 
+
+    An example of an EEO is below:  
+
+    CUNY encourages people with disabilities, minorities, veterans and women to apply. At CUNY, Italian Americans are also included among our protected groups. Applicants and employees will not be discriminated against on the basis of any legally protected category, including sexual orientation or gender identity. EEO/AA/Vet/Disability Employer.^[https://www.cuny.edu/about/administration/offices/hr/recruitment-diversity/includes/eeo-statement/]  
+    
+    Such words as religion, nation of origin, and diversity would appear in our frequencies. We would have to exclude these. We would not have been able to make this decision if we did not regroup.  
+    
+2. Loss of context  
+
+    A word or phrase can be taken out of context. For example, the word *experience* sounds good by itself, but when it is counted it could have been within a sentence that asked for 3-5 years of *experience* or *no experience needed*. In addition, we did not examine the role or title of the job description. A senior data scientist would require a particular gamut of skills different from an entry level data scientist. One job title might require a PhD as opposed to a Bachelors degree. 
+    
+3. Hard Skills  
+
+    After going through the analysis, these were the top 5 hard skills we determined by looking at the data together. Note: hard skills are "teachable abilities or skill sets that are easy to quantify."^[https://www.thebalancecareers.com/hard-skills-vs-soft-skills-2063780]  
+    
+    + Programming Skills: Python, R, SQL  
+    + Platforms: Tableau, Apache Spark, Hadoop, AWS  
+    + Computer Science  
+    + Statistics, Mathematics, Algorithms  
+    + Experience and Education  
+    
+4. Soft Skills  
+
+    The following were the top 5 soft skills we determined by looking at the data together. Note: soft skills are "subjective skills that are much harder to quantify."^[https://www.thebalancecareers.com/hard-skills-vs-soft-skills-2063780]  
+    
+    + Communication Skills: presentation skills
+    + Interpersonal Skills: i.e. EQ Emotional Intelligence
+    + Team Player  
+    + Analytical  
+    + Motivated, driven  
+    
+5. Debugging?  
+
+    From the number of days spent debugging and troubleshooting, the team saw what was absent was the skill of debugging. Why was troubleshooting seemingly absent from the job descriptions?
+    
+    
+    
+<br>
 <div style="margin-bottom:50px;"></div>
-# Conclusions
+# Conclusions  
+
+The above skills are highly subjective as the team was looking at the data that was before us. From what the data and analysis provided, did not provide any earth-breaking "Aha" moments. We did make a note that the data we obtained is for job postings and represented only a slice of the skills needed to be a data scientist. Our analysis is not a holistic one.  
+
+Every company will look for the best ideal candidates and the job posting is one step in any recruitment process. For every job, candidates have to interview and sometimes have to go through a barrage of interpersonal relationships with managers and headhunters.  
+
+For future steps, it would be necessary to include headhunters and other recruiters to provide data. In addition, a breakdown of the skills by job title might produce additional insight. For the Azure text analytics, one can remove the EEO policies from the job descriptions and employ `RJson` to encapsulate the job descriptions as JSON objects to be analyzed.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

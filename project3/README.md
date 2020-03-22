@@ -27,6 +27,7 @@ dbFetch(rs, n = -1 ) becomes dbFetch(rs)
 * [GitHub](https://github.com/)
 * [GitHub Desktop](https://desktop.github.com/)
 * [Azure](http://azure.microsoft.com/en-us/) - Infrastructure
+* [Power BI](https://powerbi.microsoft.com/en-us/) - Analytics
 * [MySQL](https://www.mysql.com/) - Database
 * [Azure Text Analytics](https://azure.microsoft.com/en-us/services/cognitive-services/text-analytics/) - Machine Text Analytics
 * [Sublime Text](https://www.sublimetext.com/) - Power Text Editor
