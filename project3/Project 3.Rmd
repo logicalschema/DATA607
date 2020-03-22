@@ -217,7 +217,7 @@ Let's get the unique key phrases that Azure found.
 ```{r}
 
 #Remove non ASCII characters
-dbRows <-  gsub("[^\x20-\x7E]", "", dbRows)
+dbRows <-  gsub("[^\x20-\x7E]", " ", dbRows)
 dbRows <-  gsub("\"", "", dbRows)
 
 #Grab the unique keyphrases after some clean up: 
