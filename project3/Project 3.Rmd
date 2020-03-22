@@ -38,7 +38,7 @@ library(ggplot2)
 library(tidytext)
 library(tidyverse)
 library(knitr)
-
+library(quanteda)
 
 ```
 
@@ -242,7 +242,8 @@ Before we continue, we have to tidy the job descriptions. We will remove non-ASC
 #Remove non-ASCII characters
 descriptions <-  gsub("[^\x20-\x7E]", " ", descriptions)
 
-#Convert our variable to a Corpus variable for the package tm to work on
+#Convert our variable to a Corpus variable for the package tm to work on.
+#A corpus is a collection of documents
 descriptions <- Corpus(VectorSource(descriptions))
 
 #Create a function to make patterns into spaces
@@ -329,6 +330,7 @@ wordcloud(words = freqTable$word, freq = freqTable$freq, min.freq = 100,
 
 ```{r}
 keyphrases
+
 
 
 
