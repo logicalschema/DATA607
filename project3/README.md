@@ -10,10 +10,13 @@ These instructions will get you a copy of the project up and running on your loc
 
 Before you can test, you will need to request access to the MySQL database. Please send your IPv4 address to one of the team members so access can be given for your network. To find your address, you can go to this address https://nordvpn.com/what-is-my-ip/ and send your host address.
 
-Because the dataset is 10,000 records, your machine might not be able to handle the computation. To use a small subset of records, make these adjustments to the Rmd file:
+Because the dataset is 10,000 records, your machine might not be able to handle the computation. 
+
+To use a small subset of records, remove `n = -1` from the Rmd file for the function dbFetch.
 
 ```
-Change `dbFetch(rs, n = -1 )` to `dbFetch(rs)`
+dbFetch(rs, n = -1 ) becomes dbFetch(rs)
+
 ```
 
 ## Built With
