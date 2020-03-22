@@ -216,18 +216,20 @@ Let's get the unique key phrases that Azure found.
 
 ```{r}
 
-#Remove non ASCII characters
-dbRows <-  gsub("[^\x20-\x7E]", " ", dbRows)
-dbRows <-  gsub("\"", "", dbRows)
-
 #Grab the unique keyphrases after some clean up: 
-keyphrases <- unique(unlist(str_split(dbRows, ",")))
+keyphrases <- unlist(str_split(dbRows, ","))
 keyphrases <- str_replace_all(keyphrases, "^ ", "")
-keyphrases <- unique(sort(keyphrases))
+keyphrases <- str_replace_all(keyphrases, "[^\x20-\x7E]", "")
+keyphrases <- str_replace_all(keyphrases, "\"", "")
+
+# Remove the "c(" in the first element
+keyphrases[[1]] <- keyphrases[[1]] %>% 
+  str_replace("c[(]", "")
+
 keyphrases <- as.data.frame(keyphrases)
 
 #Some of the key phrases
-head(keyphrases, n=50)
+keyphrases
 
 ```
 
