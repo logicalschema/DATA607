@@ -1,21 +1,32 @@
 # CUNY DATA 607 Spring 2020 Project 3 Data Science Skills
 
-=======
-## Objective
-The purpose of this project is to answer the question, "Which are the most valued data science skills?"
+The purpose of this project is to answer the question, "Which are the most valued data science skills?" 
 
+## Getting Started
 
-## Group Members for Team MPSV
+These instructions will get you a copy of the project up and running on your local machine for testing purposes. 
 
+### Prerequisites
 
-**M**att Mecoli  
+Before you can test, you will need to request access to the MySQL database. Please send your IPv4 address to one of the team members so access can be given for your network. To find your address, you can go to this address https://nordvpn.com/what-is-my-ip/ and send your host address.
 
-**P**hilip Tanofsky  
+Because the dataset is 10,000 records, your machine might not be able to handle the computation. To use a small subset of records, make these adjustments to the Rmd file:
 
-**S**ung Lee  
+```
+Change `dbFetch(rs, n = -1 )` to `dbFetch(rs)`
+```
 
-**V**anita Thompson
+## Built With
 
+* [R Markdown](https://rmarkdown.rstudio.com/) - Development Environment
+* [CRAN](https://cran.r-project.org/) - R Libraries and Tutorials
+* [MySQL Workbench](https://www.mysql.com/products/workbench/) - Database Development
+* [GitHub](https://github.com/)
+* [GitHub Desktop](https://desktop.github.com/)
+* [Azure](http://azure.microsoft.com/en-us/) - Infrastructure
+* [MySQL](https://www.mysql.com/) - Database
+* [Azure Text Analytics](https://azure.microsoft.com/en-us/services/cognitive-services/text-analytics/) - Machine Text Analytics
+* [Sublime Text](https://www.sublimetext.com/) - Power Text Editor
 
 ## Deliverables
 
@@ -29,7 +40,21 @@ The following serves as the grading rubric for this project:
 - While you are strongly encouraged (and will hopefully find it fun) to try out statistics and data models, your grade will not be affected by the statistical analysis and modeling performed (since this is a semester one course on Data Acquisition and Management).
 - Every student must be prepared to explain how the data was collected, loaded, transformed, tidied, and analyzed for outliers, etc. in our Meetup. This is the only way I’ll have to determine that everyone actively participated in the process, so you need to hold yourself responsible for understanding what your class-size team did! If you are unable to attend the meet up, then you need to either present to me one-on-one before the meetup presentation, or post a 3 to 5 minute video (e.g. on YouTube) explaining the process. Individual students will not be responsible for explaining any forays into statistical analysis, modeling, data mining, regression, decision trees, etc.
 
+## Authors
 
-## References
+* **M**att Mecoli  
 
+* **P**hilip Tanofsky  
 
+* **S**ung Lee  
+
+* **V**anita Thompson
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+## Acknowledgments
+
+* Julia Silge and David Robinson's *Text Mining with R* (https://www.tidytextmining.com/)
+* Billie Thompson's GitHub README format (https://gist.github.com/PurpleBooth/109311bb0361f32d87a2)

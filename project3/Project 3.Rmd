@@ -38,7 +38,9 @@ library(ggplot2)
 library(tidytext)
 library(tidyverse)
 library(knitr)
-library(quanteda)
+
+#Used for summary frequencies of the key phrases
+library(summarytools)
 
 ```
 
@@ -214,7 +216,7 @@ kable(dbRows[1:5, ],
 
 Let's get the unique key phrases that Azure found.
 
-```{r}
+```{r, warning=FALSE}
 
 #Grab the unique keyphrases after some clean up: 
 keyphrases <- unlist(str_split(dbRows, ","))
@@ -232,9 +234,9 @@ keyphrases <- as.data.frame(keyphrases)
 keyphrases
 
 
-library(summarytools)
-summarytools::freq(keyphrases$keyphrases, order = "freq")
 
+#freq(keyphrases$keyphrases, order = "freq")
+freq(keyphrases$keyphrases, order = "freq", style = "rmarkdown", rows = 1:50)
 ```
 
 <br>
