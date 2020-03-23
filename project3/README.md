@@ -59,3 +59,4 @@ The following serves as the grading rubric for this project:
 
 * Julia Silge and David Robinson's *Text Mining with R* (https://www.tidytextmining.com/)
 * Billie Thompson's GitHub README format (https://gist.github.com/PurpleBooth/109311bb0361f32d87a2)
+

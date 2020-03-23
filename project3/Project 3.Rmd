@@ -832,17 +832,3 @@ Every company will look for the best ideal candidates and the job posting is one
 
 For future steps, it would be necessary to include headhunters and other recruiters to provide data. In addition, a breakdown of the skills by job title might produce additional insight. For the Azure text analytics, one can remove the EEO policies from the job descriptions and employ `RJson` to encapsulate the job descriptions as JSON objects to be analyzed.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
