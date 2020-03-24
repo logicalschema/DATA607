@@ -17,12 +17,77 @@ theme: paper
 
 [Assignment on RPubs](https://rpubs.com/logicalschema/data607_week9 "Sung's Week 9 Assignment Rpubs")
 <br>
-[Rmd on Github](https://github.com/logicalschema/DATA607/blob/master/week9/SungLee-Week9.Rmd "Sung's Week 9 Assignment Github")
+[Rmd on Github](https://github.com/logicalschema/DATA607/blob/master/week9/SungLee-Week9.Rmd
+ "Sung's Week 9 Assignment Github")
 
 
 # Introduction
 
-This asignment will employ the New York Times' set of APIs to read data into JSON and transform it into an R data frame.
+This asignment will employ the New York Times' set of APIs to read data into JSON and transform it into an R data frame. We will use the New York Times Top Stories API and select world stories. An example of the call would use this API call `https://api.nytimes.com/svc/topstories/v2/world.json?api-key=yourkey`.
+
+# Import
+
+Let's import the data from the New York Times. 
+
+```{r}
+library(jsonlite)
+
+
+# Call the JSON frm the NY Times by constructing the call store
+apikey <- "WVJoOYFhRCJAX5qahIguxfbZmmcpVeBA"
+baseurl <- "https://api.nytimes.com/svc/topstories/v2/world.json?api-key="
+
+url <- URLencode(paste0(baseurl, apikey))
+request <- fromJSON(url)
+stories <- request$results
+
+```
+
+<br>
+This is how the the top world stories looks using the `fromJSON` function from the `jsonlite` package.
+
+```{r}
+stories
+```
+
+Let's look at particular aspects of the data frame.
+
+```{r}
+
+# These are the column names
+colnames(stories)
+
+# This is the data type of the object
+class(stories)
+
+# Let's look at the first 10 titles 
+stories[1:10, 3:5]
+
+```
+
+<br>
+Let's look at how many of the top stories have Coronavirus in their title.
+
+```{r}
+library(stringr)
+library(dplyr)
+
+coronavirus <- stories %>% 
+  filter(str_detect(title, "Coronavirus"))
+
+cNumber <- nrow(coronavirus)
+
+```
+
+There are **`r cNumber`** stories in the top stories with `Coronavirus` in their title.
+
+<br>
+<br>
+
+# Conclusion
+
+`jsonlite` is a welcome package for working with APIs that generate JSON objects for data. 
+
 
 
 
