@@ -12,6 +12,21 @@ output:
     smooth_scroll: false
     toc_depth: 3
 number_sections: true
-theme: lumen
+theme: paper
 ---
+
+[Assignment on RPubs](https://rpubs.com/logicalschema/data607_week9 "Sung's Week 9 Assignment Rpubs")
+<br>
+[Rmd on Github](https://github.com/logicalschema/DATA607/blob/master/week9/SungLee-Week9.Rmd "Sung's Week 9 Assignment Github")
+
+
+# Introduction
+
+This asignment will employ the New York Times' set of APIs to read data into JSON and transform it into an R data frame.
+
+
+
+
+
+
 
