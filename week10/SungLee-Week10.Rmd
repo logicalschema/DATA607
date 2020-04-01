@@ -38,7 +38,10 @@ As usual, please submit links to both an .Rmd file posted in your GitHub reposit
 
 ## Example from Textbook
 
-The code below is an example from chapter 2 of *Text Mining with R*^[https://www.tidytextmining.com/sentiment.html]
+The code below is an example from chapter 2 of *Text Mining with R*^[https://www.tidytextmining.com/sentiment.html]  
+
+The example uses the `AFINN` lexicon to analyze sentiment for Jane Austen's *Pride and Prejudice*.  
+
 
 ```{r}
 
@@ -83,4 +86,150 @@ bind_rows(afinn) %>%
   facet_wrap(~method, ncol = 1, scales = "free_y")
 
 ```
+
+
+## Loughran Sentiment Lexicon
+
+I will use the loughran`. I found it on this page: https://www.rdocumentation.org/packages/tidytext/versions/0.2.3/topics/get_sentiments  
+
+**Note:** If you initially encounter problems loading loughran, you will need to accept the license for the lexicon by typing in the console for R Markdown.  
+
+
+```{r}
+get_sentiments("loughran")
+
+```
+
+
+## Corpus  
+
+I will use the `harrypotter` package^[https://cran.r-project.org/web/packages/harrypotter/index.html]. It contains several of novels from the *Harry Potter* series. I will use *Harry Potter and the Order of the Phoenix*.
+
+
+```{r}
+library(tidyverse)
+library(stringr)
+
+# Code based on https://afit-r.github.io/sentiment_analysis
+devtools::install_github("bradleyboehmke/harrypotter") 
+library(harrypotter) 
+
+```  
+
+<br>  
+
+This is a sample of the corpus:
+
+```{r}
+
+order_of_the_phoenix[1:1]
+
+```
+
+<br>
+<br>
+
+## Import  
+
+```{r}
+# Code based on https://afit-r.github.io/sentiment_analysis
+titles <- c("Order of the Phoenix")
+books <- list(order_of_the_phoenix)
+series <- tibble()
+
+for(i in seq_along(titles)) {
+  
+  temp <- tibble(chapter = seq_along(books[[i]]),
+                  text = books[[i]]) %>%
+    unnest_tokens(word, text) %>%
+    ##Here we tokenize each chapter into words
+    mutate(book = titles[i]) %>%
+    select(book, everything())
+  
+  series <- rbind(series, temp)
+}
+# set factor to keep books in order of publication
+series$book <- factor(series$book, levels = rev(titles))
+
+# This is what the tokenizing looks like
+series
+
+```  
+
+## Analysis  
+
+Here is sentiment analysis on the book using the `AFINN` lexicon.
+
+```{r}
+
+# Using the AFINN lexicon for sentiment analysis on Harry Potter
+afinn <- series %>%
+        group_by(book) %>% 
+        mutate(word_count = 1:n(),
+               index = word_count %/% 500 + 1) %>% 
+        inner_join(get_sentiments("afinn")) %>%
+        group_by(book, index) %>%
+        summarise(sentiment = sum(value)) %>%
+        mutate(method = "AFINN")
+
+#A view of the AFINN analysis
+afinn
+
+```  
+
+<br>
+Now, let's take a look at the Loughran lexicon for sentiment analysis.  
+
+<br>
+```{r}
+
+# Using the Loughran lexicon for sentiment analysis on Harry Potter
+loughran <- series %>%
+  right_join(get_sentiments("loughran")) %>%
+  filter(!is.na(sentiment)) %>%
+  count(sentiment, sort = TRUE)
+
+#A view of the Loughran analysis
+loughran
+
+#Prepares loughran for plotting
+loughran <- bind_rows(series %>%
+                  group_by(book) %>% 
+                  mutate(word_count = 1:n(),
+                         index = word_count %/% 500 + 1) %>%
+                  inner_join(get_sentiments("loughran") %>%
+                                     filter(sentiment %in% c("positive", "negative"))) %>%
+                  mutate(method = "Loughran")) %>%
+        count(book, method, index = index , sentiment) %>%
+        ungroup() %>%
+        spread(sentiment, n, fill = 0) %>%
+        mutate(sentiment = positive - negative) %>%
+        select(book, index, method, sentiment)
+
+
+```
+
+
+<br>
+Here is a comparison of the the Loughlan and Afinn analyses.  
+
+<br>
+```{r}
+bind_rows(afinn,
+          loughran) %>%
+        ungroup() %>%
+        mutate(book = factor(book, levels = titles)) %>%
+  ggplot(aes(index, sentiment, fill = method)) +
+  geom_bar(alpha = 0.8, stat = "identity", show.legend = FALSE) +
+  facet_grid(book ~ method)
+
+```
+
+
+## Conclusion  
+
+Both lexicons produce similar trends. I should adjust the axis for the comparison.
+
+
+
 
