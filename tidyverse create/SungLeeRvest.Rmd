@@ -1,0 +1,103 @@
+---
+title: "Data 607 Tidyverse Create Assignment"
+author: "Sung Lee"
+date: "3/12/2020"
+output:
+  html_document:
+    df_print: paged
+    toc: yes
+    toc_collapsed: yes
+    toc_depth: 3
+    toc_float: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+theme: lumen
+number_sections: yes
+---
+
+# Purpose
+Not all web pages are created the same. Oftentimes, in trying to analyze data, we will need a handy utility to scrape web pages. The package `rvest` is a handy Tidyverse package that will save time having to "harvest"^[https://cran.r-project.org/web/packages/rvest/rvest.pdf p 1] web pages.
+
+
+
+
+# Preparation
+We will need to load the library for `rvest`.
+
+```{r message=FALSE, warning=FALSE}
+
+library(rvest)           # Tidyverse package for rvest
+```
+
+To take a look at what `rvest` can do, let's scrap the FiveThirtyEight web page at https://data.fivethirtyeight.com/^[The download was taken on March 12, 2020 at 10:28 PM EST]. Please note that I downloaded a copy of the html for the page and placed it in this [link.](https://raw.githubusercontent.com/logicalschema/SPRING2020TIDYVERSE/master/fivethirtyeight.html)
+
+![](https://raw.githubusercontent.com/logicalschema/SPRING2020TIDYVERSE/master/firvethirtyeightscreenshot.png)
+
+The following code allows you to read a URL into your program.
+
+```{r}
+
+# This line reads the contents of the url into sampleHTML. 
+# The function read_html can also take a string of HTML code.
+sampleHTML <- read_html("https://raw.githubusercontent.com/logicalschema/SPRING2020TIDYVERSE/master/fivethirtyeight.html")
+
+```
+
+
+
+
+# Helpful Functions {.tabset}
+
+`rvest` has some helpful functions to help you parse HTML code.
+
+
+## html_nodes()
+
+Because HTML (a subset of XML) is a markup language that wraps up text in tags (i.e. nodes), you can select specific HTML tags from a web page.
+
+`html_nodes()` allows you to grab all of the HTML tags from the page. In this example, I grab the `<img>` tags for the web page.
+
+```{r}
+sampleHTML %>%
+  html_nodes("img") 
+
+```
+
+## html_attr()
+
+Sometimes the information you need is nested inside the HTML tag. You can use the `html_attr()` function to extract specific attributes for a HTML tag.
+
+Let's look at all of the `<a>` tags for the sample FiveThirtyEight page. `<a>` tags contain hyperlinks for standard HTML. So as we grab the `<a>` tags, let's get the hyperlinks associated with them.
+
+```{r}
+sampleHTML %>%
+  html_nodes("a") %>%
+  html_attr("href")
+```
+
+
+## html_table()
+
+The `html_table()` function comes in handy if you need to convert a HTML table to a data frame. 
+
+Let's convert the HTML table found on the sample FiveThirtyEight page. Note: for this function it assumes^[https://cran.r-project.org/web/packages/rvest/rvest.pdf p 8]:  
+
+  * No cells span multiple rows  
+  
+  * Headers are in the first row
+
+```{r}
+
+# dataIndexMobile can be found by looking at the "id" for the table
+# Example: If you wanted <table id="dataIndexMobile">, you would use #dataIndexMobile
+# Initially the table for the web page does not meet the 1st condition described above.
+
+
+sampleHTML %>%
+  html_node("#dataIndex") %>%
+  html_table(fill = TRUE)   # fill = TRUE for badly formed HTML tables
+
+```
+
+
