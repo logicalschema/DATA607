@@ -41,7 +41,7 @@ library(quanteda)
 <div style="margin-bottom:50px;"></div>
 # Import
 
-The data to train the model is from https://spamassassin.apache.org/old/publiccorpus/. The files 20030228_spam.tar.bz2, 20030228_spam_2.tar.bz2, and 20050311_spam_2.tar.bz2 were used. These files were uncompressed and the contents were moved to a single file. In addition, the `cmds` file located in each archive file was removed.
+The data to train the model is from https://spamassassin.apache.org/old/publiccorpus/. The files 20030228_spam.tar.bz2, 20030228_spam_2.tar.bz2, and 20050311_spam_2.tar.bz2 were used. These files were uncompressed and the contents were moved to a single file. In addition, the `cmds` file located in each archive file was removed. The complete file with the combined emails is here: https://github.com/logicalschema/DATA607/raw/master/Project%204/spamemails.tgz.
 
 
 
