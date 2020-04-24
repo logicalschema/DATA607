@@ -21,12 +21,42 @@ theme: paper
 
 
 # Introduction
+The purpose of this project is to get our feet wet in document classification. One application of document classification is identifying "spam" and "ham". Spam is "any kind of unwanted, unsolicited digital communication, often an email, that gets sent out in bulk."^[https://www.malwarebytes.com/spam/] Ham would be the opposite of spam and represent necessary and/or wanted digital communications. Spam can potentially contain malicious code and consume space on email servers.  
 
+This project will employ a spam/ham dataset to train a model. This model will then be run to make predictions of a new dataset to determine spam/ham.  
 
+These will be the libraries used for this project. I wanted to use `quanteda` package for this project. It is package for analyzing text documents and I was interested in it since Project 3. More information can be found here: https://quanteda.io/.  
 
+````{r echo=TRUE, results='hide', message=FALSE, warning=FALSE}
+library(RColorBrewer)
+library(ggplot2)
+library(SnowballC)
+library(summarytools)
+library(wordcloud)
+library(tidytext)
+library(tidyverse)
+library(quanteda)
+```  
+
+<div style="margin-bottom:50px;"></div>
 # Import
 
+The data to train the model is from https://spamassassin.apache.org/old/publiccorpus/. The files 20030228_spam.tar.bz2, 20030228_spam_2.tar.bz2, and 20050311_spam_2.tar.bz2 were used. These files were uncompressed and the contents were moved to a single file. In addition, the `cmds` file located in each archive file was removed.
 
+
+
+<div style="margin-bottom:50px;"></div>
+# Text Mining {.tabset}
+
+
+<div style="margin-bottom:50px;"></div>
+## Method 1
+
+
+<div style="margin-bottom:50px;"></div>
+## Method 2
+
+<div style="margin-bottom:50px;"></div>
 # Conclusion
 
 
