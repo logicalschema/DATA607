@@ -28,6 +28,7 @@ This project will employ a spam/ham dataset to train a model. This model will th
 These will be the libraries used for this project. I wanted to use `quanteda` package for this project. It is package for analyzing text documents and I was interested in it since Project 3. More information can be found here: https://quanteda.io/.  
 
 ````{r echo=TRUE, results='hide', message=FALSE, warning=FALSE}
+library(readtext)
 library(RColorBrewer)
 library(ggplot2)
 library(SnowballC)
@@ -36,18 +37,59 @@ library(wordcloud)
 library(tidytext)
 library(tidyverse)
 library(quanteda)
+library(tm)
 ```  
 
 <div style="margin-bottom:50px;"></div>
 # Import
 
-The data to train the model is from https://spamassassin.apache.org/old/publiccorpus/. The files 20030228_spam.tar.bz2, 20030228_spam_2.tar.bz2, and 20050311_spam_2.tar.bz2 were used. These files were uncompressed and the contents were moved to a single file. In addition, the `cmds` file located in each archive file was removed. The complete file with the combined emails is here: https://github.com/logicalschema/DATA607/raw/master/Project%204/spamemails.tgz.
+The data to train the model is from https://spamassassin.apache.org/old/publiccorpus/. The files 20030228_spam.tar.bz2, 20030228_spam_2.tar.bz2, and 20050311_spam_2.tar.bz2 will be used. These files were uncompressed and the contents were moved to a single file. In addition, the `cmds` file located in each archive file was removed. The complete file with the combined emails is here: https://github.com/logicalschema/DATA607/raw/master/Project%204/spamemails.tgz. Another file https://github.com/logicalschema/DATA607/raw/master/Project%204/hamemails.tgz contains the emails from 20030228_easy_ham.tar.bz2, 20030228_easy_ham_2.tar.bz2, and 20030228_hard_ham.tar.bz2 with the `cmds` files removed.  
+
+This is an import of the tar files.
+
+
+```{r, message=FALSE, warning=FALSE}
+
+# The function importFiles imports a url of a zipped tar file into a variable. Creates a directory called temp
+importFiles <- function(remoteURL = NULL){
+  download.file(remoteURL, "temp.tgz")
+  
+  if (dir.exists("temp")) unlink("temp", recursive = TRUE)
+  dir.create("temp")
+  
+  # Unzips and expands the archive of the file
+  untar("temp.tgz", exdir = "temp")
+  file.remove("temp.tgz")
+  
+  temp_data <- readtext("temp/complete/*")
+  unlink("temp", recursive = TRUE)
+  return(temp_data)
+}
+
+# Import the spam emails
+url <- "https://github.com/logicalschema/DATA607/raw/master/Project%204/spamemails.tgz"
+
+raw_spam_data <- importFiles(url)
+
+
+# Import the ham emails
+url <- "https://github.com/logicalschema/DATA607/raw/master/Project%204/hamemails.tgz"
+
+raw_ham_data <- importFiles(url)
+
+```  
+
+Let's take a look at the data imported.
+
+```{r}
+head(raw_spam_data)
+head(raw_ham_data)
+```
 
 
 
 <div style="margin-bottom:50px;"></div>
 # Text Mining {.tabset}
-
 
 <div style="margin-bottom:50px;"></div>
 ## Method 1
