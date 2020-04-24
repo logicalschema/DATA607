@@ -15,9 +15,9 @@ number_sections: true
 theme: paper
 ---
 
-[Assignment on RPubs]
+[Assignment on RPubs](https://rpubs.com/logicalschema/data607_project4 "Sung's Project 4 on RPubs")
 <br>
-[Rmd on Github]
+[Rmd on Github](https://github.com/logicalschema/DATA607/blob/master/Project%204/SungLee_Project4_Data607.Rmd "Sung's Project 4 Assignment Github")
 
 
 # Introduction
