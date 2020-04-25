@@ -2887,6 +2887,31 @@ strip_html &lt;- function(x) {
   return(gsub(&quot;&lt;.*?&gt;&quot;, &quot; &quot;, x))
 }
 
+# Function to clean troublesome strings from text
+clean_text &lt;- function(x) {
+  
+  # Strip out html tags
+  x &lt;- strip_html(x)
+
+  # Remove hostnames: https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
+  # https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&amp;//=]*)
+  # The tokens function has an argument &#39;remove_url = TRUE&#39; but this did not work so I stripped it here
+  x &lt;- str_replace_all(x, &quot;https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&amp;//=]*)&quot;, &quot; &quot;)
+
+  # Remove Email addresses
+  x &lt;- str_replace_all(x, &quot;\\S*@\\S*\\s?&quot;, &quot; &quot;)
+
+  # Remove \n, \t, and &amp;nbsp;
+  x &lt;- str_replace_all(x, &quot;\n&quot;, &quot; &quot;)
+  x &lt;- str_replace_all(x, &quot;\t&quot;, &quot; &quot;)
+  x &lt;- str_replace_all(x, &quot;&amp;nbsp;&quot;, &quot; &quot;)
+  
+  return(x)
+  
+}
+
+
+
 # The function importFiles imports a url of a zipped tar file into a variable. Creates a directory called temp
 importFiles &lt;- function(remoteURL = NULL){
   download.file(remoteURL, &quot;temp.tgz&quot;)
@@ -2928,54 +2953,38 @@ raw_ham_data &lt;- cbind(raw_ham_data, type = &quot;ham&quot;)</code></pre>
   </script>
 </div>
 <p>Before we continue, we will combine the email types and randomly choose a sample from the collection. This is also necessary for the classifier that will be used later.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
-<pre class="r"><code>combined &lt;- rbind(raw_spam_data, raw_ham_data)
+<pre class="r"><code># Create a corpus for all the documents
+combined &lt;- rbind(raw_spam_data, raw_ham_data)
+combined$text &lt;- clean_text(combined$text) # Cleans the text
 
+
+
+# Create a sample of 3000 documents
 set.seed(2543)
-sample &lt;- combined[sample(nrow(combined), 3000), ]
-
-
+sample &lt;- combined[sample(nrow(combined), 3000), ] # Sample without replacement
 sample_raw_spam_data &lt;- subset(sample, type == &quot;spam&quot;)
-sample_raw_ham_data &lt;- subset(sample, type == &quot;ham&quot;)</code></pre>
+sample_raw_ham_data &lt;- subset(sample, type == &quot;ham&quot;)
+
+
+# Test
+test &lt;- setdiff(combined, sample)
+
+nrow(combined)</code></pre>
+<pre><code>## [1] 6047</code></pre>
+<pre class="r"><code>nrow(sample)</code></pre>
+<pre><code>## [1] 3000</code></pre>
+<pre class="r"><code>nrow(test)</code></pre>
+<pre><code>## [1] 3047</code></pre>
 <p>There is not a consistent format for each of the files from SpamAssassin. There are different headers for the emails in different orders across the collection. In one email, the <code>Content-Type</code> might be declared and in another the email client used would be listed. Let’s convert documents we have to corpora.</p>
-<pre class="r"><code># Strip out html tags
-sample_raw_spam_data$text &lt;- strip_html(sample_raw_spam_data$text)
-sample_raw_ham_data$text &lt;- strip_html(sample_raw_ham_data$text)
-
-# Remove hostnames: https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
-# https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&amp;//=]*)
-# The tokens function has an argument &#39;remove_url = TRUE&#39; but this did not work so I stripped it here
-sample_raw_spam_data$text &lt;- str_replace_all(sample_raw_spam_data$text, &quot;https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&amp;//=]*)&quot;, &quot; &quot;)
-sample_raw_ham_data$text &lt;- str_replace_all(sample_raw_ham_data$text, &quot;https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&amp;//=]*)&quot;, &quot; &quot;)
-
-
-# Remove Email addresses
-sample_raw_spam_data$text &lt;- str_replace_all(sample_raw_spam_data$text, &quot;\\S*@\\S*\\s?&quot;, &quot; &quot;)
-sample_raw_ham_data$text &lt;- str_replace_all(sample_raw_ham_data$text, &quot;\\S*@\\S*\\s?&quot;, &quot; &quot;)
-
-
-# Remove \n, \t, and &amp;nbsp;
-sample_raw_spam_data$text &lt;- str_replace_all(sample_raw_spam_data$text, &quot;\n&quot;, &quot; &quot;)
-sample_raw_spam_data$text &lt;- str_replace_all(sample_raw_spam_data$text, &quot;\t&quot;, &quot; &quot;)
-sample_raw_spam_data$text &lt;- str_replace_all(sample_raw_spam_data$text, &quot;&amp;nbsp;&quot;, &quot; &quot;)
-
-sample_raw_ham_data$text &lt;- str_replace_all(sample_raw_ham_data$text, &quot;\n&quot;, &quot; &quot;)
-sample_raw_ham_data$text &lt;- str_replace_all(sample_raw_ham_data$text, &quot;\t&quot;, &quot; &quot;)
-sample_raw_ham_data$text &lt;- str_replace_all(sample_raw_ham_data$text, &quot;&amp;nbsp;&quot;, &quot; &quot;)
-
-
-# Convert the text data to the character class
-sample_raw_spam_data$text &lt;- as.character(sample_raw_spam_data$text)
-sample_raw_ham_data$text &lt;- as.character(sample_raw_ham_data$text)
-
-# Store the variables as corpora
-spam_corpus &lt;- corpus(sample_raw_spam_data$text)
-ham_corpus &lt;- corpus(sample_raw_ham_data$text)</code></pre>
+<pre class="r"><code># Store the variables as corpora
+spam_corpus &lt;- corpus(sample_raw_spam_data)
+ham_corpus &lt;- corpus(sample_raw_ham_data)</code></pre>
 <p>Here are snippets from each of the corpora.</p>
 <pre class="r"><code>texts(spam_corpus)[10]</code></pre>
-<pre><code>##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             text10 
+<pre><code>##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             00359.4ab70de20a198b736ed01940c9745384 
 ## &quot;From   Wed Sep 18 11:50:27 2002 Return-Path:   Delivered-To:  Received: from localhost (jalapeno [127.0.0.1])  by zzzzason.org (Postfix) with ESMTP id 714A516F16  for  ; Wed, 18 Sep 2002 11:50:26 +0100 (IST) Received: from jalapeno [127.0.0.1]  by localhost with IMAP (fetchmail-5.9.0)  for  (single-drop); Wed, 18 Sep 2002 11:50:26 +0100 (IST) Received: from lugh.tuatha.org  [194.125.145.45]) by     dogma.slashnull.org (8.11.6/8.11.6) with ESMTP id g8I0C0C02158 for      ; Wed, 18 Sep 2002 01:12:00 +0100 Received: from lugh.tuatha.org  [127.0.0.1]) by     lugh.tuatha.org (8.9.3/8.9.3) with ESMTP id BAA32179; Wed, 18 Sep 2002     01:12:09 +0100 Received: from relay.dub-t3-1.nwcgroup.com      [195.129.80.16]) by lugh.tuatha.org     (8.9.3/8.9.3) with ESMTP id BAA32146 for  ; Wed,     18 Sep 2002 01:12:01 +0100 Received: from glb03 (unknown [81.18.33.83]) by     relay.dub-t3-1.nwcgroup.com (Postfix) with SMTP id 9F3D770044 for      ; Wed, 18 Sep 2002 01:11:58 +0100 (IST) From: \&quot;Femi Daniel\&quot;   To:   MIME-Version: 1.0 Content-Type: text/plain; charset=\&quot;iso-8859-1\&quot; Message-Id:   Subject: [ILUG-Social] HELLO Sender:  Errors-To:  X-Beenthere:  X-Mailman-Version: 2.0.11 Precedence: bulk List-Help:   List-Post:   List-Subscribe:  ,       List-Id: Irish Linux Users&#39; Group social events   List-Unsubscribe:  ,       List-Archive:   X-Original-Date: Wed, 18 Sep 2002 01:11:52 Date: Wed, 18 Sep 2002 01:11:52  OFFICE OF:EGNR. FEMI DANIEL FEDERAL MINISTRY OF WORKS AND HOUSING FEDERAL SECRETARIAT OFFICE COMPLEX IKOYI-LAGOS.  ATTN:,                    First, I must solicit your strictest confidence in this transaction, this is by virtue of it&#39;s nature as being utterly confidential and top secret as you were introduced to me in confidence through the Nigeria Chamber of Commerce and Industries.  We are top officials from the Federal Ministry of Works and Housing,(FMW&amp;H), Federal Ministry of Finance and the Presidency, making up the Contract Review Panel(CRP) set up by the Federal Government of Nigeria to review contracts awarded by the past military administration.   In the course of our work on the CRP, we discovered this fund which resulted from grossly over - invoiced contracts which were executed for the FMW&amp;H during the last administration.The companies that executed the contracts have been duly paid and the contracts commissioned leaving the sum of US$21.4 Million floating in the escrow account of the Central Bank of Nigeria ready for payment.  I have therefore  been mandated as a matter of trust by my colleagues in the panel to look for an overseas partner to whom we could transfer the sum of US21.4 legally subcontracting the entitlement to your company.This is bearing in mind that our civil service code of conduct forbids us from owning foreign companies or operating foreign accounts while in government service, hence the need for an overseas partner.  We have agreed that the funds will be shared thus after it has been paid into your account. (1) 30% of the money will go to you for acting as the beneficiary of the fund. (2) 10% has been set aside as an abstract projection for reimbursement to both parties for incidental expences that may be incurred in the course of the transaction. (3) 60% to us the government officials (with which we intend to commence an importation business in conjunction with you)  All logistics are in place and all modalities worked out for the smooth conclusion of the transaction within ten to fourteen days of commencement after receipt of the following information; your full names, company&#39;s name, address,details &amp; activities, telephone &amp; fax numbers.These information will enable us make the applications and lodge claims to the concerned ministries &amp; agencies in favour of your company and it is pertinent to state here that this transaction is entirely based on trust as the solar bank draft or certified cheque drawable in any of the Central Bank of Nigeria correspondent bankers around the world is going to be made in your name.  Please acknowledge the reciept of this letter using the above e-mail or the Alternative:  to reply me.   Yours faithfully,  Egnr. Femi Daniel.  NB:Bank Account Details not necessary as preferred mode of payment is by draft or cheque.    -   Irish Linux Users&#39; Group Social Events:    for (un)subscription information. List maintainer:   &quot;</code></pre>
 <pre class="r"><code>texts(ham_corpus)[10]</code></pre>
-<pre><code>##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 text10 
+<pre><code>##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 02361.68fa77659ad7611f8bcad48d030a3039 
 ## &quot;From   Tue Oct  8 10:56:02 2002 Return-Path:   Delivered-To:  Received: from localhost (jalapeno [127.0.0.1])  by jmason.org (Postfix) with ESMTP id DB5DE16F16  for  ; Tue,  8 Oct 2002 10:56:01 +0100 (IST) Received: from jalapeno [127.0.0.1]  by localhost with IMAP (fetchmail-5.9.0)  for  (single-drop); Tue, 08 Oct 2002 10:56:01 +0100 (IST) Received: from dogma.slashnull.org (localhost [127.0.0.1]) by     dogma.slashnull.org (8.11.6/8.11.6) with ESMTP id g9880VK06078 for      ; Tue, 8 Oct 2002 09:00:31 +0100 Message-Id:   To:  From: boingboing   Subject: A&amp;L Daily to be auctioned in bankruptcy Date: Tue, 08 Oct 2002 08:00:31 -0000 Content-Type: text/plain; encoding=utf-8  URL:   Date: Not supplied  Arts and Letters Daily, a wonderful and dense blog, has folded up its tent due  to the bankruptcy of its parent company. A&amp;L Daily will be auctioned off by the  receivers. Link[1] Discuss[2] (_Thanks, Misha!_)  [1]   [2]    &quot;</code></pre>
 <p>The files are imported into the corpus format but we need to do some tidying.</p>
 <p>First, let’s tokenize the text in our data.</p>
@@ -3020,10 +3029,7 @@ title(&quot;Ham Wordcloud&quot;, col.main = &quot;black&quot;)</code></pre>
 </div>
 <div id="bayes-theorem" class="section level2">
 <h2>Bayes Theorem</h2>
-<p>This page <a href="https://www.r-bloggers.com/text-message-classification/" class="uri">https://www.r-bloggers.com/text-message-classification/</a> has code for using a Naïve Bayes classifier for classifying messages.</p>
-<pre class="r"><code>#spam_dfm2 &lt;- dfm_trim(spam_dfm, min_termfreq = 4, min_docfreq = 10)  
-#spam_dfm2 &lt;- dfm_tfidf(spam_dfm2, scheme_tf = &quot;logcount&quot;) 
-#head(spam_dfm2)</code></pre>
+<p>This page <a href="https://www.r-bloggers.com/text-message-classification/" class="uri">https://www.r-bloggers.com/text-message-classification/</a> has code for using a Naïve Bayes classifier for classifying messages in addition to the Quanteda page linked earlier.</p>
 <div style="margin-bottom:50px;">
 
 </div>

@@ -56,6 +56,31 @@ strip_html <- function(x) {
   return(gsub("<.*?>", " ", x))
 }
 
+# Function to clean troublesome strings from text
+clean_text <- function(x) {
+  
+  # Strip out html tags
+  x <- strip_html(x)
+
+  # Remove hostnames: https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
+  # https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)
+  # The tokens function has an argument 'remove_url = TRUE' but this did not work so I stripped it here
+  x <- str_replace_all(x, "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)", " ")
+
+  # Remove Email addresses
+  x <- str_replace_all(x, "\\S*@\\S*\\s?", " ")
+
+  # Remove \n, \t, and &nbsp;
+  x <- str_replace_all(x, "\n", " ")
+  x <- str_replace_all(x, "\t", " ")
+  x <- str_replace_all(x, "&nbsp;", " ")
+  
+  return(x)
+  
+}
+
+
+
 # The function importFiles imports a url of a zipped tar file into a variable. Creates a directory called temp
 importFiles <- function(remoteURL = NULL){
   download.file(remoteURL, "temp.tgz")
@@ -96,17 +121,26 @@ head(raw_ham_data)
 Before we continue, we will combine the email types and randomly choose a sample from the collection. This is also necessary for the classifier that will be used later.^[https://tutorials.quanteda.io/machine-learning/nb/]
 
 ```{r}
+
+# Create a corpus for all the documents
 combined <- rbind(raw_spam_data, raw_ham_data)
+combined$text <- clean_text(combined$text) # Cleans the text
 
 
+
+# Create a sample of 3000 documents
 set.seed(2543)
-
-# Samples without replacement
-sample <- combined[sample(nrow(combined), 3000), ]
-
-
+sample <- combined[sample(nrow(combined), 3000), ] # Sample without replacement
 sample_raw_spam_data <- subset(sample, type == "spam")
 sample_raw_ham_data <- subset(sample, type == "ham")
+
+
+# Test
+test <- setdiff(combined, sample)
+
+nrow(combined)
+nrow(sample)
+nrow(test)
 
 ```  
 
@@ -117,39 +151,9 @@ There is not a consistent format for each of the files from SpamAssassin. There 
 
 ```{r}
 
-# Strip out html tags
-sample_raw_spam_data$text <- strip_html(sample_raw_spam_data$text)
-sample_raw_ham_data$text <- strip_html(sample_raw_ham_data$text)
-
-# Remove hostnames: https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
-# https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)
-# The tokens function has an argument 'remove_url = TRUE' but this did not work so I stripped it here
-sample_raw_spam_data$text <- str_replace_all(sample_raw_spam_data$text, "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)", " ")
-sample_raw_ham_data$text <- str_replace_all(sample_raw_ham_data$text, "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)", " ")
-
-
-# Remove Email addresses
-sample_raw_spam_data$text <- str_replace_all(sample_raw_spam_data$text, "\\S*@\\S*\\s?", " ")
-sample_raw_ham_data$text <- str_replace_all(sample_raw_ham_data$text, "\\S*@\\S*\\s?", " ")
-
-
-# Remove \n, \t, and &nbsp;
-sample_raw_spam_data$text <- str_replace_all(sample_raw_spam_data$text, "\n", " ")
-sample_raw_spam_data$text <- str_replace_all(sample_raw_spam_data$text, "\t", " ")
-sample_raw_spam_data$text <- str_replace_all(sample_raw_spam_data$text, "&nbsp;", " ")
-
-sample_raw_ham_data$text <- str_replace_all(sample_raw_ham_data$text, "\n", " ")
-sample_raw_ham_data$text <- str_replace_all(sample_raw_ham_data$text, "\t", " ")
-sample_raw_ham_data$text <- str_replace_all(sample_raw_ham_data$text, "&nbsp;", " ")
-
-
-# Convert the text data to the character class
-sample_raw_spam_data$text <- as.character(sample_raw_spam_data$text)
-sample_raw_ham_data$text <- as.character(sample_raw_ham_data$text)
-
 # Store the variables as corpora
-spam_corpus <- corpus(sample_raw_spam_data$text)
-ham_corpus <- corpus(sample_raw_ham_data$text)
+spam_corpus <- corpus(sample_raw_spam_data)
+ham_corpus <- corpus(sample_raw_ham_data)
 
 ```  
 
