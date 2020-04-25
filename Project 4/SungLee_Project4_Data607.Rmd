@@ -37,6 +37,8 @@ library(summarytools)
 library(tidytext)
 library(tidyverse)
 library(quanteda)
+library(quanteda.textmodels)
+library(caret)
 ```  
 
 <div style="margin-bottom:50px;"></div>
@@ -136,11 +138,8 @@ sample_raw_ham_data <- subset(sample, type == "ham")
 
 
 # Test
-test <- setdiff(combined, sample)
+test_raw_data <- setdiff(combined, sample)
 
-nrow(combined)
-nrow(sample)
-nrow(test)
 
 ```  
 
@@ -154,6 +153,10 @@ There is not a consistent format for each of the files from SpamAssassin. There 
 # Store the variables as corpora
 spam_corpus <- corpus(sample_raw_spam_data)
 ham_corpus <- corpus(sample_raw_ham_data)
+training_corpus <- corpus(sample)
+testing_corpus <- corpus(test_raw_data)
+
+
 
 ```  
 
@@ -187,12 +190,27 @@ ham_dfm <- dfm(ham_tokens, remove = stopwords("english"))
 ```
 
 
-
-
-
-
 <div style="margin-bottom:50px;"></div>
 # Analysis {.tabset}
+
+<div style="margin-bottom:50px;"></div>
+## Bayes Theorem
+
+This page https://www.r-bloggers.com/text-message-classification/ has code for using a Naïve Bayes classifier for classifying messages in addition to the Quanteda page linked earlier.
+
+```{r bayes}
+# Get Training Set
+training_dfm <- dfm(training_corpus, remove = stopwords("english"))
+
+# Get Test Set (documents not in id_train)
+test_dfm <- dfm(testing_corpus, remove = stopwords("english"))
+
+# Train the Bayes classifier
+tmod_nb <- textmodel_nb(training_dfm, training_dfm$type)
+summary(tmod_nb)
+
+```
+
 
 <div style="margin-bottom:50px;"></div>
 ## Word Clouds
@@ -216,18 +234,7 @@ textplot_wordcloud(ham_dfm, min_count = 200, color = ham.colors)
 title("Ham Wordcloud", col.main = "black")
 ```
 
-<div style="margin-bottom:50px;"></div>
-## Bayes Theorem
 
-This page https://www.r-bloggers.com/text-message-classification/ has code for using a Naïve Bayes classifier for classifying messages in addition to the Quanteda page linked earlier.
-
-```{r}
-
-
-
-```
-
-<div style="margin-bottom:50px;"></div>
 # Conclusion
 
 
