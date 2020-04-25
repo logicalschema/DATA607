@@ -51,9 +51,9 @@ This is an import of the tar files.
 
 
 # This function will strip html tags from text. This uses the rvest package
-# https://www.rdocumentation.org/packages/rvest/versions/0.3.5/topics/html_text
+# https://stackoverflow.com/questions/17227294/removing-html-tags-from-a-string-in-r
 strip_html <- function(x) {
-    return(html_text(read_html(x)))
+  return(gsub("<.*?>", " ", x))
 }
 
 # The function importFiles imports a url of a zipped tar file into a variable. Creates a directory called temp
@@ -76,12 +76,13 @@ importFiles <- function(remoteURL = NULL){
 url <- "https://github.com/logicalschema/DATA607/raw/master/Project%204/spamemails.tgz"
 
 raw_spam_data <- importFiles(url)
-
+raw_spam_data <- cbind(raw_spam_data, type = "spam")
 
 # Import the ham emails
 url <- "https://github.com/logicalschema/DATA607/raw/master/Project%204/hamemails.tgz"
 
 raw_ham_data <- importFiles(url)
+raw_ham_data <- cbind(raw_ham_data, type = "ham")
 
 ```  
 
@@ -90,38 +91,65 @@ Let's take a look at the data imported.
 ```{r}
 head(raw_spam_data)
 head(raw_ham_data)
-```
+```  
+
+Before we continue, we will combine the email types and randomly choose a sample from the collection. This is also necessary for the classifier that will be used later.^[https://tutorials.quanteda.io/machine-learning/nb/]
+
+```{r}
+combined <- rbind(raw_spam_data, raw_ham_data)
+
+
+set.seed(2543)
+
+# Samples without replacement
+sample <- combined[sample(nrow(combined), 3000), ]
+
+
+sample_raw_spam_data <- subset(sample, type == "spam")
+sample_raw_ham_data <- subset(sample, type == "ham")
+
+```  
+
+
+
 
 There is not a consistent format for each of the files from SpamAssassin. There are different headers for the emails in different orders across the collection. In one email, the `Content-Type` might be declared and in another the email client used would be listed. Let's convert documents we have to corpora.  
 
 ```{r}
 
 # Strip out html tags
-raw_spam_data$text <- strip_html(raw_spam_data$text)
-raw_ham_data$text <- strip_html(raw_ham_data$text)
-
-# Remove Email addresses
-raw_spam_data$text <- str_replace_all(raw_spam_data$text, "\\S*@\\S*\\s?", " ")
-raw_ham_data$text <- str_replace_all(raw_ham_data$text, "\\S*@\\S*\\s?", " ")
+sample_raw_spam_data$text <- strip_html(sample_raw_spam_data$text)
+sample_raw_ham_data$text <- strip_html(sample_raw_ham_data$text)
 
 # Remove hostnames: https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
-#[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)
-raw_spam_data$text <- str_replace_all(raw_spam_data$text, "[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)", " ")
-raw_ham_data$text <- str_replace_all(raw_ham_data$text, "[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)", " ")
+# https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)
+# The tokens function has an argument 'remove_url = TRUE' but this did not work so I stripped it here
+sample_raw_spam_data$text <- str_replace_all(sample_raw_spam_data$text, "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)", " ")
+sample_raw_ham_data$text <- str_replace_all(sample_raw_ham_data$text, "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)", " ")
 
 
-# Remove \n
-raw_spam_data$text <- str_replace_all(raw_spam_data$text, "\n", " ")
-raw_ham_data$text <- str_replace_all(raw_ham_data$text, "\n", " ")
+# Remove Email addresses
+sample_raw_spam_data$text <- str_replace_all(sample_raw_spam_data$text, "\\S*@\\S*\\s?", " ")
+sample_raw_ham_data$text <- str_replace_all(sample_raw_ham_data$text, "\\S*@\\S*\\s?", " ")
+
+
+# Remove \n, \t, and &nbsp;
+sample_raw_spam_data$text <- str_replace_all(sample_raw_spam_data$text, "\n", " ")
+sample_raw_spam_data$text <- str_replace_all(sample_raw_spam_data$text, "\t", " ")
+sample_raw_spam_data$text <- str_replace_all(sample_raw_spam_data$text, "&nbsp;", " ")
+
+sample_raw_ham_data$text <- str_replace_all(sample_raw_ham_data$text, "\n", " ")
+sample_raw_ham_data$text <- str_replace_all(sample_raw_ham_data$text, "\t", " ")
+sample_raw_ham_data$text <- str_replace_all(sample_raw_ham_data$text, "&nbsp;", " ")
 
 
 # Convert the text data to the character class
-raw_spam_data$text <- as.character(raw_spam_data$text)
-raw_ham_data$text <- as.character(raw_ham_data$text)
+sample_raw_spam_data$text <- as.character(sample_raw_spam_data$text)
+sample_raw_ham_data$text <- as.character(sample_raw_ham_data$text)
 
 # Store the variables as corpora
-spam_corpus <- corpus(raw_spam_data$text)
-ham_corpus <- corpus(raw_ham_data$text)
+spam_corpus <- corpus(sample_raw_spam_data$text)
+ham_corpus <- corpus(sample_raw_ham_data$text)
 
 ```  
 
@@ -141,7 +169,7 @@ First, let's tokenize the text in our data.
 
 # Tokenize the corpora and remove punctuation and symbols: https://quanteda.io/reference/tokens.html
 spam_tokens <- tokens(spam_corpus, remove_punct = TRUE, remove_symbols = TRUE, remove_numbers = TRUE, remove_separators = TRUE)
-ham_tokens <- tokens(ham_corpus, remove_punct = TRUE, remove_symbols = TRUE, remove_numbers = TRUE)
+ham_tokens <- tokens(ham_corpus, remove_punct = TRUE, remove_symbols = TRUE, remove_numbers = TRUE, remove_separators = TRUE)
 
 # Convert the tokens to lowercase
 spam_tokens <- tokens_tolower(spam_tokens)
@@ -151,13 +179,6 @@ ham_tokens <- tokens_tolower(ham_tokens)
 spam_dfm <- dfm(spam_tokens, remove = stopwords("english"))
 ham_dfm <- dfm(ham_tokens, remove = stopwords("english"))
 
-
-# Create a word cloud: https://quanteda.io/reference/textplot_wordcloud.html
-spam.col <- brewer.pal(10, "BrBG")  
-
-textplot_wordcloud(spam_dfm, min_count = 100, color = spam.col)  
-title("Spam Wordcloud", col.main = "grey14")
-  
   
 ```
 
@@ -167,14 +188,40 @@ title("Spam Wordcloud", col.main = "grey14")
 
 
 <div style="margin-bottom:50px;"></div>
-# Text Mining {.tabset}
+# Analysis {.tabset}
 
 <div style="margin-bottom:50px;"></div>
-## Method 1
+## Word Clouds
 
+Here is a look at the word clouds for the spam and ham data: 
+
+```{r}
+# Create a word cloud: https://quanteda.io/reference/textplot_wordcloud.html
+spam.colors <- brewer.pal(9, "Paired")  
+
+textplot_wordcloud(spam_dfm, min_count = 200, color = spam.colors)  
+title("Spam Wordcloud", col.main = "black")
+```  
+
+
+```{r}
+# Create a word cloud: https://quanteda.io/reference/textplot_wordcloud.html
+ham.colors <- brewer.pal(9, "Paired")  
+
+textplot_wordcloud(ham_dfm, min_count = 200, color = ham.colors)  
+title("Ham Wordcloud", col.main = "black")
+```
 
 <div style="margin-bottom:50px;"></div>
-## Method 2
+## Bayes Theorem
+
+This page https://www.r-bloggers.com/text-message-classification/ has code for using a Naïve Bayes classifier for classifying messages in addition to the Quanteda page linked earlier.
+
+```{r}
+
+
+
+```
 
 <div style="margin-bottom:50px;"></div>
 # Conclusion
