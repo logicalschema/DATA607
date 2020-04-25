@@ -39,6 +39,14 @@ library(tidyverse)
 library(quanteda)
 library(quanteda.textmodels)
 library(caret)
+
+# Needed for the Confusion Matrix
+library(e1071)
+
+# Random Forest method
+library(randomForest)
+
+library(tm)
 ```  
 
 <div style="margin-bottom:50px;"></div>
@@ -81,7 +89,37 @@ clean_text <- function(x) {
   
 }
 
+# Clean Tokens: returns a DFM by tokenizing a corpus
+clean_corpus <- function(x) {
 
+# Tokenize the corpora and remove punctuation and symbols: https://quanteda.io/reference/tokens.html
+temp_tokens <- tokens(x, remove_punct = TRUE, remove_symbols = TRUE, remove_numbers = TRUE, remove_separators = TRUE)
+
+# Convert the tokens to lowercase
+temp_tokens <- tokens_tolower(temp_tokens)
+
+# Create the DFM: document-feature matrix: https://quanteda.io/reference/dfm.html
+temp_dfm <- dfm(temp_tokens, remove = stopwords("english"))
+
+return(temp_dfm)
+}
+
+# Clean Tokens: returns a DFM by tokenizing a corpus
+clean_corpus_dtm <- function(x) {
+
+corpus <- VCorpus(VectorSource(x))
+corpus <- tm_map(corpus, content_transformer(tolower))
+corpus <- tm_map(corpus, removeNumbers)
+corpus <- tm_map(corpus, removePunctuation)
+corpus <- tm_map(corpus, removeWords, stopwords())
+corpus <- tm_map(corpus, stemDocument)
+corpus <- tm_map(corpus, stripWhitespace)
+
+dtm <- DocumentTermMatrix(corpus)
+dtm <- removeSparseTerms(dtm, 0.9)
+
+return(dtm)
+}
 
 # The function importFiles imports a url of a zipped tar file into a variable. Creates a directory called temp
 importFiles <- function(remoteURL = NULL){
@@ -170,52 +208,85 @@ texts(ham_corpus)[10]
 The files are imported into the corpus format but we need to do some tidying.
 
 
-First, let's tokenize the text in our data.
+First, let's clean text in our data and convert to DFMs.
 
-```{r}
+```{r convert_corpus_dfm}
 
-# Tokenize the corpora and remove punctuation and symbols: https://quanteda.io/reference/tokens.html
-spam_tokens <- tokens(spam_corpus, remove_punct = TRUE, remove_symbols = TRUE, remove_numbers = TRUE, remove_separators = TRUE)
-ham_tokens <- tokens(ham_corpus, remove_punct = TRUE, remove_symbols = TRUE, remove_numbers = TRUE, remove_separators = TRUE)
+# Used for the Word Cloud
+spam_dfm <- clean_corpus(spam_corpus)
+ham_dfm <- clean_corpus(ham_corpus)
 
-# Convert the tokens to lowercase
-spam_tokens <- tokens_tolower(spam_tokens)
-ham_tokens <- tokens_tolower(ham_tokens)
 
-# Create the DFM: document-feature matrix: https://quanteda.io/reference/dfm.html
-spam_dfm <- dfm(spam_tokens, remove = stopwords("english"))
-ham_dfm <- dfm(ham_tokens, remove = stopwords("english"))
+# Used for the Bayes Classifier
+training_dfm <- clean_corpus(training_corpus)
+testing_dfm <- clean_corpus(testing_corpus)
 
-  
+# Used for the Random Forest Classifier
+training_dtm <- clean_corpus_dtm(sample$text)
+training_df <- as.data.frame(as.matrix(training_dtm))
+training_df$type <- sample$type
+
+testing_dtm <- clean_corpus_dtm(test_raw_data$text)
+testing_df <- as.data.frame(as.matrix(testing_dtm))
+testing_df$type <- test_raw_data$type
+
 ```
 
 
 <div style="margin-bottom:50px;"></div>
-# Analysis {.tabset}
+# Analysis {.tabset}  
+
+This section will go analyze the data we have imported and tidied.
 
 <div style="margin-bottom:50px;"></div>
 ## Bayes Theorem
 
-This page https://www.r-bloggers.com/text-message-classification/ has code for using a Naïve Bayes classifier for classifying messages in addition to the Quanteda page linked earlier.
+This page https://www.r-bloggers.com/text-message-classification/ has code for using a Naïve Bayes classifier for classifying messages in addition to the Quanteda page linked earlier. We will train the model and look at a summary of the model. This employs both the `caret` and `quanteda` packages.
 
-```{r bayes}
-# Get Training Set
-training_dfm <- dfm(training_corpus, remove = stopwords("english"))
-
-# Get Test Set (documents not in id_train)
-test_dfm <- dfm(testing_corpus, remove = stopwords("english"))
+```{r Bayes}
 
 # Train the Bayes classifier
-tmod_nb <- textmodel_nb(training_dfm, training_dfm$type)
-summary(tmod_nb)
+tmodel_nb <- textmodel_nb(training_dfm, training_dfm$type)
+
+summary(tmodel_nb)
+
+```  
+
+"Naïve Bayes can only take features into consideration that occur both in the training set and the test set."^[https://tutorials.quanteda.io/machine-learning/nb/] The function `dfm_match()` can use the `training_dfm` as a pattern. The cross-table matrix shows how the classifier did.
+
+```{r Test_inspection}
+matching_dfm <- dfm_match(testing_dfm, features = featnames(training_dfm))
+
+# Evaluating how the classifier did
+actual_class <- matching_dfm$type
+predicted_class <- predict(tmodel_nb, newdata = matching_dfm)
+tab_class <- table(actual_class, predicted_class)
+tab_class
+```  
+
+For further analysis, we can construct a Confusion Matrix^[https://en.wikipedia.org/wiki/Confusion_matrix] using the `caret` package. A Confusion Matrix is basically an error matrix.
+
+```{r confusionmatrix}
+confusionMatrix(tab_class, mode = "everything")
+```
+
+<div style="margin-bottom:50px;"></div>
+## Random Forest 
+
+John DeBlase's Rpub https://rpubs.com/bsnacks000/125281 and  Chris Marshall's article^[https://towardsdatascience.com/random-forest-text-classification-trump-v-obama-c09f947173dc] were the basis for this. We use the sample data from before to develop a Random Forest classifier. For more informatio about the Random Forest, you can see this article: https://en.wikipedia.org/wiki/Random_forest. 
+
+```{r algorithms}
+# Creates the Random Forest Classifier using the sample training data
+summary(training_df)
 
 ```
+
 
 
 <div style="margin-bottom:50px;"></div>
 ## Word Clouds
 
-Here is a look at the word clouds for the spam and ham data: 
+Below is a look at the word clouds for the spam and ham data. Notice how `localhost` and domain names appear. In spam classifying, domains can be filtered out.
 
 ```{r}
 # Create a word cloud: https://quanteda.io/reference/textplot_wordcloud.html
