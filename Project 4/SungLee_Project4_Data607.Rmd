@@ -31,17 +31,16 @@ These will be the libraries used for this project. I wanted to use `quanteda` pa
 library(readtext)
 library(RColorBrewer)
 library(ggplot2)
-library(SnowballC)
+library(rvest)
+library(stringr)
 library(summarytools)
-library(wordcloud)
 library(tidytext)
 library(tidyverse)
 library(quanteda)
-library(tm)
 ```  
 
 <div style="margin-bottom:50px;"></div>
-# Import
+# Import and Tidy the Data
 
 The data to train the model is from https://spamassassin.apache.org/old/publiccorpus/. The files 20030228_spam.tar.bz2, 20030228_spam_2.tar.bz2, and 20050311_spam_2.tar.bz2 will be used. These files were uncompressed and the contents were moved to a single file. In addition, the `cmds` file located in each archive file was removed. The complete file with the combined emails is here: https://github.com/logicalschema/DATA607/raw/master/Project%204/spamemails.tgz. Another file https://github.com/logicalschema/DATA607/raw/master/Project%204/hamemails.tgz contains the emails from 20030228_easy_ham.tar.bz2, 20030228_easy_ham_2.tar.bz2, and 20030228_hard_ham.tar.bz2 with the `cmds` files removed.  
 
@@ -49,6 +48,13 @@ This is an import of the tar files.
 
 
 ```{r, message=FALSE, warning=FALSE}
+
+
+# This function will strip html tags from text. This uses the rvest package
+# https://www.rdocumentation.org/packages/rvest/versions/0.3.5/topics/html_text
+strip_html <- function(x) {
+    return(html_text(read_html(x)))
+}
 
 # The function importFiles imports a url of a zipped tar file into a variable. Creates a directory called temp
 importFiles <- function(remoteURL = NULL){
@@ -85,6 +91,78 @@ Let's take a look at the data imported.
 head(raw_spam_data)
 head(raw_ham_data)
 ```
+
+There is not a consistent format for each of the files from SpamAssassin. There are different headers for the emails in different orders across the collection. In one email, the `Content-Type` might be declared and in another the email client used would be listed. Let's convert documents we have to corpora.  
+
+```{r}
+
+# Strip out html tags
+raw_spam_data$text <- strip_html(raw_spam_data$text)
+raw_ham_data$text <- strip_html(raw_ham_data$text)
+
+# Remove Email addresses
+raw_spam_data$text <- str_replace_all(raw_spam_data$text, "\\S*@\\S*\\s?", " ")
+raw_ham_data$text <- str_replace_all(raw_ham_data$text, "\\S*@\\S*\\s?", " ")
+
+# Remove hostnames: https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
+#[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)
+raw_spam_data$text <- str_replace_all(raw_spam_data$text, "[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)", " ")
+raw_ham_data$text <- str_replace_all(raw_ham_data$text, "[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)", " ")
+
+
+# Remove \n
+raw_spam_data$text <- str_replace_all(raw_spam_data$text, "\n", " ")
+raw_ham_data$text <- str_replace_all(raw_ham_data$text, "\n", " ")
+
+
+# Convert the text data to the character class
+raw_spam_data$text <- as.character(raw_spam_data$text)
+raw_ham_data$text <- as.character(raw_ham_data$text)
+
+# Store the variables as corpora
+spam_corpus <- corpus(raw_spam_data$text)
+ham_corpus <- corpus(raw_ham_data$text)
+
+```  
+
+Here are snippets from each of the corpora.
+
+```{r}
+texts(spam_corpus)[10]
+texts(ham_corpus)[10]
+```  
+
+The files are imported into the corpus format but we need to do some tidying.
+
+
+First, let's tokenize the text in our data.
+
+```{r}
+
+# Tokenize the corpora and remove punctuation and symbols: https://quanteda.io/reference/tokens.html
+spam_tokens <- tokens(spam_corpus, remove_punct = TRUE, remove_symbols = TRUE, remove_numbers = TRUE, remove_separators = TRUE)
+ham_tokens <- tokens(ham_corpus, remove_punct = TRUE, remove_symbols = TRUE, remove_numbers = TRUE)
+
+# Convert the tokens to lowercase
+spam_tokens <- tokens_tolower(spam_tokens)
+ham_tokens <- tokens_tolower(ham_tokens)
+
+# Create the DFM: document-feature matrix: https://quanteda.io/reference/dfm.html
+spam_dfm <- dfm(spam_tokens, remove = stopwords("english"))
+ham_dfm <- dfm(ham_tokens, remove = stopwords("english"))
+
+
+# Create a word cloud: https://quanteda.io/reference/textplot_wordcloud.html
+spam.col <- brewer.pal(10, "BrBG")  
+
+textplot_wordcloud(spam_dfm, min_count = 100, color = spam.col)  
+title("Spam Wordcloud", col.main = "grey14")
+  
+  
+```
+
+
+
 
 
 
