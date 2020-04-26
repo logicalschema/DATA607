@@ -301,17 +301,6 @@ rf_tab
 
 ```  
 
-Let's use the model on the testing data.
-
-```{r rf_testing}
-rf_model <- randomForest(rf_variable_spam~., data = rf_test)
-prediction_rf_test <- predict(rf_model, newdata=rf_test, type="prob")[,2] 
-rf_tab_test <- table(rf_test$rf_variable_spam, prediction_rf_test > 0.5)
-colnames(rf_tab_test) <- c("spam", "ham")
-rf_tab_test
-
-
-```
 
 
 
