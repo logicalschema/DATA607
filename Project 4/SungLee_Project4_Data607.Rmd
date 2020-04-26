@@ -104,19 +104,19 @@ temp_dfm <- dfm(temp_tokens, remove = stopwords("english"))
 return(temp_dfm)
 }
 
-# Clean Tokens: returns a DFM by tokenizing a corpus
+# Clean Tokens: returns a DTM by tokenizing a corpus
 clean_corpus_dtm <- function(x) {
 
-corpus <- VCorpus(VectorSource(x))
+corpus <- Corpus(VectorSource(x))
 corpus <- tm_map(corpus, content_transformer(tolower))
 corpus <- tm_map(corpus, removeNumbers)
 corpus <- tm_map(corpus, removePunctuation)
-corpus <- tm_map(corpus, removeWords, stopwords())
-corpus <- tm_map(corpus, stemDocument)
+corpus <- tm_map(corpus, removeWords, stopwords("english"))
 corpus <- tm_map(corpus, stripWhitespace)
 
 dtm <- DocumentTermMatrix(corpus)
-dtm <- removeSparseTerms(dtm, 0.9)
+
+dtm <- removeSparseTerms(dtm, 0.95)
 
 return(dtm)
 }
@@ -210,7 +210,7 @@ The files are imported into the corpus format but we need to do some tidying.
 
 First, let's clean text in our data and convert to DFMs.
 
-```{r convert_corpus_dfm}
+```{r convert_corpus_dfm, warning=FALSE}
 
 # Used for the Word Cloud
 spam_dfm <- clean_corpus(spam_corpus)
@@ -223,12 +223,8 @@ testing_dfm <- clean_corpus(testing_corpus)
 
 # Used for the Random Forest Classifier
 training_dtm <- clean_corpus_dtm(sample$text)
-training_df <- as.data.frame(as.matrix(training_dtm))
-training_df$type <- sample$type
-
 testing_dtm <- clean_corpus_dtm(test_raw_data$text)
-testing_df <- as.data.frame(as.matrix(testing_dtm))
-testing_df$type <- test_raw_data$type
+
 
 ```
 
@@ -276,8 +272,44 @@ confusionMatrix(tab_class, mode = "everything")
 John DeBlase's Rpub https://rpubs.com/bsnacks000/125281 and  Chris Marshall's article^[https://towardsdatascience.com/random-forest-text-classification-trump-v-obama-c09f947173dc] were the basis for this. We use the sample data from before to develop a Random Forest classifier. For more informatio about the Random Forest, you can see this article: https://en.wikipedia.org/wiki/Random_forest. 
 
 ```{r algorithms}
-# Creates the Random Forest Classifier using the sample training data
-summary(training_df)
+
+# Convert the training_dtm and testing_dtm to data frames
+rf_df <- as.data.frame(as.matrix(training_dtm))
+colnames(rf_df) <- make.names(colnames(rf_df))
+
+rf_test <- as.data.frame(as.matrix(testing_dtm))
+colnames(rf_test) <- make.names(colnames(rf_test))
+
+
+# Add the type variable to the data frame
+rf_df$rf_variable_spam <- sample$type
+rf_test$rf_variable_spam <- test_raw_data$type
+
+
+# Train the Random Forest Model
+rf_model <- randomForest(rf_variable_spam~., data = rf_df)
+summary(rf_model)
+
+# Evaluating how the classifier did
+prediction_rf_class <- predict(rf_model, type="prob")[,2] 
+
+
+# Evaluate the performance of the random forest model on the training set
+rf_tab <- table(rf_df$rf_variable_spam, prediction_rf_class > 0.5)
+colnames(rf_tab) <- c("spam", "ham")
+rf_tab
+
+```  
+
+Let's use the model on the testing data.
+
+```{r rf_testing}
+rf_model <- randomForest(rf_variable_spam~., data = rf_test)
+prediction_rf_test <- predict(rf_model, newdata=rf_test, type="prob")[,2] 
+rf_tab_test <- table(rf_test$rf_variable_spam, prediction_rf_test > 0.5)
+colnames(rf_tab_test) <- c("spam", "ham")
+rf_tab_test
+
 
 ```
 
@@ -308,5 +340,5 @@ title("Ham Wordcloud", col.main = "black")
 
 # Conclusion
 
-
+Witha  cursory entry into classifiers, I found that it was easier to use the `quanteda` and `caret` packages to use the Naïve Bayes classifier for spam. However, the Random Forest Classifier can be tweaked to obtain a higher accuracy. Sophisticated spam filters can be employed to examine the source address, MAC addresses, and domains to quickly remove spam.
 
