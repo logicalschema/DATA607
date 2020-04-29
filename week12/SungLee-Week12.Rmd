@@ -1,0 +1,28 @@
+---
+title: "Data 607 Week 12 Assignment"
+author: "Sung Lee"
+date: "4/29/2020"
+output: 
+  html_document:
+    code_folding: show
+    df_print: paged
+    toc: true
+    toc_float: true
+    toc_collapsed: true
+    smooth_scroll: false
+    toc_depth: 3
+number_sections: true
+theme: paper
+---
+
+[Assignment on RPubs](https://rpubs.com/logicalschema/data607_week12 "Sung's Week 12 Assignment Rpubs")
+<br>
+[Rmd on Github](https://github.com/logicalschema/DATA607/blob/master/week12/SungLee-Week12.Rmd "Sung's Week 12 Assignment Github")  
+<br>
+
+
+
+## Introduction  
+
+
+
