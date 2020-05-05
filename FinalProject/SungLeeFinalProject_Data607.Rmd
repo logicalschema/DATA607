@@ -17,7 +17,7 @@ theme: paper
 
 [Assignment on RPubs](https://rpubs.com/logicalschema/data607_finalproject "Sung's Data 607 Final Project")
 <br>
-[Rmd on Github](https://github.com/logicalschema/DATA607/blob/master/week12/SungLee-Week12.Rmd "Sung's Data 607 Final Project")  
+[Rmd on Github](https://github.com/logicalschema/DATA607/blob/master/FinalProject/SungLeeFinalProject_Data607.Rmd "Sung's Data 607 Final Project")  
 <br>
 
 
