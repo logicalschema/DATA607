@@ -1,0 +1,1182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  "http://www.w3.org/TR/html4/loose.dtd">
+<html ><head><title> </title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<!-- BEGIN 2009_redesign/inc/top.html -->
+<script type="text/javascript">
+        var djConfig = {
+            parseOnLoad: true,
+            isDebug: false
+        };
+</script>
+<script type="text/javascript"
+        src="/2009_redesign/dojo-1.3/dojo/dojo.js"></script>
+<link rel="stylesheet" href="/2009_redesign/dojo-1.3/dijit/themes/tundra/tundra.css">
+<link rel="stylesheet" href="/2009_redesign/2009.css" type="text/css">
+<link rel="image_src" href="//www.nber.org/img_2009/NBER_logo_2014.jpg" / ><!--formatted-->
+<script language="JavaScript" type="text/javascript" src="/2009_redesign/top.js"></script>
+<!--style applied-->
+
+<!-- Google Analytics -->
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+
+ga('create', 'UA-28569388-1', 'auto');  // Replace with your property ID.
+// the following was interpolated by NBER::Style.pm
+
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+<style>
+body.waiting {
+  cursor: wait !important;
+}
+</style>
+
+</head>
+<body>
+<div id="printTopDiv">NATIONAL BUREAU OF ECONOMIC RESEARCH</div>
+<div id="topDiv"><a href="/" title="Return to Home Page">
+<img border="0" src="//www.nber.org/img_2009/main_top.jpg" height="95" width="997" alt="NATIONAL BUREAU OF ECONOMIC RESEARCH">
+</a></div>
+    
+<div id="currentDate"></div>
+
+<div id="homeLink">
+<a href="/" title="return to home">HOME PAGE</a></div>
+
+<div id="searchBoxDiv" >
+
+<div id="loginTopDiv" >
+loading...
+</div>
+
+<form action="/xsearch" name="siteSearchForm" id="searchBoxForm" method=GET
+onSubmit="if ( verifySearchForm() ) {
+ document.body.classList.add('waiting');
+ return true;
+} else {
+ return false;
+};"
+style="vertical-align:top"
+ >
+
+<input type="text" name="q" id="mainSearchBoxId" class="yellowInput"
+       value="Search the NBER site" onClick="if (this.value == 'Search the NBER site') 
+                  {this.value =''; this.style.textAlign = 'left'}"
+onKeyPress="if (this.value.length > 1) {
+ this.oninput();
+}"
+oninput="var themenu = document.getElementById('whichsearch');
+         themenu.size=4;
+         if (themenu.value == '') {
+            document.getElementById('ws-ftpub').selected=true;
+         }
+"
+onpaste="this.oninput();"
+onchange="this.oninput();"
+
+style="vertical-align:top"
+>
+
+<select id="whichsearch" name="whichsearch"
+ style="font-family: Tahoma, Calibri, Verdana, Helvetica, Arial, sans-serif;font-size: 13px; "
+ onChange="searchMenuClick();" >
+<option id="ws-default" selected value="">Select one
+</option>
+<option id="ws-ftpub" value="ftpub"   onclick="searchMenuClick();">
+Research</option>
+
+<option id="ws-dbauth" value="dbauth" onclick="searchMenuClick();">
+Researchers</option>
+
+<option id="ws-ftsite" value="ftsite" onclick="searchMenuClick();">
+Institutional</option>
+</select>
+
+</form>
+
+</div><!-- end searchBoxDiv -->
+
+
+<div id="mainNewsDiv">
+<table border=0 cellspacing=0 cellpadding=0 id="mainTable"><tr>
+   <td id="mainContentTd" valign="top" style="padding-bottom: 10px;">
+<!-- END top.html -->
+<h1 class='title '> </h1>
+
+
+<!--Place copy of this file in the root directory as well if modified-->
+
+<META name="resource-type" content="document">
+<META name="description" content="Business Cycle Expansion and
+            contraction dates for the United States Economy">
+<META name="keywords" content="business,cycle,cycles,boom,bust,
+            expansions,contractions,US,economy,recession,
+            recesions,nber">
+</head>
+
+
+<H2>US Business Cycle Expansions and Contractions <!--<a href="#announcements">&sup1;</a>--></H2><br><br>
+<a href=/cycles/US_Business_Cycle_Expansions_and_Contractions_20120423.pdf> pdf version</a><br>
+ <em>Contractions (recessions) start at the peak of a business cycle and end at the trough.</em><br>
+
+
+Please also see:<br>
+<ul style="margin-top: 0; padding-top: 0">
+
+
+<a href="/cycles/sept2010.html">Latest announcement</a> from the NBER's Business Cycle Dating Committee, dated 9/20/10.<BR>
+
+<!--<li><a href="https://www.nber.org/cycles/recessions.html">Latest announcement</a> on how the NBER's Business Cycle Dating Committee chooses turning points in the Economy and its
+latest memo, dated 10/21/03
+<a href="/cycles/july2003.html">July 2003 announcement</a> of
+business cycle trough.
+-->
+
+<a href="/cycles/bcdc1.xlsx">Download Excel file with machine-readable chronology</a><br>
+
+<!--<a href="/cycles/NBER chronology.xlsx">Download Excel file with machine-readable chronology</a><br>-->
+
+<!-- <a href="/cyclescites.html">Press citations</a> on NBER Business Cycles <br>
+<li>Historical data: 
+<a href="/cycles/hall.xlw">Excel</a>
+<a href="/cycles/hall.htm">HTML</a>
+<a href="/cycles/hall.pdf">PDF</a>
+
+
+
+				<a href="/cycles/hall.xlw">Excel</a> | 
+                     <a href="/cycles/hall.htm">HTML</a> | 
+                     <a href="/cycles/hall.pdf">PDF</a> -->
+
+
+
+
+
+</ul>
+
+
+
+
+
+
+<div align="center">
+<table border="0" cellspacing="5" cellpadding="5">
+<tr align="center" valign="bottom">
+<td colspan="2"><b><u>BUSINESS CYCLE <br>REFERENCE DATES</u></b></td>
+<td colspan="4"><b><u>DURATION IN MONTHS</u></b></td>
+</tr>
+<tr valign="top">
+<td align="center"><b>Peak</b></td>
+<td align="center"><b>Trough</b></td>
+<td align="center"><b>Contraction</b></td>
+<td align="center"><b>Expansion</b></td>
+<td align="center" colspan="2"><b>Cycle</b></td>
+</tr>
+<tr align="center" valign="top">
+<td colspan="2"><i>Quarterly dates<br>are in parentheses</i></td>
+<td><i>Peak <br>to <br>Trough</i></td>
+<td><i>Previous trough <br>to <br>this peak</i></td>
+<td><i>Trough from <br>Previous <br>Trough</i></td>
+<td><i>Peak from <br>Previous <br>Peak</i></td>
+</tr>
+<tr valign="top">
+<td nowrap>
+<br>
+June 1857(II)<br>
+October 1860(III)<br>
+April 1865(I)<br>
+June 1869(II)<br>
+October 1873(III)<br>
+
+March 1882(I)<br>
+March 1887(II)<br>
+July 1890(III)<br>
+January 1893(I)<br>
+December 1895(IV)<br>
+
+June 1899(III)<br>
+September 1902(IV)<br>
+May 1907(II)<br>
+January 1910(I)<br>
+January 1913(I)<br>
+
+August 1918(III)<br>
+January 1920(I)<br>
+May 1923(II)<br>
+October 1926(III)<br>
+August 1929(III)<br>
+
+May 1937(II)<br>
+February 1945(I)<br>
+November 1948(IV)<br>
+July 1953(II)<br>
+August 1957(III)<br>
+<B></B>
+April 1960(II)<br>
+December 1969(IV)<br>
+November 1973(IV)<br>
+January 1980(I)<br>
+July 1981(III)<br>
+
+July 1990(III)<br>
+<a href="/cycles/november2001/">March     2001</a>(I)<br>
+<a href="/cycles/dec2008.pdf">December 2007</a> (IV)<br>
+</td>
+<td nowrap>
+December 1854 (IV)<br>
+December 1858 (IV)<br>
+June 1861 (III)<br>
+December 1867 (I)<br>
+December 1870 (IV)<br>
+March 1879 (I)<br>
+
+May 1885 (II)<br>
+April 1888 (I)<br>
+May 1891 (II)<br>
+June 1894 (II)<br>
+June 1897 (II)<br>
+
+December 1900 (IV)<br>
+August 1904 (III)<br>
+June 1908 (II)<br>
+January 1912 (IV)<br>
+December 1914 (IV)<br>
+
+March 1919 (I)<br>
+July 1921 (III)<br>
+July 1924 (III)<br>
+November 1927 (IV)<br>
+March 1933 (I)<br>
+
+June 1938 (II)<br>
+October 1945 (IV)<br>
+October 1949 (IV)<br>
+May 1954 (II)<br>
+April 1958 (II)<br>
+
+February 1961 (I)<br>
+November 1970 (IV)<br>
+March 1975 (I)<br>
+July 1980 (III)<br>
+November 1982 (IV)<br>
+
+<a href="March91.html">March     1991</a>(I)<br>
+
+
+ 
+
+
+ <a href="july2003.html">November 2001</a> (IV)<br>
+<a href="sept2010.html">June 2009</a> (II)<br>
+
+</td> 
+
+
+ 
+
+
+<td align="center" nowrap>
+--<br>
+18<br>
+8<br>
+32<br>
+18<br>
+65<br>
+
+38<br>
+13<br>
+10<br>
+17<br>
+18<br>
+
+18<br>
+23<br>
+13<br>
+24<br>
+23<br>
+
+7<br>
+18<br>
+14<br>
+13<br>
+43<br>
+
+13<br>
+8<br>
+11<br>
+10<br>
+8<br>
+
+10<br>
+11<br>
+16<br>
+6<br>
+16<br>
+
+8<br>
+8<br>
+18<br>
+</td>
+<td align="center" nowrap>
+--<br>
+30<br>
+22<br>
+46<br>
+18<br>
+34<br>
+
+36<br>
+22<br>
+27<br>
+20<br>
+18<br>
+
+24<br>
+21<br>
+33<br>
+19<br>
+12<br>
+
+44<br>
+10<br>
+22<br>
+27<br>
+21<br>
+
+50<br>
+80<br>
+37<br>
+45<br>
+39<br>
+
+24<br>
+106<br>
+36<br>
+58<br>
+12<br>
+
+92<br>
+120<br>
+73<br>
+</td>
+<td align="center" nowrap>
+--<br>
+48<br>
+30<br>
+78<br>
+36<br>
+99<br>
+
+74<br>
+35<br>
+37<br>
+37<br>
+36<br>
+
+42<br>
+44<br>
+46<br>
+43<br>
+35<br>
+
+51<br>
+28<br>
+36<br>
+40<br>
+64<br>
+
+63<br>
+88<br>
+48<br>
+55<BR>
+47<br>
+
+34<br>
+117<br>
+52<br>
+64<br>
+28<br>
+
+100<br>
+128<bR>
+91<br>
+<td align="center" nowrap>
+--<br>
+--<br>
+40<br>
+54<br>
+50<br>
+52<br>
+
+101<br>
+60<br>
+40<br>
+30<br>
+35<br>
+
+42<br>
+39<br>
+56<br>
+32<br>
+36<br>
+
+67<br>
+17<br>
+40<br>
+41<br>
+34<br>
+
+93<br>
+93<br>
+45<br>
+56<br>
+49<br>
+
+32<br>
+116<br>
+47<br>
+74<br>
+18<br>
+
+108<br>
+128<br>
+81<bR>
+</td></tr>
+
+<tr><td colspan="6"><hr></td></tr>
+
+<tr>
+<td colspan="2" align="left" nowrap>
+Average, all cycles:<br>
+     1854-2009 (33 cycles)<br>
+     1854-1919 (16 cycles)<br>
+     1919-1945 (6 cycles)<br>
+     1945-2009 (11 cycles)
+</td><td align="center" nowrap>
+&nbsp;<br>
+17.5<br>
+21.6<br>
+18.2<br>
+11.1<br>
+</td><td align="center" nowrap>
+&nbsp;<br>
+38.7<br>
+26.6<br>
+35.0<br>
+58.4<br>
+</td><td align="center" nowrap>
+&nbsp;<br>
+56.2<br>
+48.2<br>
+53.2<br>
+69.5<br>
+</td><td align="center" nowrap>
+&nbsp;<br>
+56.4*<br>
+&nbsp;&nbsp;48.9**<br>
+53.0<br>
+68.5<br>
+</td>
+
+<tr>
+<td colspan="2" align="left" nowrap>
+
+<tr>
+<td colspan="6" align="left" nowrap>
+*    32 cycles<br>
+**   15 cycles<br>
+
+</td></tr></table>
+</div>
+
+
+
+<p>Source: NBER</p>
+
+
+
+</p><strong>The determination that the last expansion began
+in June 2009 is the most recent decision of the Business Cycle Dating Committee
+of the National Bureau of Economic Research.</strong></p>
+
+<br><br>
+<center>Announcement Dates with Links to Announcement Memos	</center>	
+
+
+
+<TABLE BORDER="4" CELLPADDING="8" align="center">
+
+
+<TR>
+<TD>Turning Point Date</TD>
+<TD>Peak or Trough</TD>
+<TD>Announcement Date with Link</TD>
+
+</TR>
+
+<TR>
+<TH VALIGN="Center">June 2009</TH>
+<TH>Trough</TH>
+<TH><a href="/cycles/sept2010.html">September 20, 2010</a></TH>
+</TR>
+
+<TR>
+<TH VALIGN="Center">December 2007</TH>
+<TH>Peak</TH>
+<TH><a href="/cycles/dec2008.html">December 1, 2008</a></TH>
+</TR>
+
+<TR>
+<TH VALIGN="Center">November 2001</TH>
+<TH>Trough</TH>
+<TH><a href="/cycles/july2003.html">July 17, 2003</a></TH>
+</TR>
+
+<TR>
+<TH VALIGN="Center">March 2001</TH>
+<TH>Peak</TH>
+<TH><a href="/cycles/november2001/">November 26, 2001</a></TH>
+</TR>
+
+
+<TR>
+<TH VALIGN="Center">March 1991</TH>
+<TH>Trough</TH>
+<TH><a href="March91.html">December 22, 1992</a></TH>
+</TR>
+
+
+
+
+
+<TR>
+<TH VALIGN="Center">July 1990</TH>
+<TH>Peak</TH>
+<TH><a href="                          april1991.html">April 25, 1991</a></TH>
+</TR>
+
+
+<TR>
+<TH VALIGN="Center">November 1982</TH>
+<TH>Trough</TH>
+<TH><a href="                           july1983.html">July 8, 1983</a></TH>
+</TR>
+
+
+<TR>
+<TH VALIGN="Center">July 1981</TH>
+<TH>Peak</TH>
+<TH><a href="                          jan1982.html">January 6, 1982</a></TH>
+</TR>
+
+
+<TR>
+<TH VALIGN="Center">July 1980</TH>
+<TH>Trough</TH>
+<TH><a href="                           july1981.html">July 8, 1981</a></TH>
+</TR>
+
+
+
+
+
+
+<TR>
+<TH VALIGN="Center">January 1980</TH>
+<TH>Peak</TH>
+<TH><a href="                           june1980.html">June 3, 1980</a></TH>
+</TR>
+</TABLE> 
+
+<p>Other Related Press Releases:</p>
+
+<a href="                           april2010.html">April 12, 2010</a><br>
+<a href="                           jan08bcdc_memo.html">January 7, 2008</a><br>
+<a href="                           october2003.html">October 21, 2003</a><br>
+<a href="                           dec1990.html">December 21, 1990</a><br>
+<a href="                           dec1979.html">December 31, 1979</a><br>
+<a href="                           oct1979.html">October 25, 1979</a><br>
+<a href="                           july1979.html">July 27, 1979</a><br><BR><BR>
+<p>Prior to 1979, there were no formal announcements of business cycle turning points.<BR><BR>
+
+</ul>
+<hr>
+The NBER does not define a recession in terms of two consecutive quarters of decline in real GDP. Rather, a recession is a significant decline in economic activity spread across the economy, lasting more than a few months, normally visible in real GDP, real income, employment, industrial production, and wholesale-retail sales. For more information, see the latest announcement from the NBER's Business Cycle Dating Committee, dated 9/20/10.
+
+
+
+
+
+<!--
+<P>The NBER does not define a
+recession in terms of two consecutive quarters of decline in real GNP.
+Rather, a recession is a period of significant decline in total output, 
+income, employment, and trade, usually lasting from six months to a 
+year, and marked by widespread contractions in many sectors of the
+economy.</P>
+
+<P>A growth recession is a recurring period of slow growth in total output,
+income, employment, and trade, usually lasting a year or more.  A growth
+recession may encompass a recession, in which case the slowdown usually
+begins before the recession starts, but ends at about the same time.
+Slowdowns also may occur without recession, in which case the economy
+continues to grow, but at a pace significantly below its long-run growth</P>
+
+<P>A depression is a recession that is major in both scale and duration.
+Further discussion of these concepts can be found in the NBER book,
+<u>Business Cycles, Inflation and Forecasting</u>, 2nd edition,
+by Geoffrey H. Moore,  1983, Ballinger Publishing Co., Cambridge, MA.</P>
+-->
+
+
+
+<P>Source:<BR>
+<ul>
+<a href="mailto:info@nber.org">
+Public Information Office</a><BR>
+National Bureau of Economic Research, Inc.  <BR>
+1050 Massachusetts Avenue                   <BR>
+Cambridge MA 02138                          <BR>
+USA                                         <p>
+617-868-3900
+</ul></P>
+
+
+
+<B><I>Permission to copy is granted, provided credit is given
+</I></B>
+
+
+
+
+
+<!-- td changed to /td to close the td that is started in top.html
+ by Alex 2016-09 -->
+</td>
+<td style="height: 250px; min-height: 250px">&nbsp;</td>
+</tr></table>
+
+<div id="leftNav">
+<img src="//www.nber.org/img_2009/nav1_pubs.gif" alt="Publications" 
+    onMouseOver="this.src='//www.nber.org/img_2009/nav1_pubs_active.gif'" 
+    onMouseOut="this.src='//www.nber.org/img_2009/nav1_pubs.gif'" onClick="showNav(1,0)"><br>
+
+<img src="//www.nber.org/img_2009/nav2_activities.gif" alt="Activities" 
+    onMouseOver="this.src='//www.nber.org/img_2009/nav2_activities_active.gif'" 
+    onMouseOut="this.src='//www.nber.org/img_2009/nav2_activities.gif'" 
+    onClick="showNav(2,0)"><br>
+
+<img src="//www.nber.org/img_2009/nav3_meetings.gif" alt="Meetings" 
+    onMouseOver="this.src='//www.nber.org/img_2009/nav3_meetings_active.gif'" 
+    onMouseOut="this.src='//www.nber.org/img_2009/nav3_meetings.gif'" 
+    onClick="showNav(3,0)"><br>
+
+<img src="//www.nber.org/img_2009/nav8_video.gif" alt="NBER Videos" 
+    onMouseOver="this.src='//www.nber.org/img_2009/nav8_video_active.gif'" 
+    onMouseOut="this.src='//www.nber.org/img_2009/nav8_video.gif'" 
+    onClick="showNav(8,0)"><br>
+
+<img src="//www.nber.org/img_2009/nav9_themes_4.gif" alt="Themes" 
+    onMouseOver="this.src='//www.nber.org/img_2009/nav9_themes_4_active.gif'" 
+    onMouseOut="this.src='//www.nber.org/img_2009/nav9_themes_4.gif'" 
+    onClick="showNav(9,0)"><br>
+
+<img src="//www.nber.org/img_2009/nav4_data.gif" alt="Data" 
+    onMouseOver="this.src='//www.nber.org/img_2009/nav4_data_active.gif'" 
+    onMouseOut="this.src='//www.nber.org/img_2009/nav4_data.gif'" 
+    onClick="showNav(4,0)"><br>
+
+<img src="//www.nber.org/img_2009/nav5_people.gif" alt="People" 
+    onMouseOver="this.src='//www.nber.org/img_2009/nav5_people_active.gif'" 
+    onMouseOut="this.src='//www.nber.org/img_2009/nav5_people.gif'" 
+    onClick="showNav(5,0)"><br>
+
+<img src="//www.nber.org/img_2009/nav6_about.gif" alt="About" 
+    onMouseOver="this.src='//www.nber.org/img_2009/nav6_about_active.gif'"
+    onMouseOut="this.src='//www.nber.org/img_2009/nav6_about.gif'" 
+    onClick="showNav(6,0)"><br>
+
+<!--<img src="//www.nber.org/img_2009/nav7_support.gif" alt="Support" 
+    onMouseOver="this.src='//www.nber.org/img_2009/nav7_support_active.gif'" 
+    onMouseOut="this.src='//www.nber.org/img_2009/nav7_support.gif'" 
+    onClick="showNav(7,0)"><br>-->
+
+
+<img src="//www.nber.org/img_2009/nav_bottom.gif" alt=""><br>
+<div style="display: none">
+
+<img src="//www.nber.org/img_2009/nav1_pubs_active.gif"
+height="1" width="1.5" alt="">
+<img src="//www.nber.org/img_2009/nav2_activities_active.gif"
+height="1" width="1" alt="">
+<img src="//www.nber.org/img_2009/nav3_meetings_active.gif"
+height="1" width="1" alt="">
+<img src="//www.nber.org/img_2009/nav8_video_active.gif"
+height="1" width="1" alt="">
+
+<img src="//www.nber.org/img_2009/nav9_themes_4_active.gif"
+height="1" width="1" alt="">
+
+
+<img src="//www.nber.org/img_2009/nav4_data_active.gif"
+height="1" width="1" alt="">
+<img src="//www.nber.org/img_2009/nav5_people_active.gif"
+height="1" width="1" alt="">
+<img src="//www.nber.org/img_2009/nav6_about_active.gif"
+height="1" width="1" alt="">
+
+
+
+
+<!--height="1" width="1" alt=""><img src="//www.nber.org/img_2009/nav7_support_active.gif"-->
+
+
+</div>
+</div>
+<div id="middleSeparator"><img src="//www.nber.org/img_2009/middle_sep.jpg" alt=""></div>
+<div id="bottomSectionBackground">
+<div id="bottomSection">
+  <div id="bottomSectionContent"></div>
+<div align="center" id="nberContactInfo">
+National Bureau of Economic Research, 1050 Massachusetts Ave.,
+Cambridge, MA 02138;  <a href="callto:+16178683900">617-868-3900</a>; email: info@nber.org<BR><BR> <a href="/contact/">Contact Us</a>
+</div>
+</div> <!-- bottomSection -->
+</div> <!-- bottomSectionBackground -->
+
+<div id="navDiv1_outer" class="navDivOuter"></div>
+<div id="navDiv1_inner" class="navDivInner">
+<h2 class="withinNav">Working Papers & Publications</h2>
+
+<form action="/s/search" name="wpSearchForm" method="GET">
+<div style="background-image:url('//www.nber.org/img_2009/wp_washed.gif'); background-repeat:no-repeat; background-position: center right;">
+<h2>&nbsp;<a href="/papers.html">Working Papers</a> &nbsp; 
+  <a href="/papers.html" style="font-size: 6pt; color: #134656">(MORE SEARCH OPTIONS)</a></h2>
+<div id="wpSearchCaption" style="display:
+                                 none">&nbsp; <span style="font-size:
+                                                           6pt;">
+  AUTHOR OR TITLE SEARCH OF WORKING PAPERS</span></div>
+<input type="hidden" name="restrict_papers" value="yes">
+<input type="hidden" name="whichsearch" value="db">
+<input type="hidden" name="client" value="test3_fe">
+<input type="hidden" name="proxystylesheet" value="test3_fe">
+<input type="hidden" name="site" value="default_collection">
+<input type="hidden" name="entqr" value="0">
+<input type="hidden" name="ud" value="1">
+<input type="hidden" name="output" value="xml_no_dtd">
+<input type="hidden" name="oe" value="UTF-8">
+<input type="hidden" name="ie" value="UTF-8">
+<input type="hidden" name="sort" value="date%3AD%3AL%3Ad1">
+<input type="text" name="q" id="wpSearchBoxId" size=40 style="text-align: left" class="yellowInput"
+       value="Search Author or Title of Working Papers" 
+       onClick="if (this.value == 'Search Author or Title of Working Papers') 
+                  {this.value =''; dojo.byId('wpSearchCaption').style.display = 'block'}"><br>
+&nbsp; <a href="/new.html">This Week's Working Papers</a><BR>
+&nbsp; <a href="/help/wp/free.html">Check to see if you are eligible for Free Downloads</a><br>
+&nbsp; <a href="/wpsubscribe.html">Become a subscriber</a><BR>
+</div>
+</form>
+&nbsp;<br>
+<!-- <a href="/wpsubmit/eligibilitytosubmit.html">Submit to WP Series</a><BR><BR>-->
+
+<form action="/s/search" name="booksSearchForm" method="GET">
+<div style="padding-left: 140px; background-image:url('//www.nber.org/img_2009/books_washed.gif'); background-repeat:no-repeat">
+<h2>&nbsp;Books</h2>
+<div id="booksSearchCaption" style="display: none">&nbsp; <span style="font-size: 6pt;">SEARCH NBER BOOKS</span></div>
+<input type="hidden" name="restrict_books" value="yes">
+<input type="hidden" name="client" value="test3_fe">
+<input type="hidden" name="proxystylesheet" value="test3_fe">
+<input type="hidden" name="site" value="default_collection">
+<input type="hidden" name="entqr" value="0">
+<input type="hidden" name="ud" value="1">
+<input type="hidden" name="output" value="xml_no_dtd">
+<input type="hidden" name="oe" value="UTF-8">
+<input type="hidden" name="ie" value="UTF-8">
+<input type="hidden" name="sort" value="date%3AD%3AL%3Ad1">
+<input type="text" name="q" id="bookSearchBoxId" size=40 style="text-align: left" class="yellowInput"
+       value="Search NBER Books" onClick="if (this.value == 'Search NBER Books') 
+                  {this.value =''; dojo.byId('booksSearchCaption').style.display = 'block'}"><br>
+&nbsp; <a href="/books.html">Recent Books</a><br>
+&nbsp; <a href="/booksbyyear/">Earlier Books (by decade)</a><br>
+&nbsp; <a href="/booksbyseries/">Browse books by Series</a><BR>
+&nbsp; <a href="/books_in_progress/">Chapters from Books In Process</a><br>
+
+<!--<a href="">New Chapters</a><br>-->
+</div>
+</form>
+&nbsp;<br>
+
+<h2>Free Publications</h2>
+<a href="/BRD/" target="_blank">Bulletin on Retirement and Disability</a><br>
+<a href="/BH/" target="_blank">Bulletin on Health </a>including 
+<a href="/BH/lemedical_other.html" target="_blank">Archive of Lists of Affiliates' Work in Medical and Other Journals <br>with Pre-Publication Restrictions</a><br>
+<a href="/aginghealth/" target="_blank">Archives of Bulletin on Aging and Health</a><br>
+<a href="/digest/" target="_blank">Digest</a> &mdash; Non-technical summaries of 4-8 working papers per month<br>
+<a href="/reporter/" target="_blank">Reporter</a> &mdash; News about the Bureau and its activities.<br>
+<a href="/othersubscribe.html" target="_blank">Become a subscriber</a><BR><br><br>
+
+<h2><a href="/researchdisclosurepolicy.html">NBER Research Disclosure Policy</a></h2>
+
+
+<div class="bottomRight" onClick="hideNavs(0)">Close</div>
+</div>
+
+<!--<div id="navDiv2_inner" class="navDivInner" style="height: 560px">-->
+<div id="navDiv2_outer" class="navDivOuter" style="height: 630px"></div>
+
+<div id="navDiv2_inner" class="navDivInner" style="height: 580px">
+
+<h2 class="withinNav">Activities</h2>
+<div style="padding-bottom: 10px"><center>NBER activities are organized into
+  <a href="/programs/"><B>Programs</B></a> and <a href="/workinggroups/">Working Groups</center></a>.  <!--Most NBER research is published in <a href="/papers/">Working Papers</a>.
+
+<span class="smallcaps" style="color: #666666">( bold = NBER Program )</span>-->
+</div>
+<table style="width: 100%"><tr><td style="padding-left: 10px; padding-right: 10px; width:
+                    45%; min-width:40%">
+<div class="singleHang"><b><A HREF="/programs/ag/">Aging</A></b></div> 
+<div class="singleHang"><b><A HREF="/programs/ap/ap.html">Asset Pricing</A></b></div> 
+<div class="singleHang"><A HREF="/workinggroups/bf/bf.html">Behavioral Finance</a></div>
+<div class="singleHang"><b><A HREF="/programs/ch/ch.html">Children</A></b></div> 
+<div class="singleHang"><A HREF="/workinggroups/ce/ce.html">Chinese Economy</A></div> 
+<div class="singleHang"><A HREF="/workinggroups/cs/cs.html">Cohort Studies</a></div>
+<div class="singleHang"><b><A HREF="/programs/cf/cf.html">Corporate Finance</A></b></div> 
+<div class="singleHang"><A HREF="/workinggroups/cri/cri.html">Economics of Crime</a></div>
+<div class="singleHang"><b><A HREF="/programs/dev/dev.html"> Development Economics </a></b></div> 
+<div class="singleHang"><b><A HREF="/programs/dae/dae.html"> Development of  the American Economy </a></b></div>
+<div class="singleHang"><b><A HREF="/programs/efg/efg.html">Economic Fluctuations and Growth</a></b></div> 
+<div class="singleHang"><b><A HREF="/programs/ed/ed.html">Education</a></b></div> 
+<div class="singleHang"><A HREF="/workinggroups/ent/ent.html">Entrepreneurship</a></div>
+<div class="singleHang"><b><A HREF="/programs/eee/eee.html">Environment and Energy</a></b></div> 
+<div class="singleHang"><A HREF="/workinggroups/fr/fr.html">Financial Risks</A></div>
+<div class="singleHang"><b><A HREF="/programs/hc/hc.html">Health Care</a></b></div> 
+<div class="singleHang"><b><A HREF="/programs/he/he.html">Health Economics</a></b></div>
+<div class="singleHang"><A HREF="/workinggroups/hf/hf.html">Household Finance</a></div>
+</td><td style="padding-left: 10px; width: 50%; min-width: 40%">
+<div class="singleHang"><b><A HREF="/programs/io/io.html">Industrial Organization</a></b></div> 
+<div class="singleHang"><A HREF="/workinggroups/ipe/ipe.html">Innovation Policy</a></div> 
+<div class="singleHang"><A HREF="/workinggroups/ins/ins.html">Insurance</a></div>
+<div class="singleHang"><b><A HREF="/programs/ifm/ifm.html">International Finance and Macroeconomics</a></b></div> 
+<div class="singleHang"><b><A HREF="/programs/iti/iti.html">International Trade and Investment</a></b></div> 
+<div class="singleHang"><b><A HREF="/programs/ls/ls.html">Labor Studies</a></b></div> 
+<div class="singleHang"><b><A HREF="/programs/le/le.html">Law and Economics</a></b></div> 
+<div class="singleHang"><A HREF="/workinggroups/md/md.html">Market Design</a></div>
+<!--<div class="singleHang"><A HREF="/workinggroups/mm/mm.html">Market Microstructure</a></div> commented out on 12/23/2016-->
+<div class="singleHang"><b><A HREF="/programs/me/me.html">Monetary Economics</A></b></div> 
+<!--
+<div class="singleHang"><A HREF="/workinggroups/ens/ens.html">National Security</a></div>
+-->
+<div class="singleHang"><A HREF="/workinggroups/oe/oe.html">Organizational Economics</a></div>
+<div class="singleHang"><A HREF="/workinggroups/per/per.html">Personnel Economics</A></div>
+<div class="singleHang"><b><A HREF="/programs/pol/pol.html">Political Economy</A></b></div> 
+<div class="singleHang"><b><A HREF="/programs/pr/pr.html">Productivity, Innovation, and Entrepreneurship</A></b></div> 
+<div class="singleHang"><b><A HREF="/programs/pe/pe.html">Public
+      Economics</A></b></div>
+<div class="singleHang"><A HREF="/workinggroups/ue/ue.html">Urban Economics</A></div>
+</td></tr></table>
+<div style="padding-left: 10px;"><h3 style="margin-bottom: 0px">Special Projects:</h3>
+
+<div class="singleHang"><A HREF="/programs/ag/cahr/cahrhome.html"><i>Center for Aging and Health Research <span class="smallcaps">(CAHR)</span></i></A></div> 
+
+<div class="singleHang"><A HREF="/CEME/"><I>Conference on Econometrics
+      and Mathematical Economics <span class="smallcaps">(CEME)</span></i></a></div>
+
+<div class="singleHang"><a href="/CRIW/"><I>Conference on Research in
+      Income and Wealth <span class="smallcaps">(CRIW)</span></i></a></div>
+
+<div class="singleHang"><A HREF="http://projects.nber.org/drupal/GITE"><I>Gender in the Economy Study Group</i></A></div>
+
+<div class="singleHang"><A HREF="/workplacewellness"><I>Illinois Workplace Wellness Study </span></i></a></div>
+
+<div class="singleHang"><A HREF="/oregon/index.html"><I>The Oregon Health Insurance Experiment</span></i></a></div>
+
+<div class="singleHang"><A HREF="http://projects.nber.org/drupal/rdrc"><I>Retirement and Disability Research Center (RDRC)</i></A></div>
+
+<div class="singleHang"><A HREF="https://projects.nber.org/drupal/sosf"><I>The Science of Science Funding Initiative </i></A></div>
+
+<!--<div class="singleHang"><A HREF="https://projects.nber.org/projects/wwl/"><I> The Women Working Longer Project </i></A></div>-->
+
+
+<!-- Removed 10 16 2019 Requested by Cecilia Lang <div class="singleHang"><A HREF="https://projects.nber.org/projects/drc/"><I>Disability Research Center<span class="smallcaps"> (DRC)</span></i></A></div> 
+<div class="singleHang"><A HREF="https://projects.nber.org/projects/rrc/"><I>Retirement Research Center <span class="smallcaps">(RRC)</span></i></A></div> -->
+
+
+
+<!--
+Removed 04 02 2019 Requested by Jennifer Amadeo-Hall from Richard Freeman. 
+
+<div class="singleHang"><A HREF="/~sewp/"><I> Science & Engineering Workforce <span class="smallcaps">(SEWP)</span></i></a></div>-->
+
+<div class="bottomRight" onClick="hideNavs(0)">Close</div>
+</div>
+
+
+
+
+<div id="navDiv3_outer" class="navDivOuter" style="height: 480px"></div>
+<div id="navDiv3_inner" class="navDivInner" style="height: 420px">
+<h2 class="withinNav">Meetings</h2>
+<center class="withinNav"><font size=".5">(by invitation only)</font></center>
+
+
+<h2>Recent Meetings</h2>
+&nbsp;
+<table>
+
+
+<tr><td class="padR10">April 30-May 1</td><td>
+<A HREF="/conferences/2020/AMs20/summary.html">
+Agricultural Markets and Trade Policy</a></td></tr>
+
+
+<tr><td class="padR10">April 24</td><td>
+<A HREF="/conferences/2020/INSs20/summary.html">
+Financial Economics of Insurance</a></td></tr>
+
+
+
+<tr><td class="padR10">April 10</td><td>
+<A HREF="/conferences/2020/APs20/summary.html">
+Asset Pricing</a></td></tr>
+
+
+
+<tr><td class="padR10"> April 2-3</td><td>
+<A HREF="/conferences/2020/Macro20/summary.html">
+35th Annual Conference on Macroeconomics</a></td></tr>
+
+
+</table>
+<div align="right" style="padding-top: 12px; color: #5386A6;">
+(<a href="/meeting_summaries.html">...More summaries of NBER Meetings...</a>)</div>
+<!--<h2 style="margin-bottom: 0px; margin-top: 12px">-->
+
+<h2>Other Meeting Links</h2>
+
+<a href="/summer-institute/">
+NBER Summer Institutes</a><BR>
+
+<a href="/SI_econometrics_lectures.html">
+Summer Institute Econometric Lectures</a><BR>
+
+<a href="/macroannualconference/MacroAnnualConference.html">
+NBER Annual Conference on Macroeconomics</a><BR>
+
+<a href="/2019LTAM/2019ltam.html">
+New Developments in Long-Term Asset Management</a><BR>
+
+
+<a href="/PublicPolicies/publicpolicies.html">
+Public Policies in Canada and the United States</a><BR>
+
+<a href="/Entrepreneurship/entrepreneurship.html">
+Entrepreneurship and Economic Growth</a><BR>
+
+<br>
+<!--
+<a href="/confer/2019/SI2019/call2019.html">Call for Papers - 2019 Summer Institute </a><br>
+-->
+<a href="/callforpapers/callpapers.html">Calls for Papers</a>
+
+
+
+
+
+
+<div class="bottomRight" onClick="hideNavs(0)">Close</div>
+</div>
+
+
+<div id="navDiv8_outer" class="navDivOuter" style="height: 320px"></div>
+<div id="navDiv8_inner" class="navDivInner" style="height: 250px">
+<h2 class="withinNav">NBER Videos</h2>
+
+<a href="/si2019_video/socialsecurity/">2019 Social Security: Panel on Economic Determinants of Fertility Behavior </a><br>
+<a href="/si2019_video/entrepreneurshipbootcamp/">2019 NBER's Entrepreneurship Research Boot Camp</a><br>
+<a href="/feldstein_tribute_2019/">2019 Tributes to Martin Feldstein's role at the NBER</a><br>
+<a href="/si2019_video/bigdatafinancialecon/">2019 Big Data and High-Performance Computing for Financial Economics</a><br>
+<a href="/econometrics_minicourse_2019/">2019 Summer Institute Methods Lectures</a><br>
+<a href="/feldstein_lecture_2019/feldstein_lecture_2019.html">2019 Martin Feldstein Lecture</a><br>
+<a href="/2019LTAM/2019ltam.html">2019 New Developments in Long-Term Asset Management</a><br>
+<a href="/macroannualconference2019/macroannual2019.html">2019 34th Annual Conference on Macroeconomics</a><br>
+<!--<a href="/internationaltrade/">2018 Labor Market Consequences of International Trade</a><br>
+<a href="/si2018_video/bigdatafinancialecon/">2018 Big Data and High-Performance Computing for Financial Economics</a><br>
+<a href="/si2018_video/tradepanel/">2018 Policy Panel on the Consequences of Trade</a><br>-->
+
+<br>
+<a href="/SI_econometrics_lectures.html">Earlier Summer Institute Methods Lectures</a><br>
+<a href="/feldstein_lectures.html">Earlier Martin Feldstein Lectures</a><br>
+<a href="/video_archives.html">Other NBER Videos</a><br>
+
+<div class="bottomRight" onClick="hideNavs(0)">Close</div>
+</div></div>
+
+
+
+<div id="navDiv9_outer" class="navDivOuter" style="height: 320px"></div>
+<div id="navDiv9_inner" class="navDivInner" style="height: 260px">
+<h2 class="withinNav">Themes in NBER Research</h2>
+
+<a href="/themes/africa/africansuccesses.shtml">Africa</a><br>
+<a href="/themes/childhood/childhoodsummary.shtml">Childhood Interventions</a><br>
+<a href="/themes/china2015/chinasummary.shtml">China's Economy</a><br>
+<a href="/themes/commodity/commoditysummary.shtml">Commodity Prices</a><br>
+<a href="/themes/brexit/brexitsummary.shtml">Developments in the European Economy</a><br>
+<a href="/themes/energy/energysummary.shtml ">Energy</a><br>
+<a href="/themes/entrepreneurship/entrepreneurship.shtml">Entrepreneurship</a><br>
+<a href="/themes/immigration/immigrationsummary.shtml">Immigration and Innovation</a><br>
+<a href="/themes/inequality/inequalitysummary.shtml">Inequality</a><br>
+<a href="/themes/capitalflows/capitalflowssummary.shtml">International Capital Flows</a><br>
+<a href="/themes/productivity_growth/productivityandgrowth.shtml
+">Productivity and Growth</a><br>
+<a href="/themes/taxpolicy/taxpolicysummary.shtml">Taxation</a><br>
+<div class="bottomRight" onClick="hideNavs(0)">Close</div>
+</div>
+
+
+
+
+
+<div id="navDiv4_outer" class="navDivOuter" style="height: 280px"></div>
+<div id="navDiv4_inner" class="navDivInner" style="height: 220px">
+<h2 class="withinNav">Data</h2>
+
+<div style="background-image:url('//www.nber.org/img_2009/data_washed.gif'); background-repeat:no-repeat; background-position: top right;">
+<div class="singleHang"><A HREF="/brdc/">Boston Census Research Data Center <span class="smallcaps">(BRDC)</span></a></div>
+<a href="/data/">Public Use Data Archive</a>&nbsp;<br><BR>
+<!--<a href="/data/">&nbsp;Data Created by NBER Researchers </a>&nbsp;<br><BR>-->
+
+<h2>Frequently Requested:</h2>
+<a href="/cycles/main.html">Business Cycle Memos, FAQ, Members</a><br>
+<a href="/cycles/cyclesmain.html">Business Cycle Dates</a><br>
+<a href="/cps/">Current Population Survey</a><br>
+<a href="/erp/ERP-2017.pdf"> Economic Report of the President</a><BR>
+<a href="/releases/">New Economic Releases</a><br>
+<a href="/data/#demographic">Vital Statistics</a><BR>
+</div>
+
+
+
+		
+<!--<img src="/images/pencil_arrow.png"><A HREF="prefs/releases">Register here to receive free
+e-mail notification of new economic releases</A>-->
+<div class="bottomRight" onClick="hideNavs(0)">Close</div>
+</div></div>
+
+
+
+
+<div id="navDiv5_outer" class="navDivOuter" style="height: 440px"></div>
+<div id="navDiv5_inner" class="navDivInner" style="height: 380px">
+<h2 class="withinNav">People</h2>
+<table><tr><td><!--<img src="//www.nber.org/img_2009/poterba_pic.jpg" alt="" align="left">
+</td><td><h2><a href="/poterba.html">James Poterba</a>, president</h2><BR>
+James Poterba is President of the National Bureau of Economic Research.
+He is also the Mitsui Professor of Economics at M.I.T. -->
+</td></tr></table>
+<table width="100%"><tr><td>
+<h2>NBER Researchers</h2>
+<font size="2.0em">New NBER affiliates are appointed through a highly competitive process that begins with a call for nominations in January. Candidates are evaluated based on their research records and their capacity to contribute to the NBER's activities by program directors and steering committees.  New affiliates must hold primary academic appointments in North America.  On January 1, 2020, there were 1,581 NBER-affiliated researchers based at 180 institutions.</font> <br><br>
+<a href="/programs/program_members.html">Researchers by NBER Program</a><br>
+<!-- <a href="">Researchers with Recent Working Papers</a><br> -->
+<a href="/vitae.html">Complete List of NBER Researchers</a><br>
+</td><td>
+<form action="/s/search" name="peopleSearchForm" method=GET>
+<div id="peopleSearchCaption" style="display: none">&nbsp; <span style="font-size: 6pt;">SEARCH NBER RESEARCHERS</span></div>
+<input type="hidden" name="whichsearch" value="dbfam">
+<input type="hidden" name="client" value="default_frontend">
+<input type="hidden" name="proxystylesheet" value="test3_fe">
+<input type="hidden" name="site" value="default_collection">
+<input type="hidden" name="entqr" value="0">
+<input type="hidden" name="ud" value="1">
+<input type="hidden" name="output" value="xml_no_dtd">
+<input type="hidden" name="oe" value="UTF-8">
+<input type="hidden" name="ie" value="UTF-8">
+<input type="text" name="q" id="peopleSearchBoxId" size=23 style="text-align: left" class="yellowInput"
+       value="Search NBER researchers" onClick="if (this.value == 'Search NBER researchers') 
+                  {this.value =''; dojo.byId('peopleSearchCaption').style.display = 'block'}"></form>
+
+<!-- <input class="yellowInput" type="text" value="Search NBER researchers"> -->
+</td></tr></table>
+<table><tr><td width="80"><img src="//www.nber.org/img_2009/people_sil.gif"
+                               alt="image of people"></td><td>
+<h2>Other People Links</h2>
+<a href="/board.html">Board of Directors</a><br>
+<a href="/poterba.html">President</a><br>
+<a href="/programs/program_desc.html">Program Directors</a><br>
+<a href="/staff.html">Staff</a><br>
+
+</td></tr></table>
+<div class="bottomRight" onClick="hideNavs(0)">Close</div>
+</div></div>
+
+<!-- height outer was 377px, inner was was 317px, increased by Alex 2011-06-27 -->
+
+<div id="navDiv6_outer" class="navDivOuter" style="height: 395px"></div>
+<div id="navDiv6_inner" class="navDivInner" 
+
+style="height: 335px;
+       background-image: url('/images/lobby_new.jpg');
+       background-repeat: no-repeat;
+       background-position: 0px 40px;
+">
+<h2 class="withinNav">About</h2>
+<div style="padding-left: 220px; position: relative; top: -10px">
+<p><a href="/info.html">About NBER</A><BR>
+<a href="/contact/">Contact Information</a><br>
+<a href="/nberhistory/">Historical Archives</a></p>
+<p><a href="/programs/">Research Programs</A><BR>
+<a href="/workinggroups/">Working Groups</A><BR>
+<a href="/professionalconduct.html">Professional Conduct</A><BR>
+<!-- <a href="/researchdisclosurepolicy.html">Research Disclosure Policy</A><BR>-->
+<a href="/jobs/index.html">Employment and Fellowships</a><br>
+<!-- <a href="/fellowships/">Fellowships</a><br> -->
+<a href="/siteguide.html">Sitemap</a><br>
+<a href="/links/">Links to other Resources</a><br>
+<a href="/s/search/">Search</a><br>
+<a href="/privacy.html">Privacy Policy</a></p>
+<p>Map/Directions:<br>
+<a
+href="https://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=NBER&amp;sll=42.373764,-71.105211&amp;sspn=0.00531,0.013175&amp;ie=UTF8&amp;ll=42.374937,-71.111112&amp;spn=0.010621,0.02635&amp;z=15"
+title="Directions to NBER" target="_new">1050 Massachusetts Ave., Cambridge, MA 02138</a></p>
+<p>ph: <a href="callto:+16178683900" title="dial the NBER">617-868-3900</a><br>
+email: <a href="mailto:info@nber.org" title="email the NBER">info@nber.org</a></p>
+
+<div class="bottomRight" onClick="hideNavs(0)">Close</div>
+</div>
+
+
+
+
+
+<div id="navDiv7_outer" class="navDivOuter" style="height: 260px"></div>
+<div id="navDiv7_inner" class="navDivInner" style="height: 200px">
+<h2 class="withinNav"></h2>
+
+<h2></h2>
+<!-- The research activities of the NBER are funded by grants from federal research agencies, by private foundations, and by generous donations from our corporate associates and from private individuals.  The NBER is a non-profit, 501(c)(3) organization.  For information on supporting the NBER, please contact:<br><br>
+
+Mr. Denis Healy, Director of Development<br>
+NBER<br>
+1050 Massachusetts Avenue<br>
+Cambridge, MA 02138-5398<br>
+<p>ph: <a href="callto:+16178683900" title="dial the NBER">617-868-3900</a><br>
+email: <a href="mailto:dhealy@nber.org" title="Denis Healy">dhealy@nber.org</a></p>-->
+<br><br><br><br>
+<div class="bottomRight" onClick="hideNavs(0)">Close</div>
+
+</div>
+
+</div> <!-- closes mainNewsDiv -->
+
+<!-- dollar "video_footer" insert when Style.pm supports -->
+
+</body>
+</html>

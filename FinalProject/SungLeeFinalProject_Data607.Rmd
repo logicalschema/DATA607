@@ -23,6 +23,23 @@ theme: paper
 
 ## Introduction  
 
-## Import
+NYC (New Amsterdam) was founded on a land deal and from then on has been driven by profit and commerce. NYC has since weathered many booms and busts. It is with this I endeavor to analyze the impact on businesses of recessions in the United States. My father is a small business owner and I have friends who have started businesses in NYC. I would like to understand potentially how long a recession would impact the NYC economic climate as I have been here in this city since birth.
+
+The data sources I would use are:
+
+1. The National Bureau of Economic Research (NBER) web site on U.S Business Cycle Expansions and Contractions: https://www.nber.org/cycles/. Though I had initially decided to use Wikipedia https://en.wikipedia.org/wiki/List_of_recessions_in_the_United_States as a source for dates of recessions, NBER's site proved to be a more reliable source. A copy of the web page was downloaded on May 6, 2020 and is available here:
+
+2. NYC Open Data: https://data.cityofnewyork.us/Business/Legally-Operating-Businesses/w7w3-xahh  as a source for data from at least 1998 for licenses of businesses in NYC. The data contains the types of industry and information about their licenses.
+
+Based on the data, I would like to see how long NYC would potentially be impacted by financial downturn. 
+
+
+## Import  
+
+
+
+
+
+
 
 ## Conclusion
