@@ -2860,14 +2860,30 @@ div.tocify {
 
 <p><a href="https://rpubs.com/logicalschema/data607_finalproject" title="Sung&#39;s Data 607 Final Project">Assignment on RPubs</a> <br> <a href="https://github.com/logicalschema/DATA607/blob/master/FinalProject/SungLeeFinalProject_Data607.Rmd" title="Sung&#39;s Data 607 Final Project">Rmd on Github</a><br />
 <br></p>
-<div id="introduction" class="section level2">
-<h2>Introduction</h2>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>NYC (New Amsterdam) was founded on a land deal and from then on has been driven by profit and commerce. NYC has since weathered many booms and busts. It is with this I endeavor to analyze the impact on businesses of recessions in the United States. My father is a small business owner and I have friends who have started businesses in NYC. I would like to understand potentially how long a recession would impact the NYC economic climate as I have been here in this city since birth.</p>
+<p>The data sources I would use are:</p>
+<ol style="list-style-type: decimal">
+<li><p>The National Bureau of Economic Research (NBER) web site on U.S Business Cycle Expansions and Contractions: <a href="https://www.nber.org/cycles/" class="uri">https://www.nber.org/cycles/</a>. Though I had initially decided to use Wikipedia <a href="https://en.wikipedia.org/wiki/List_of_recessions_in_the_United_States" class="uri">https://en.wikipedia.org/wiki/List_of_recessions_in_the_United_States</a> as a source for dates of recessions, NBER’s site proved to be a more reliable source. A copy of the web page was downloaded on May 6, 2020 and is available here: <a href="https://raw.githubusercontent.com/logicalschema/DATA607/master/FinalProject/nber.html" class="uri">https://raw.githubusercontent.com/logicalschema/DATA607/master/FinalProject/nber.html</a></p></li>
+<li><p>NYC Open Data: <a href="https://data.cityofnewyork.us/Business/Legally-Operating-Businesses/w7w3-xahh" class="uri">https://data.cityofnewyork.us/Business/Legally-Operating-Businesses/w7w3-xahh</a> as a source for data from at least 1998 for licenses of businesses in NYC. The data contains the types of industry and information about their licenses. A download of the data was made to csv and is available here: <a href="https://github.com/logicalschema/DATA607/raw/master/FinalProject/Legally_Operating_Businesses.csv.gz" class="uri">https://github.com/logicalschema/DATA607/raw/master/FinalProject/Legally_Operating_Businesses.csv.gz</a></p></li>
+</ol>
+<p>Based on the data, I would like to see how long NYC would potentially be impacted by financial downturn.</p>
+<p>Let’s start by using the libraries we will be using.</p>
+<pre class="r"><code>library(xml2)
+library(rvest)</code></pre>
 </div>
-<div id="import" class="section level2">
-<h2>Import</h2>
+<div id="import" class="section level1 tabset">
+<h1>Import</h1>
+<div id="nber" class="section level2">
+<h2>NBER</h2>
 </div>
-<div id="conclusion" class="section level2">
-<h2>Conclusion</h2>
+<div id="nyc-data" class="section level2">
+<h2>NYC Data</h2>
+</div>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
 </div>
 
 
