@@ -35,25 +35,210 @@ Based on the data, I would like to see how long NYC would potentially be impacte
 
 Let's start by using the libraries we will be using.
 
-```{r}
+```{r, results='hide', message=FALSE, warning=FALSE}
 library(xml2)
+library(stringr)
+library(dplyr)
 library(rvest)
+library(lubridate)
+library(tidyverse)
+
+# Function to remove HTML tags from x
+cleanHTML <- function(x) {
+  return(gsub("<.*?>", "", x))
+}
+
+
+```
+
+<div style="margin-bottom:50px;"></div>
+# Import {.tabset}
+This section will go over how the data was imported for use in R. 
+
+
+<div style="margin-bottom:50px;"></div>
+## NYC Data  
+
+The NYC OpenData Platform allows you to download their data in xml and csv formats. It is a very handy source. The csv was downloaded and I placed it on my Github.
+
+```{r, message=FALSE, warning=FALSE}
+
+# Using read_csv as it allows for on the fly decompression of zip csv files
+# licenseData <- read_csv("https://github.com/logicalschema/DATA607/raw/master/FinalProject/Legally_Operating_Businesses.csv.gz")
+
+# Reading the Legally_Operating_Businesses.csv file
+licenseData <- read.csv("Legally_Operating_Businesses.csv", 
+                    sep = ",", 
+                    header = TRUE)
+
+# A view of what was imported
+head(licenseData, 10)
+
+```
+
+The imported table `licenseData` has these as columns: `r names(licenseData)`
+
+I will tidy up the data and take a subset of the information I need.
+
+```{r}
+
+# Remove unnecessary columns from the imported data 
+data <- subset(licenseData, select = -c(Contact.Phone.Number, 
+                                        Address.Borough, 
+                                        Borough.Code, 
+                                        Community.Board, 
+                                        Council.District, 
+                                        BIN, 
+                                        BBL, 
+                                        NTA, 
+                                        Census.Tract, 
+                                        Detail, 
+                                        Longitude, 
+                                        Latitude, 
+                                        Location)
+               )
+
+# Convert License.Creation.Date and License.Expiration.Date to Date types
+data$License.Expiration.Date <- as.Date(data$License.Expiration.Date, format = "%m/%d/%Y")
+data$License.Creation.Date <- as.Date(data$License.Creation.Date, format = "%m/%d/%Y")
+
+# Reorder the columns
+data <- data[c(6,4,5,3,2,1,7,8,9,10,11,12,13,14)]
+
+# Order the rows by the License Creation.Date
+data <- data[order(data$License.Creation.Date),]
+
+# View of the data
+head(data, 10)
+
+
+```
+
+We have the recession and NYC's data. We are ready to begin analysis.
+
+<div style="margin-bottom:50px;"></div>
+## OpenData Format
+
+The following is a description of the data fields from the https://data.cityofnewyork.us/Business/Legally-Operating-Businesses/w7w3-xahh web site.
+
+Column Name|Description|Type
+-----------|-----------|----
+DCA License Number|An identification number issued to businesses/individuals to operate legally for the duration of their license term.|Plain Text|
+License Type|DCA offers two license types: Business. License is issued to an entity/organization based on their address. Individual. License is issued to an individual person.|Plain Text|
+License Expiration Date|Expiration date of DCA License.|Date & Time|
+License Status||Plain Text|
+License Creation Date||Date & Time|
+Industry||Plain Text|
+Business Name|"The legal business name as filed with the New York State Secretary of State or County Clerk or if individual| the person’s first name and last name."|Plain Text|
+Business Name 2|"If applicable| the Doing-Business-As (DBA)/trade name."|Plain Text|
+Address Building|The building number of the business’s address.|Plain Text|
+Address Street Name|The street name of the business’s address.|Plain Text|
+Secondary Address Street Name|The cross-street of the business’s address.|Plain Text|
+Address City|The city where the business is located.|Plain Text|
+Address State|The state where the business is located.|Plain Text|
+Address ZIP|The zip code where the business is located.|Plain Text|
+Contact Phone Number|Contact telephone number for legally operating business.|Plain Text|
+Address Borough|The borough where the business is located.|Plain Text|
+Borough Code|Provides the following information for each listed license category: Amusement Device: device name(s) Cabaret / Catering Establishment: capacity of largest room| number of additional rooms Games of Chance: type of game Garage / Parking Lot: number of vehicle and bicycle spaces Sidewalk Cafe: type| square footage| number of tables and chairs  Stoop Line Stand: product category; number of 4-foot| 5-foot| and 5.01 to 10-foot stands Tow Truck Company| Tow Truck Exemption| Horse Drawn Cab Owner| Sightseeing Bus| Pedicab Business: active vehicles"|Plain Text|
+Community Board||Plain Text|
+Council District||Plain Text|
+BIN||Plain Text|
+BBL||Plain Text|
+NTA||Plain Text|
+Census Tract||Plain Text|
+Detail||Plain Text|
+Longitude||Plain Text|
+Latitude||Plain Text|
+Location||Location|
+
+
+
+<div style="margin-bottom:50px;"></div>
+## NBER
+
+I used `rvest` to obtain the information from NBER's page. I was mainly interested in the recession data. 
+
+![](https://raw.githubusercontent.com/logicalschema/DATA607/master/FinalProject/nber.png)
+
+As mentioned before, the page was downloaded and stored in my Github account. NBER did not make a clean HTML table to represent their data. The peaks and troughs of expansions and contractions are represented as individual `<td>` elements in one row instead of multiple rows. I am defining a recession period as a peak to its corresponding trough using the NBER data. Some text wrangling is needed for our data.
+
+
+```{r, warning=FALSE}
+nberHTML <- read_html("https://raw.githubusercontent.com/logicalschema/DATA607/master/FinalProject/nber.html")
+
+# Grab the td HTML nodes that have the nowrap attribute
+tableData <- nberHTML %>%  html_nodes("td[nowrap]")
+
+# We only need the first two elements representing the peaks and troughs of recessions
+tableData <- head(tableData, 2) %>% str_replace_all("[\n]" , "")
+tableData
+
+```
+
+The above gives us the elements for peaks and trough. Each row is denoted by a line break and will need some cleaning before importing into a dataframe.  
+<br>
+
+```{r, warning=FALSE}
+
+peaks <- head(tableData, 1) 
+peaks <- peaks %>% str_split("<br>")
+peaks <- cleanHTML(peaks)
+peaks <- data.frame(peak=unlist(strsplit(as.character(peaks),",")))
+
+troughs <- tail(tableData, 1) 
+troughs <- troughs %>% str_split("<br>")
+troughs <- cleanHTML(troughs)
+troughs <- data.frame(trough=unlist(strsplit(as.character(troughs),",")))
+
+# Combine the peaks and troughs
+resessionData <- cbind(peaks, troughs)
+
+# Remove (I... IV) and trailing space
+resessionData$peak <- str_replace(resessionData$peak, "\\(.*\\)", "")
+resessionData$peak <- str_replace_all(resessionData$peak, '\"', '')
+
+resessionData$trough <- str_replace(resessionData$trough, "\\(.*\\)", "")
+resessionData$trough <- str_replace_all(resessionData$trough, '\"', '')
+
+# Replace multiple spaces with one space 
+resessionData$peak <- str_replace_all(resessionData$peak, '([ ]+)', ' ')
+resessionData$trough <- str_replace_all(resessionData$trough, '([ ]+)', ' ')
+
+# Remove leading and trailing whitespace
+resessionData$peak <- str_trim(resessionData$peak)
+resessionData$trough <- str_trim(resessionData$trough)
+
+
+#Remove the first and last rows as they were irrelevant 
+resessionData <- resessionData[-1, ]
+resessionData <- head(resessionData, -1)
+
+# Creating a new column where the peaks and troughs are converted to Date variables
+start <-  as.Date(paste(resessionData$peak, "1", sep = " "), format = "%B %Y %d")
+end <- as.Date(paste(resessionData$trough, "1", sep = " "), format = "%B %Y %d")
+resessionData <- cbind(resessionData, start = start, end = end)
+
+```
+
+Here is a look at the NBER data tidied up.
+
+```{r}
+resessionData
 
 ```
 
 
-# Import {.tabset}
+<div style="margin-bottom:50px;"></div>
+# Analysis {.tabset}
 
+## Tab 1
 
-## NBER
-
-
-## NYC Data
-
+## Tab 2
 
 
 
 
 
 
+<div style="margin-bottom:50px;"></div>
 # Conclusion
