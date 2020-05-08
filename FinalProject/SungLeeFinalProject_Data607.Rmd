@@ -36,12 +36,27 @@ Based on the data, I would like to see how long NYC would potentially be impacte
 Let's start by using the libraries we will be using.
 
 ```{r, results='hide', message=FALSE, warning=FALSE}
+library(knitr)
 library(xml2)
 library(stringr)
 library(dplyr)
 library(rvest)
 library(lubridate)
 library(tidyverse)
+library(summarytools)
+
+
+# For summarytools package
+opts_chunk$set(results = 'asis',      
+                comment = NA,
+                prompt  = FALSE,
+                cache   = FALSE)
+
+st_options(plain.ascii = FALSE,        
+            style        = "rmarkdown", 
+            footnote     = NA,          
+            subtitle.emphasis = FALSE)  
+
 
 # Function to remove HTML tags from x
 cleanHTML <- function(x) {
@@ -118,6 +133,10 @@ We have the recession and NYC's data. We are ready to begin analysis.
 
 <div style="margin-bottom:50px;"></div>
 ## OpenData Format
+
+![](https://raw.githubusercontent.com/logicalschema/DATA607/master/FinalProject/opendata.png)  
+
+
 
 The following is a description of the data fields from the https://data.cityofnewyork.us/Business/Legally-Operating-Businesses/w7w3-xahh web site.
 
@@ -228,12 +247,65 @@ resessionData
 ```
 
 
+
+<div style="margin-bottom:50px;"></div>
+## Zip Codes and NYC
+NYC consists of five boroughs: the Bronx, Brooklyn, Manhattan (aka New York), Queens, and Staten Island. Queens can be broken down into its old village system where cities are listed as such villages as Jackson Heights, Elmhurst, and Forest Hills. I decided that I needed a one-to-one mapping of zip code to borough to better represent the data. For this, I consulted the web site: https://www.health.ny.gov/statistics/cancer/registry/appendix/neighborhoods.htm that breaks down zip codes into the associated borough. This page was downloaded and saved on my Github.
+
+
+
+
 <div style="margin-bottom:50px;"></div>
 # Analysis {.tabset}
+In this section we will look through to see what insights we can gleam from our NYC license data.
 
-## Tab 1
 
-## Tab 2
+
+## Summary Tools
+
+This is a view of the frequency for the `Industry` variable of the license data.
+
+```{r}
+freq(data$Industry, order = "freq", plain.ascii = FALSE)
+```
+
+Here is a summary of the data.
+
+```{r, results="markup"}
+summary(data)
+```
+
+<div style="overflow: scroll;">
+Here is an additional summary of the license data. Note the earliest license creation date for this data is January 24, 1977 and the latest is April 24, 2020.
+
+```{r}
+print(dfSummary(data[, c(1:5)], graph.magnif = 0.75), valid.col = FALSE, method = 'render')
+
+```
+</div>
+
+## Borough Breakdown
+
+Looking at the license data, there were noticeable anomalies of bad data. At times observations, a license record, did not have a valid zip code and/or city listed for address. The following is a look at the unique zip codes and cities in the data.
+
+```{r}
+
+# List the unique cities
+cities <- subset(data, Address.State == "NY",
+                  select=c(Address.City)) 
+
+unique(cities)
+
+# List the unique zip codes
+zipcodes <- subset(data, Address.State == "NY",
+                  select=c(Address.ZIP)) 
+
+unique(zipcodes)
+
+
+```
+
+
 
 
 
