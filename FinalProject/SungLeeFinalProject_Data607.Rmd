@@ -72,6 +72,26 @@ This section will go over how the data was imported for use in R.
 
 
 <div style="margin-bottom:50px;"></div>
+## NYC Zip Codes  
+
+NYC consists of five boroughs: the Bronx, Brooklyn, Manhattan (aka New York), Queens, and Staten Island. Queens can be broken down into its old village system where cities are listed as such villages as Jackson Heights, Elmhurst, and Forest Hills. I decided that I needed a one-to-one mapping of zip code to borough to better represent the data. For this, I consulted the web site: https://www.nycbynatives.com/nyc_info/new_york_city_zip_codes.php that breaks down zip codes into the associated borough. This page was downloaded and saved on my Github. 
+
+```{r, results="markdown"}
+zipHTML <- read_html("https://raw.githubusercontent.com/logicalschema/DATA607/master/FinalProject/neighborhoods.html")
+tbls <- html_nodes(zipHTML, "table")
+zip <- as.data.frame(html_table(tbls))
+zip <- zip[, -c(3)]
+zipcode <- c(zip$X1, zip$x4)
+borough <- c(zip$x2, zip$X5)
+zipcodes <- as.data.frame(cbind(zipcode, borough))
+zipcodes$borough <- str_replace(zipcodes$borough, 'Staten', 'Staten Island')
+
+# zipcodes dataframe matches zip codes with the appropriate borough
+zipcodes
+```
+
+
+<div style="margin-bottom:50px;"></div>
 ## NYC Data  
 
 The NYC OpenData Platform allows you to download their data in xml and csv formats. It is a very handy source. The csv was downloaded and I placed it on my Github.
@@ -86,6 +106,7 @@ licenseData <- read.csv("Legally_Operating_Businesses.csv",
                     sep = ",", 
                     header = TRUE)
 
+
 # A view of what was imported
 head(licenseData, 10)
 
@@ -95,7 +116,7 @@ The imported table `licenseData` has these as columns: `r names(licenseData)`
 
 I will tidy up the data and take a subset of the information I need.
 
-```{r}
+```{r data}
 
 # Remove unnecessary columns from the imported data 
 data <- subset(licenseData, select = -c(Contact.Phone.Number, 
@@ -123,10 +144,24 @@ data <- data[c(6,4,5,3,2,1,7,8,9,10,11,12,13,14)]
 # Order the rows by the License Creation.Date
 data <- data[order(data$License.Creation.Date),]
 
-# View of the data
+
+# Zip codes to Boroughs
+tempzips <- data$Address.ZIP
+
+
+for (value in zipcodes$zipcode){
+    tempborough <-  zipcodes %>% filter(zipcode == value) %>% select(borough)
+    tempzips <- str_replace_all(tempzips, as.character(value), as.character(tempborough))
+}
+
+# Set NA to any zip codes that are not found in NYC
+tempzips[!(tempzips %in% c("Bronx","Brooklyn", "Manhattan", "Queens", "Staten Island"))] <- NA
+
+# Add the boroughs as Address.Borough to the NYC data
+data <- cbind(data, "Address.Borough" = tempzips)
+
+# A view of the data
 head(data, 10)
-
-
 ```
 
 We have the recession and NYC's data. We are ready to begin analysis.
@@ -248,19 +283,6 @@ resessionData
 
 
 
-<div style="margin-bottom:50px;"></div>
-## NYC Zip Codes  
-
-NYC consists of five boroughs: the Bronx, Brooklyn, Manhattan (aka New York), Queens, and Staten Island. Queens can be broken down into its old village system where cities are listed as such villages as Jackson Heights, Elmhurst, and Forest Hills. I decided that I needed a one-to-one mapping of zip code to borough to better represent the data. For this, I consulted the web site: https://www.nycbynatives.com/nyc_info/new_york_city_zip_codes.php that breaks down zip codes into the associated borough. This page was downloaded and saved on my Github.
-
-```{r, results = "markup"}
-healthHTML <- read_html("https://www.nycbynatives.com/nyc_info/new_york_city_zip_codes.php")
-tbls <- html_nodes(healthHTML, "table")
-zip <- html_table(tbls)
-zip
-
-```
-
 
 
 <div style="margin-bottom:50px;"></div> 
@@ -281,11 +303,13 @@ Here is a summary of the data.
 summary(data)
 ```
 
+<div style="margin-bottom:50px;"></div>
+
 <div style="overflow: scroll;">
 Here is an additional summary of the license data. Note the earliest license creation date for this data is January 24, 1977 and the latest is April 24, 2020.
 
 ```{r}
-print(dfSummary(data[, c(1:5)], graph.magnif = 0.75), valid.col = FALSE, method = 'render')
+print(dfSummary(data[, c(1:5)], graph.magnif = 0.75), method = 'render')
 
 ```
 </div>
