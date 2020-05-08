@@ -3196,12 +3196,263 @@ resessionData &lt;- cbind(resessionData, start = start, end = end)</code></pre>
 
 </div>
 </div>
+<div id="nyc-zip-codes" class="section level2">
+<h2>NYC Zip Codes</h2>
+<p>NYC consists of five boroughs: the Bronx, Brooklyn, Manhattan (aka New York), Queens, and Staten Island. Queens can be broken down into its old village system where cities are listed as such villages as Jackson Heights, Elmhurst, and Forest Hills. I decided that I needed a one-to-one mapping of zip code to borough to better represent the data. For this, I consulted the web site: <a href="https://www.nycbynatives.com/nyc_info/new_york_city_zip_codes.php" class="uri">https://www.nycbynatives.com/nyc_info/new_york_city_zip_codes.php</a> that breaks down zip codes into the associated borough. This page was downloaded and saved on my Github.</p>
+<pre class="r"><code>healthHTML &lt;- read_html(&quot;https://www.nycbynatives.com/nyc_info/new_york_city_zip_codes.php&quot;)
+tbls &lt;- html_nodes(healthHTML, &quot;table&quot;)
+zip &lt;- html_table(tbls)
+zip</code></pre>
+<pre><code>[[1]]
+       X1        X2 X3    X4        X5
+1   10001 Manhattan NA 10451     Bronx
+2   10002 Manhattan NA 10452     Bronx
+3   10003 Manhattan NA 10453     Bronx
+4   10004 Manhattan NA 10454     Bronx
+5   10005 Manhattan NA 10455     Bronx
+6   10006 Manhattan NA 10456     Bronx
+7   10007 Manhattan NA 10457     Bronx
+8   10009 Manhattan NA 10458     Bronx
+9   10010 Manhattan NA 10459     Bronx
+10  10011 Manhattan NA 10460     Bronx
+11  10012 Manhattan NA 10461     Bronx
+12  10013 Manhattan NA 10462     Bronx
+13  10014 Manhattan NA 10463     Bronx
+14  10015 Manhattan NA 10464     Bronx
+15  10016 Manhattan NA 10465     Bronx
+16  10017 Manhattan NA 10466     Bronx
+17  10018 Manhattan NA 10467     Bronx
+18  10019 Manhattan NA 10468     Bronx
+19  10020 Manhattan NA 10469     Bronx
+20  10021 Manhattan NA 10470     Bronx
+21  10022 Manhattan NA 10471     Bronx
+22  10023 Manhattan NA 10472     Bronx
+23  10024 Manhattan NA 10473     Bronx
+24  10025 Manhattan NA 10474     Bronx
+25  10026 Manhattan NA 10475     Bronx
+26  10027 Manhattan NA 11201  Brooklyn
+27  10028 Manhattan NA 11203  Brooklyn
+28  10029 Manhattan NA 11204  Brooklyn
+29  10030 Manhattan NA 11205  Brooklyn
+30  10031 Manhattan NA 11206  Brooklyn
+31  10032 Manhattan NA 11207  Brooklyn
+32  10033 Manhattan NA 11208  Brooklyn
+33  10034 Manhattan NA 11209  Brooklyn
+34  10035 Manhattan NA 11210  Brooklyn
+35  10036 Manhattan NA 11211  Brooklyn
+36  10037 Manhattan NA 11212  Brooklyn
+37  10038 Manhattan NA 11213  Brooklyn
+38  10039 Manhattan NA 11214  Brooklyn
+39  10040 Manhattan NA 11215  Brooklyn
+40  10041 Manhattan NA 11216  Brooklyn
+41  10044 Manhattan NA 11217  Brooklyn
+42  10045 Manhattan NA 11218  Brooklyn
+43  10048 Manhattan NA 11219  Brooklyn
+44  10055 Manhattan NA 11220  Brooklyn
+45  10060 Manhattan NA 11221  Brooklyn
+46  10069 Manhattan NA 11222  Brooklyn
+47  10090 Manhattan NA 11223  Brooklyn
+48  10095 Manhattan NA 11224  Brooklyn
+49  10098 Manhattan NA 11225  Brooklyn
+50  10099 Manhattan NA 11226  Brooklyn
+51  10103 Manhattan NA 11228  Brooklyn
+52  10104 Manhattan NA 11229  Brooklyn
+53  10105 Manhattan NA 11230  Brooklyn
+54  10106 Manhattan NA 11231  Brooklyn
+55  10107 Manhattan NA 11232  Brooklyn
+56  10110 Manhattan NA 11233  Brooklyn
+57  10111 Manhattan NA 11234  Brooklyn
+58  10112 Manhattan NA 11235  Brooklyn
+59  10115 Manhattan NA 11236  Brooklyn
+60  10118 Manhattan NA 11237  Brooklyn
+61  10119 Manhattan NA 11238  Brooklyn
+62  10120 Manhattan NA 11239  Brooklyn
+63  10121 Manhattan NA 11241  Brooklyn
+64  10122 Manhattan NA 11242  Brooklyn
+65  10123 Manhattan NA 11243  Brooklyn
+66  10128 Manhattan NA 11249  Brooklyn
+67  10151 Manhattan NA 11252  Brooklyn
+68  10152 Manhattan NA 11256  Brooklyn
+69  10153 Manhattan NA 10001 Manhattan
+70  10154 Manhattan NA 10002 Manhattan
+71  10155 Manhattan NA 10003 Manhattan
+72  10158 Manhattan NA 10004 Manhattan
+73  10161 Manhattan NA 10005 Manhattan
+74  10162 Manhattan NA 10006 Manhattan
+75  10165 Manhattan NA 10007 Manhattan
+76  10166 Manhattan NA 10009 Manhattan
+77  10167 Manhattan NA 10010 Manhattan
+78  10168 Manhattan NA 10011 Manhattan
+79  10169 Manhattan NA 10012 Manhattan
+80  10170 Manhattan NA 10013 Manhattan
+81  10171 Manhattan NA 10014 Manhattan
+82  10172 Manhattan NA 10015 Manhattan
+83  10173 Manhattan NA 10016 Manhattan
+84  10174 Manhattan NA 10017 Manhattan
+85  10175 Manhattan NA 10018 Manhattan
+86  10176 Manhattan NA 10019 Manhattan
+87  10177 Manhattan NA 10020 Manhattan
+88  10178 Manhattan NA 10021 Manhattan
+89  10199 Manhattan NA 10022 Manhattan
+90  10270 Manhattan NA 10023 Manhattan
+91  10271 Manhattan NA 10024 Manhattan
+92  10278 Manhattan NA 10025 Manhattan
+93  10279 Manhattan NA 10026 Manhattan
+94  10280 Manhattan NA 10027 Manhattan
+95  10281 Manhattan NA 10028 Manhattan
+96  10282 Manhattan NA 10029 Manhattan
+97  10301    Staten NA 10030 Manhattan
+98  10302    Staten NA 10031 Manhattan
+99  10303    Staten NA 10032 Manhattan
+100 10304    Staten NA 10033 Manhattan
+101 10305    Staten NA 10034 Manhattan
+102 10306    Staten NA 10035 Manhattan
+103 10307    Staten NA 10036 Manhattan
+104 10308    Staten NA 10037 Manhattan
+105 10309    Staten NA 10038 Manhattan
+106 10310    Staten NA 10039 Manhattan
+107 10311    Staten NA 10040 Manhattan
+108 10312    Staten NA 10041 Manhattan
+109 10314    Staten NA 10044 Manhattan
+110 10451     Bronx NA 10045 Manhattan
+111 10452     Bronx NA 10048 Manhattan
+112 10453     Bronx NA 10055 Manhattan
+113 10454     Bronx NA 10060 Manhattan
+114 10455     Bronx NA 10069 Manhattan
+115 10456     Bronx NA 10090 Manhattan
+116 10457     Bronx NA 10095 Manhattan
+117 10458     Bronx NA 10098 Manhattan
+118 10459     Bronx NA 10099 Manhattan
+119 10460     Bronx NA 10103 Manhattan
+120 10461     Bronx NA 10104 Manhattan
+121 10462     Bronx NA 10105 Manhattan
+122 10463     Bronx NA 10106 Manhattan
+123 10464     Bronx NA 10107 Manhattan
+124 10465     Bronx NA 10110 Manhattan
+125 10466     Bronx NA 10111 Manhattan
+126 10467     Bronx NA 10112 Manhattan
+127 10468     Bronx NA 10115 Manhattan
+128 10469     Bronx NA 10118 Manhattan
+129 10470     Bronx NA 10119 Manhattan
+130 10471     Bronx NA 10120 Manhattan
+131 10472     Bronx NA 10121 Manhattan
+132 10473     Bronx NA 10122 Manhattan
+133 10474     Bronx NA 10123 Manhattan
+134 10475     Bronx NA 10128 Manhattan
+135 11004    Queens NA 10151 Manhattan
+136 11101    Queens NA 10152 Manhattan
+137 11102    Queens NA 10153 Manhattan
+138 11103    Queens NA 10154 Manhattan
+139 11104    Queens NA 10155 Manhattan
+140 11105    Queens NA 10158 Manhattan
+141 11106    Queens NA 10161 Manhattan
+142 11109    Queens NA 10162 Manhattan
+143 11201  Brooklyn NA 10165 Manhattan
+144 11203  Brooklyn NA 10166 Manhattan
+145 11204  Brooklyn NA 10167 Manhattan
+146 11205  Brooklyn NA 10168 Manhattan
+147 11206  Brooklyn NA 10169 Manhattan
+148 11207  Brooklyn NA 10170 Manhattan
+149 11208  Brooklyn NA 10171 Manhattan
+150 11209  Brooklyn NA 10172 Manhattan
+151 11210  Brooklyn NA 10173 Manhattan
+152 11211  Brooklyn NA 10174 Manhattan
+153 11212  Brooklyn NA 10175 Manhattan
+154 11213  Brooklyn NA 10176 Manhattan
+155 11214  Brooklyn NA 10177 Manhattan
+156 11215  Brooklyn NA 10178 Manhattan
+157 11216  Brooklyn NA 10199 Manhattan
+158 11217  Brooklyn NA 10270 Manhattan
+159 11218  Brooklyn NA 10271 Manhattan
+160 11219  Brooklyn NA 10278 Manhattan
+161 11220  Brooklyn NA 10279 Manhattan
+162 11221  Brooklyn NA 10280 Manhattan
+163 11222  Brooklyn NA 10281 Manhattan
+164 11223  Brooklyn NA 10282 Manhattan
+165 11224  Brooklyn NA 11101    Queens
+166 11225  Brooklyn NA 11102    Queens
+167 11226  Brooklyn NA 11103    Queens
+168 11228  Brooklyn NA 11004    Queens
+169 11229  Brooklyn NA 11104    Queens
+170 11230  Brooklyn NA 11105    Queens
+171 11231  Brooklyn NA 11106    Queens
+172 11232  Brooklyn NA 11109    Queens
+173 11233  Brooklyn NA 11351    Queens
+174 11234  Brooklyn NA 11354    Queens
+175 11235  Brooklyn NA 11355    Queens
+176 11236  Brooklyn NA 11356    Queens
+177 11237  Brooklyn NA 11357    Queens
+178 11238  Brooklyn NA 11358    Queens
+179 11239  Brooklyn NA 11359    Queens
+180 11241  Brooklyn NA 11360    Queens
+181 11242  Brooklyn NA 11361    Queens
+182 11243  Brooklyn NA 11362    Queens
+183 11249  Brooklyn NA 11363    Queens
+184 11252  Brooklyn NA 11364    Queens
+185 11256  Brooklyn NA 11365    Queens
+186 11351    Queens NA 11366    Queens
+187 11354    Queens NA 11367    Queens
+188 11355    Queens NA 11368    Queens
+189 11356    Queens NA 11369    Queens
+190 11357    Queens NA 11370    Queens
+191 11358    Queens NA 11371    Queens
+192 11359    Queens NA 11372    Queens
+193 11360    Queens NA 11373    Queens
+194 11361    Queens NA 11374    Queens
+195 11362    Queens NA 11375    Queens
+196 11363    Queens NA 11377    Queens
+197 11364    Queens NA 11378    Queens
+198 11365    Queens NA 11379    Queens
+199 11366    Queens NA 11385    Queens
+200 11367    Queens NA 11411    Queens
+201 11368    Queens NA 11412    Queens
+202 11369    Queens NA 11413    Queens
+203 11370    Queens NA 11414    Queens
+204 11371    Queens NA 11415    Queens
+205 11372    Queens NA 11416    Queens
+206 11373    Queens NA 11417    Queens
+207 11374    Queens NA 11418    Queens
+208 11375    Queens NA 11419    Queens
+209 11377    Queens NA 11420    Queens
+210 11378    Queens NA 11421    Queens
+211 11379    Queens NA 11422    Queens
+212 11385    Queens NA 11423    Queens
+213 11411    Queens NA 11426    Queens
+214 11412    Queens NA 11427    Queens
+215 11413    Queens NA 11428    Queens
+216 11414    Queens NA 11429    Queens
+217 11415    Queens NA 11430    Queens
+218 11416    Queens NA 11432    Queens
+219 11417    Queens NA 11433    Queens
+220 11418    Queens NA 11434    Queens
+221 11419    Queens NA 11435    Queens
+222 11420    Queens NA 11436    Queens
+223 11421    Queens NA 11691    Queens
+224 11422    Queens NA 11692    Queens
+225 11423    Queens NA 11693    Queens
+226 11426    Queens NA 11694    Queens
+227 11427    Queens NA 11697    Queens
+228 11428    Queens NA 10301    Staten
+229 11429    Queens NA 10302    Staten
+230 11430    Queens NA 10303    Staten
+231 11432    Queens NA 10304    Staten
+232 11433    Queens NA 10305    Staten
+233 11434    Queens NA 10306    Staten
+234 11435    Queens NA 10307    Staten
+235 11436    Queens NA 10308    Staten
+236 11691    Queens NA 10309    Staten
+237 11692    Queens NA 10310    Staten
+238 11693    Queens NA 10311    Staten
+239 11694    Queens NA 10312    Staten
+240 11697    Queens NA 10314    Staten</code></pre>
+<div style="margin-bottom:50px;">
+
+</div>
+</div>
 </div>
 <div id="analysis" class="section level1 tabset">
 <h1>Analysis</h1>
 <p>In this section we will look through to see what insights we can gleam from our NYC license data.</p>
-<div id="summary-tools" class="section level2">
-<h2>Summary Tools</h2>
 <p>This is a view of the frequency for the <code>Industry</code> variable of the license data.</p>
 <pre class="r"><code>freq(data$Industry, order = &quot;freq&quot;, plain.ascii = FALSE)</code></pre>
 <div id="frequencies" class="section level3">
@@ -3792,7 +4043,7 @@ resessionData &lt;- cbind(resessionData, start = start, end = end)</code></pre>
 10. Car Wash
 [ 49 others ]</td>
       <td align="left" style="padding:0;vertical-align:middle"><table style="border-collapse:collapse;border:none;margin:0"><tr style="background-color:transparent"><td style="padding:0 5px 0 7px;margin:0;border:0" align="right">54</td><td style="padding:0 2px 0 0;border:0;" align="left">(</td><td style="padding:0;border:0" align="right">0.0%</td><td style="padding:0 4px 0 2px;border:0" align="left">)</td></tr><tr style="background-color:transparent"><td style="padding:0 5px 0 7px;margin:0;border:0" align="right">289</td><td style="padding:0 2px 0 0;border:0;" align="left">(</td><td style="padding:0;border:0" align="right">0.1%</td><td style="padding:0 4px 0 2px;border:0" align="left">)</td></tr><tr style="background-color:transparent"><td style="padding:0 5px 0 7px;margin:0;border:0" align="right">1530</td><td style="padding:0 2px 0 0;border:0;" align="left">(</td><td style="padding:0;border:0" align="right">0.8%</td><td style="padding:0 4px 0 2px;border:0" align="left">)</td></tr><tr style="background-color:transparent"><td style="padding:0 5px 0 7px;margin:0;border:0" align="right">794</td><td style="padding:0 2px 0 0;border:0;" align="left">(</td><td style="padding:0;border:0" align="right">0.4%</td><td style="padding:0 4px 0 2px;border:0" align="left">)</td></tr><tr style="background-color:transparent"><td style="padding:0 5px 0 7px;margin:0;border:0" align="right">98</td><td style="padding:0 2px 0 0;border:0;" align="left">(</td><td style="padding:0;border:0" align="right">0.0%</td><td style="padding:0 4px 0 2px;border:0" align="left">)</td></tr><tr style="background-color:transparent"><td style="padding:0 5px 0 7px;margin:0;border:0" align="right">760</td><td style="padding:0 2px 0 0;border:0;" align="left">(</td><td style="padding:0;border:0" align="right">0.4%</td><td style="padding:0 4px 0 2px;border:0" align="left">)</td></tr><tr style="background-color:transparent"><td style="padding:0 5px 0 7px;margin:0;border:0" align="right">120</td><td style="padding:0 2px 0 0;border:0;" align="left">(</td><td style="padding:0;border:0" align="right">0.1%</td><td style="padding:0 4px 0 2px;border:0" align="left">)</td></tr><tr style="background-color:transparent"><td style="padding:0 5px 0 7px;margin:0;border:0" align="right">12</td><td style="padding:0 2px 0 0;border:0;" align="left">(</td><td style="padding:0;border:0" align="right">0.0%</td><td style="padding:0 4px 0 2px;border:0" align="left">)</td></tr><tr style="background-color:transparent"><td style="padding:0 5px 0 7px;margin:0;border:0" align="right">333</td><td style="padding:0 2px 0 0;border:0;" align="left">(</td><td style="padding:0;border:0" align="right">0.2%</td><td style="padding:0 4px 0 2px;border:0" align="left">)</td></tr><tr style="background-color:transparent"><td style="padding:0 5px 0 7px;margin:0;border:0" align="right">184</td><td style="padding:0 2px 0 0;border:0;" align="left">(</td><td style="padding:0;border:0" align="right">0.1%</td><td style="padding:0 4px 0 2px;border:0" align="left">)</td></tr><tr style="background-color:transparent"><td style="padding:0 5px 0 7px;margin:0;border:0" align="right">199255</td><td style="padding:0 2px 0 0;border:0;" align="left">(</td><td style="padding:0;border:0" align="right">98.0%</td><td style="padding:0 4px 0 2px;border:0" align="left">)</td></tr></table></td>
-      <td align="left" style="vertical-align:middle;padding:0;background-color:transparent"><img style="border:none;background-color:transparent;padding:0" src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAHoAAADOBAMAAAADLAu0AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAD1BMVEX////9/v2mpqb39/f///+DdZCQAAAAAnRSTlMAAHaTzTgAAAABYktHRACIBR1IAAAAB3RJTUUH5AUHEBwrQttDkAAAAItJREFUaN7t2rENg0AQBEBaoARDB3b/vTlxfEL7b3HAbD7BBrf64JfluXmtUWiavoDO8Bx9Zm+apv+rMzxHbzRN31Zn2LuFpulaZ7iDHutN03RnnWHbQtN0rTNsW2iarnWGO+ix3jRNd9YZti00Tdc6w7aFpulaZ3jS35osP71/krxpmj6oxy70ifkCm9hKDBeBb0EAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjAtMDUtMDdUMjA6Mjg6NDMtMDQ6MDCJo06IAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIwLTA1LTA3VDIwOjI4OjQzLTA0OjAw+P72NAAAAABJRU5ErkJggg=="></td>
+      <td align="left" style="vertical-align:middle;padding:0;background-color:transparent"><img style="border:none;background-color:transparent;padding:0" src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAHoAAADOBAMAAAADLAu0AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAD1BMVEX////9/v2mpqb39/f///+DdZCQAAAAAnRSTlMAAHaTzTgAAAABYktHRACIBR1IAAAAB3RJTUUH5AUHEQYepYcXXwAAAItJREFUaN7t2rENg0AQBEBaoARDB3b/vTlxfEL7b3HAbD7BBrf64JfluXmtUWiavoDO8Bx9Zm+apv+rMzxHbzRN31Zn2LuFpulaZ7iDHutN03RnnWHbQtN0rTNsW2iarnWGO+ix3jRNd9YZti00Tdc6w7aFpulaZ3jS35osP71/krxpmj6oxy70ifkCm9hKDBeBb0EAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjAtMDUtMDdUMjE6MDY6MzAtMDQ6MDApvQ37AAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIwLTA1LTA3VDIxOjA2OjMwLTA0OjAwWOC1RwAAAABJRU5ErkJggg=="></td>
       <td align="center">0
 (0%)</td>
     </tr>
@@ -3803,7 +4054,7 @@ resessionData &lt;- cbind(resessionData, start = start, end = end)</code></pre>
       <td align="left">1. Active
 2. Inactive</td>
       <td align="left" style="padding:0;vertical-align:middle"><table style="border-collapse:collapse;border:none;margin:0"><tr style="background-color:transparent"><td style="padding:0 5px 0 7px;margin:0;border:0" align="right">74165</td><td style="padding:0 2px 0 0;border:0;" align="left">(</td><td style="padding:0;border:0" align="right">36.5%</td><td style="padding:0 4px 0 2px;border:0" align="left">)</td></tr><tr style="background-color:transparent"><td style="padding:0 5px 0 7px;margin:0;border:0" align="right">129264</td><td style="padding:0 2px 0 0;border:0;" align="left">(</td><td style="padding:0;border:0" align="right">63.5%</td><td style="padding:0 4px 0 2px;border:0" align="left">)</td></tr></table></td>
-      <td align="left" style="vertical-align:middle;padding:0;background-color:transparent"><img style="border:none;background-color:transparent;padding:0" src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAFQAAAAtBAMAAADCaFH7AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAD1BMVEX////9/v2mpqb39/f///+DdZCQAAAAAnRSTlMAAHaTzTgAAAABYktHRACIBR1IAAAAB3RJTUUH5AUHEBwrQttDkAAAADtJREFUOMtjYBhaQAkLUBREBVClysaYYFTpqFK6KiUhvQoSAWiqVIkIgCcE0IDRqNJRpTRVSkJ6HSoAAOXXzpYORX6XAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIwLTA1LTA3VDIwOjI4OjQzLTA0OjAwiaNOiAAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMC0wNS0wN1QyMDoyODo0My0wNDowMPj+9jQAAAAASUVORK5CYII="></td>
+      <td align="left" style="vertical-align:middle;padding:0;background-color:transparent"><img style="border:none;background-color:transparent;padding:0" src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAFQAAAAtBAMAAADCaFH7AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAD1BMVEX////9/v2mpqb39/f///+DdZCQAAAAAnRSTlMAAHaTzTgAAAABYktHRACIBR1IAAAAB3RJTUUH5AUHEQYepYcXXwAAADtJREFUOMtjYBhaQAkLUBREBVClysaYYFTpqFK6KiUhvQoSAWiqVIkIgCcE0IDRqNJRpTRVSkJ6HSoAAOXXzpYORX6XAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIwLTA1LTA3VDIxOjA2OjMwLTA0OjAwKb0N+wAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMC0wNS0wN1QyMTowNjozMC0wNDowMFjgtUcAAAAASUVORK5CYII="></td>
       <td align="center">0
 (0%)</td>
     </tr>
@@ -3816,7 +4067,7 @@ med : 2012-05-04
 max : 2020-04-24
 range : 43y 3m 0d</td>
       <td align="left" style="vertical-align:middle">6977 distinct values</td>
-      <td align="left" style="vertical-align:middle;padding:0;background-color:transparent"><img style="border:none;background-color:transparent;padding:0" src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAHQAAABUBAMAAAChGA4iAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAD1BMVEX////9/v2mpqby8vL///8shn5hAAAAAnRSTlMAAHaTzTgAAAABYktHRACIBR1IAAAAB3RJTUUH5AUHEBwuMrG3HwAAAINJREFUWMPt1NEJwCAMBFBXaEdIN6j779YURYoGjAeFWu/wx49HMJGEsFY2X3YRKZdBGuOJ0LskStXNSXOfIZpqz0LLdMdp6TMpKen/aF79EH06UlJSUlKA1kt4hFbOS42Sbto6UtJ5qJh/v0+VHabrU3Ufo/oYlOp5g6b2OqgACWvlArrWo1cN9iLJAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIwLTA1LTA3VDIwOjI4OjQ2LTA0OjAw25thLwAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMC0wNS0wN1QyMDoyODo0Ni0wNDowMKrG2ZMAAAAASUVORK5CYII="></td>
+      <td align="left" style="vertical-align:middle;padding:0;background-color:transparent"><img style="border:none;background-color:transparent;padding:0" src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAHQAAABUBAMAAAChGA4iAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAD1BMVEX////9/v2mpqby8vL///8shn5hAAAAAnRSTlMAAHaTzTgAAAABYktHRACIBR1IAAAAB3RJTUUH5AUHEQYf0oAnyQAAAINJREFUWMPt1NEJwCAMBFBXaEdIN6j779YURYoGjAeFWu/wx49HMJGEsFY2X3YRKZdBGuOJ0LskStXNSXOfIZpqz0LLdMdp6TMpKen/aF79EH06UlJSUlKA1kt4hFbOS42Sbto6UtJ5qJh/v0+VHabrU3Ufo/oYlOp5g6b2OqgACWvlArrWo1cN9iLJAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIwLTA1LTA3VDIxOjA2OjMxLTA0OjAwj8oGTwAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMC0wNS0wN1QyMTowNjozMS0wNDowMP6XvvMAAAAASUVORK5CYII="></td>
       <td align="center">0
 (0%)</td>
     </tr>
@@ -3829,7 +4080,7 @@ med : 2018-03-31
 max : 2022-12-15
 range : 12y 11m 13d</td>
       <td align="left" style="vertical-align:middle">1578 distinct values</td>
-      <td align="left" style="vertical-align:middle;padding:0;background-color:transparent"><img style="border:none;background-color:transparent;padding:0" src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAHQAAABUBAMAAAChGA4iAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAD1BMVEX////9/v2mpqby8vL///8shn5hAAAAAnRSTlMAAHaTzTgAAAABYktHRACIBR1IAAAAB3RJTUUH5AUHEBwxv7m66gAAALhJREFUWMPt18sRhSAMBVBa0A4MHZD+e5MQfY9IHJCVM964MZLDJ6wM4VuxjAfRpi/PaWRQUFBQUFBQUFBQUNASK5GbjlBObvqE6o+NoSRbGKC6jEmjJG+icjyH5i4TdagMe5Q5skd/N6cz31MZv1BOinXmY4cOlaehulBF5YMss83Sf+rS3LtCVzlJRW3q0iiw7uJBz85Ql+YSU5vO6tSl19pZWo5vUoeWW25omzr0tvatlCYifCt2Tl1eX60TqsYAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjAtMDUtMDdUMjA6Mjg6NDktMDQ6MDAt0xHGAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIwLTA1LTA3VDIwOjI4OjQ5LTA0OjAwXI6pegAAAABJRU5ErkJggg=="></td>
+      <td align="left" style="vertical-align:middle;padding:0;background-color:transparent"><img style="border:none;background-color:transparent;padding:0" src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAHQAAABUBAMAAAChGA4iAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAD1BMVEX////9/v2mpqby8vL///8shn5hAAAAAnRSTlMAAHaTzTgAAAABYktHRACIBR1IAAAAB3RJTUUH5AUHEQYhE+E6YgAAALhJREFUWMPt18sRhSAMBVBa0A4MHZD+e5MQfY9IHJCVM964MZLDJ6wM4VuxjAfRpi/PaWRQUFBQUFBQUFBQUNASK5GbjlBObvqE6o+NoSRbGKC6jEmjJG+icjyH5i4TdagMe5Q5skd/N6cz31MZv1BOinXmY4cOlaehulBF5YMss83Sf+rS3LtCVzlJRW3q0iiw7uJBz85Ql+YSU5vO6tSl19pZWo5vUoeWW25omzr0tvatlCYifCt2Tl1eX60TqsYAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjAtMDUtMDdUMjE6MDY6MzMtMDQ6MDAYVRdmAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIwLTA1LTA3VDIxOjA2OjMzLTA0OjAwaQiv2gAAAABJRU5ErkJggg=="></td>
       <td align="center">35
 (0.02%)</td>
     </tr>
@@ -3840,7 +4091,7 @@ range : 12y 11m 13d</td>
       <td align="left">1. Business
 2. Individual</td>
       <td align="left" style="padding:0;vertical-align:middle"><table style="border-collapse:collapse;border:none;margin:0"><tr style="background-color:transparent"><td style="padding:0 5px 0 7px;margin:0;border:0" align="right">130091</td><td style="padding:0 2px 0 0;border:0;" align="left">(</td><td style="padding:0;border:0" align="right">63.9%</td><td style="padding:0 4px 0 2px;border:0" align="left">)</td></tr><tr style="background-color:transparent"><td style="padding:0 5px 0 7px;margin:0;border:0" align="right">73338</td><td style="padding:0 2px 0 0;border:0;" align="left">(</td><td style="padding:0;border:0" align="right">36.0%</td><td style="padding:0 4px 0 2px;border:0" align="left">)</td></tr></table></td>
-      <td align="left" style="vertical-align:middle;padding:0;background-color:transparent"><img style="border:none;background-color:transparent;padding:0" src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAFQAAAAtBAMAAADCaFH7AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAD1BMVEX////9/v2mpqb39/f///+DdZCQAAAAAnRSTlMAAHaTzTgAAAABYktHRACIBR1IAAAAB3RJTUUH5AUHEBwxv7m66gAAADlJREFUOMtjYBhaQIkIAFWqbEwQGI0qHVVKU6UkpFdBIgBNlWJzmyJ2pdhCYFTpqFK6KiUhvQ4VAABgNM6WR7DE4wAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMC0wNS0wN1QyMDoyODo0OS0wNDowMC3TEcYAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjAtMDUtMDdUMjA6Mjg6NDktMDQ6MDBcjql6AAAAAElFTkSuQmCC"></td>
+      <td align="left" style="vertical-align:middle;padding:0;background-color:transparent"><img style="border:none;background-color:transparent;padding:0" src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAFQAAAAtBAMAAADCaFH7AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAD1BMVEX////9/v2mpqb39/f///+DdZCQAAAAAnRSTlMAAHaTzTgAAAABYktHRACIBR1IAAAAB3RJTUUH5AUHEQYhE+E6YgAAADlJREFUOMtjYBhaQIkIAFWqbEwQGI0qHVVKU6UkpFdBIgBNlWJzmyJ2pdhCYFTpqFK6KiUhvQ4VAABgNM6WR7DE4wAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMC0wNS0wN1QyMTowNjozMy0wNDowMBhVF2YAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjAtMDUtMDdUMjE6MDY6MzMtMDQ6MDBpCK/aAAAAAElFTkSuQmCC"></td>
       <td align="center">0
 (0%)</td>
     </tr>
@@ -3849,9 +4100,9 @@ range : 12y 11m 13d</td>
 </div>
 </div>
 </div>
-</div>
 <div id="borough-breakdown" class="section level2">
 <h2>Borough Breakdown</h2>
+<p>Looking at the license data, there were noticeable anomalies of bad data. At times observations, a license record, did not have a valid zip code and/or city listed for address. The following is a look at the unique zip codes and cities in the data.</p>
 <pre class="r"><code># List the unique cities
 cities &lt;- subset(data, Address.State == &quot;NY&quot;,
                   select=c(Address.City)) 
@@ -3879,6 +4130,7 @@ unique(zipcodes)</code></pre>
 </div>
 <div id="conclusion" class="section level1">
 <h1>Conclusion</h1>
+<p>I learned this from the project.</p>
 </div>
 
 

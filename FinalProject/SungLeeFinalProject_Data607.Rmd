@@ -249,19 +249,25 @@ resessionData
 
 
 <div style="margin-bottom:50px;"></div>
-## Zip Codes and NYC
-NYC consists of five boroughs: the Bronx, Brooklyn, Manhattan (aka New York), Queens, and Staten Island. Queens can be broken down into its old village system where cities are listed as such villages as Jackson Heights, Elmhurst, and Forest Hills. I decided that I needed a one-to-one mapping of zip code to borough to better represent the data. For this, I consulted the web site: https://www.health.ny.gov/statistics/cancer/registry/appendix/neighborhoods.htm that breaks down zip codes into the associated borough. This page was downloaded and saved on my Github.
+## NYC Zip Codes  
+
+NYC consists of five boroughs: the Bronx, Brooklyn, Manhattan (aka New York), Queens, and Staten Island. Queens can be broken down into its old village system where cities are listed as such villages as Jackson Heights, Elmhurst, and Forest Hills. I decided that I needed a one-to-one mapping of zip code to borough to better represent the data. For this, I consulted the web site: https://www.nycbynatives.com/nyc_info/new_york_city_zip_codes.php that breaks down zip codes into the associated borough. This page was downloaded and saved on my Github.
+
+```{r, results = "markup"}
+healthHTML <- read_html("https://www.nycbynatives.com/nyc_info/new_york_city_zip_codes.php")
+tbls <- html_nodes(healthHTML, "table")
+zip <- html_table(tbls)
+zip
+
+```
 
 
 
+<div style="margin-bottom:50px;"></div> 
 
-<div style="margin-bottom:50px;"></div>
 # Analysis {.tabset}
 In this section we will look through to see what insights we can gleam from our NYC license data.
 
-
-
-## Summary Tools
 
 This is a view of the frequency for the `Industry` variable of the license data.
 
@@ -307,10 +313,8 @@ unique(zipcodes)
 
 
 
-
-
-
-
-
 <div style="margin-bottom:50px;"></div>
-# Conclusion
+# Conclusion  
+
+I learned this from the project.
+
