@@ -1,0 +1,12 @@
+name: NYCLicenses
+title: NYCLicenses
+username:
+account: logicalschema
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2271884
+bundleId: 3126136
+url: https://logicalschema.shinyapps.io/NYCLicenses/
+when: 1589085804.8332
+asMultiple: FALSE
+asStatic: FALSE

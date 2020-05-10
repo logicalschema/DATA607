@@ -44,7 +44,8 @@ library(rvest)
 library(lubridate)
 library(tidyverse)
 library(summarytools)
-
+library(ggplot2)
+library(leaflet)
 
 # For summarytools package
 opts_chunk$set(results = 'asis',      
@@ -74,6 +75,8 @@ This section will go over how the data was imported for use in R.
 <div style="margin-bottom:50px;"></div>
 ## NYC Zip Codes  
 
+![](https://github.com/logicalschema/DATA607/raw/master/FinalProject/boroughs.jpg)
+
 NYC consists of five boroughs: the Bronx, Brooklyn, Manhattan (aka New York), Queens, and Staten Island. Queens can be broken down into its old village system where cities are listed as such villages as Jackson Heights, Elmhurst, and Forest Hills. I decided that I needed a one-to-one mapping of zip code to borough to better represent the data. For this, I consulted the web site: https://www.nycbynatives.com/nyc_info/new_york_city_zip_codes.php that breaks down zip codes into the associated borough. This page was downloaded and saved on my Github. 
 
 ```{r, results="markdown"}
@@ -81,13 +84,34 @@ zipHTML <- read_html("https://raw.githubusercontent.com/logicalschema/DATA607/ma
 tbls <- html_nodes(zipHTML, "table")
 zip <- as.data.frame(html_table(tbls))
 zip <- zip[, -c(3)]
-zipcode <- c(zip$X1, zip$x4)
-borough <- c(zip$x2, zip$X5)
-zipcodes <- as.data.frame(cbind(zipcode, borough))
+zipcode <- zip$X1
+zipcode <- c(zipcode, zip$X4)
+borough <- zip$X2
+borough <- c(borough, zip$X5)
+zipcodes <- cbind(zipcode, borough)
+zipcodes <- as.data.frame(zipcodes)
+zipcodes <- distinct(zipcodes, zipcode, .keep_all = TRUE)
 zipcodes$borough <- str_replace(zipcodes$borough, 'Staten', 'Staten Island')
 
 # zipcodes dataframe matches zip codes with the appropriate borough
 zipcodes
+
+
+```
+
+The dataframe `zipcodes` has a mapping of zip codes to their corresponding borough. This will be used for the import of te NYC OpenData to map valid zip codes with their corresponding borough.
+
+Here is map view of NYC using the `leaflet` library.
+```{r, fig.width=10, fig.height=10}
+# https://rstudio.github.io/leaflet/
+# https://maps.nyc.gov/tiles/leaflet-xyz.html
+# https://rpubs.com/jhofman/nycmaps
+
+m <- leaflet() %>%
+  addTiles() %>%  
+  addMarkers(lng=-73.989850, lat=40.748590, popup="<b>CUNY School of Professional Studies</b><br>119 W 31st Street<br>New York, NY 10001") %>% 
+  setView(lng = -73.98925, lat = 40.75039, zoom = 11)
+m  # Print the map
 ```
 
 
@@ -114,9 +138,9 @@ head(licenseData, 10)
 
 The imported table `licenseData` has these as columns: `r names(licenseData)`
 
-I will tidy up the data and take a subset of the information I need.
+I will tidy up the data and take a subset of the information I need. In the end of this section, I will use the data from `zipcodes` to populate a new column `Address.Borough` that will have the corresponding borough of the business address. For invalid zip codes, it will have `NA`.
 
-```{r data}
+```{r}
 
 # Remove unnecessary columns from the imported data 
 data <- subset(licenseData, select = -c(Contact.Phone.Number, 
@@ -162,6 +186,12 @@ data <- cbind(data, "Address.Borough" = tempzips)
 
 # A view of the data
 head(data, 10)
+
+
+# Remove before finalizing project
+write.csv(data,"data.csv", row.names = FALSE)
+
+
 ```
 
 We have the recession and NYC's data. We are ready to begin analysis.
@@ -282,9 +312,6 @@ resessionData
 ```
 
 
-
-
-
 <div style="margin-bottom:50px;"></div> 
 
 # Analysis {.tabset}
@@ -314,31 +341,110 @@ print(dfSummary(data[, c(1:5)], graph.magnif = 0.75), method = 'render')
 ```
 </div>
 
-## Borough Breakdown
 
-Looking at the license data, there were noticeable anomalies of bad data. At times observations, a license record, did not have a valid zip code and/or city listed for address. The following is a look at the unique zip codes and cities in the data.
+# Visuals {.tabset}
 
-```{r}
 
-# List the unique cities
-cities <- subset(data, Address.State == "NY",
-                  select=c(Address.City)) 
 
-unique(cities)
+## New Licenses Created by Year
 
-# List the unique zip codes
-zipcodes <- subset(data, Address.State == "NY",
-                  select=c(Address.ZIP)) 
+The following graph is the frequency of licenses created by year. 
 
-unique(zipcodes)
+```{r, fig.width=10, fig.height=11}
+
+
+# Histogram of licenses created by year
+freq <- data %>% 
+  mutate(year = as.numeric(format(License.Creation.Date, '%Y'))) %>%
+  group_by(year) %>% 
+  tally()
+
+# Basic barplot
+p <- ggplot(data=freq, aes(x=year, y=n)) + 
+  geom_bar(stat="identity", fill="steelblue") +
+  labs(title = "Frequency of Licenses by Year") + 
+  xlab("Year") +
+  ylab("Count")
+p
 
 
 ```
 
 
 
+## Bar Graph by Industry
+
+The following graph is the licenses created for industries.
+
+```{r, fig.width=10, fig.height=11}
+
+theme_set(theme_classic())
+
+# Histogram on a Categorical variable
+g <- ggplot(data, aes(Industry)) + coord_flip()
+g + geom_bar(aes(fill=Address.Borough), width = 0.5) + 
+  theme(axis.text.x = element_text(angle=65, vjust=0.6)) + 
+  labs(title="Histogram on Industry", 
+       subtitle="Industry across NYC Borough") 
+```
+
+
+
+
+## Circular Bargraph 
+
+The following graph depicts the frequency of licenses by industry for each of the 5 boroughs.
+
+```{r, fig.width=10,fig.height=11}
+
+# https://www.r-graph-gallery.com/295-basic-circular-barplot.html was used to assist in making the circular histogram
+data1 <- data.frame(
+  id=seq(1,59),
+  value=sample( seq(10,100), 59, replace=T)
+)
+
+data1 <- cbind(data1, "individual" = unique(data$Industry))
+
+# ----- This section prepare a dataframe for labels ---- #
+# Get the name and the y position of each label
+label_data <- data1
+ 
+# calculate the ANGLE of the labels
+number_of_bar <- nrow(label_data)
+angle <-  90 - 360 * (label_data$id-0.5) / number_of_bar     
+
+# calculate the alignment of labels: right or left
+# If I am on the left part of the plot, my labels have currently an angle < -90
+label_data$hjust<-ifelse( angle < -90, 1, 0)
+ 
+# flip angle BY to make them readable
+label_data$angle<-ifelse(angle < -90, angle+180, angle)
+# ----- ------------------------------------------- ---- #
+
+ 
+
+theme_set(theme_classic())
+
+# Histogram on a Categorical variable
+g <- ggplot(data, aes(Industry)) + ylim(-40,120) + coord_polar()
+g + geom_bar(aes(fill=Address.Borough), width = 0.5) + 
+
+  # Add the labels, using the label_data dataframe that we have created before
+  geom_text(data=label_data, 
+            aes(x=id, y=value+10, label=individual, hjust=hjust), 
+            color="black", fontface="bold",alpha=0.6, size=2.5, angle= label_data$angle, inherit.aes = FALSE ) +
+  
+ theme(
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+    panel.grid = element_blank()
+  )
+ 
+```
+
 <div style="margin-bottom:50px;"></div>
 # Conclusion  
 
-I learned this from the project.
+ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id mollis risus. Fusce sodales eros eget libero dapibus euismod. In luctus eros massa, vel lacinia dolor semper eu. Fusce nulla ipsum, mollis vel nisi a, pretium rhoncus sapien. Fusce ac sapien eu dolor fringilla placerat ut et velit. Proin massa odio, egestas quis pellentesque ut, tristique ut erat. Nam sit amet arcu ut quam commodo porta nec sed nulla. Vestibulum id elit non nibh mattis cursus. Integer auctor, ante a efficitur porta, lectus dui viverra massa, tincidunt hendrerit justo dolor id velit. Maecenas consectetur erat libero, vitae tincidunt lacus pellentesque in. Quisque mollis vehicula mi vel commodo. Duis faucibus purus ut eros efficitur sollicitudin eu id nisi. Donec orci justo, porta ut libero non, accumsan luctus quam. Proin facilisis, tellus ac ultricies finibus, sapien erat porttitor purus, eu pellentesque nunc ligula eu orci.
 
+Vivamus in enim ut felis pretium pulvinar. Nulla faucibus mi et mauris commodo aliquam. Nullam magna lorem, hendrerit ut est at, pharetra suscipit eros. Proin posuere ipsum viverra orci luctus, et semper lacus hendrerit. Nam ut eleifend augue. Sed nec eros non ante luctus viverra. Sed sit amet scelerisque nisi. Fusce tortor nunc, pretium non ex a, scelerisque finibus ex. Quisque viverra lobortis luctus. Morbi non sapien sit amet nisi congue volutpat ut ac neque. Integer et lobortis justo. Donec vulputate nisl id ex lobortis, rhoncus elementum sem auctor. Aliquam erat volutpat. Nullam id sapien pharetra, aliquam nisl non, placerat dolor. 
