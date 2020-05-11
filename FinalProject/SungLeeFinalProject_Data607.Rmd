@@ -311,6 +311,8 @@ resessionData
 
 ```
 
+It looks like that the only usable dates for recessions in relation to the NYC OpenData are the recessions in 2001 and 2007. Specifically, the recessions for the periods of ***March 2001 to November 2001*** and ***December 2007 to June 2009***. OpenData did not have consistent valid data until 1998.
+
 
 <div style="margin-bottom:50px;"></div> 
 
@@ -342,9 +344,18 @@ print(dfSummary(data[, c(1:5)], graph.magnif = 0.75), method = 'render')
 </div>
 
 
+## 2001
+
+
+
+## 2007 to 2009
+
+
+
+
 # Visuals {.tabset}
 
-
+This section has some graphical representations of the data. 
 
 ## New Licenses Created by Year
 
@@ -442,6 +453,16 @@ g + geom_bar(aes(fill=Address.Borough), width = 0.5) +
   )
  
 ```
+
+
+
+## Shiny App 
+
+![](https://raw.githubusercontent.com/logicalschema/DATA607/master/FinalProject/shinyapp.png)  
+
+A small app was constructed to understand the data by year and borough. It is located here: https://logicalschema.shinyapps.io/NYCLicenses/
+
+
 
 <div style="margin-bottom:50px;"></div>
 # Conclusion  
