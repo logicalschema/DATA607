@@ -67,6 +67,56 @@ cleanHTML <- function(x) {
 
 ```
 
+```{r, echo=FALSE}
+# From: http://www.cookbook-r.com/Graphs/Multiple_graphs_on_one_page_(ggplot2)/
+# Multiple plot function
+#
+# ggplot objects can be passed in ..., or to plotlist (as a list of ggplot objects)
+# - cols:   Number of columns in layout
+# - layout: A matrix specifying the layout. If present, 'cols' is ignored.
+#
+# If the layout is something like matrix(c(1,2,3,3), nrow=2, byrow=TRUE),
+# then plot 1 will go in the upper left, 2 will go in the upper right, and
+# 3 will go all the way across the bottom.
+#
+multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
+  library(grid)
+
+  # Make a list from the ... arguments and plotlist
+  plots <- c(list(...), plotlist)
+
+  numPlots = length(plots)
+
+  # If layout is NULL, then use 'cols' to determine layout
+  if (is.null(layout)) {
+    # Make the panel
+    # ncol: Number of columns of plots
+    # nrow: Number of rows needed, calculated from # of cols
+    layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),
+                    ncol = cols, nrow = ceiling(numPlots/cols))
+  }
+
+ if (numPlots==1) {
+    print(plots[[1]])
+
+  } else {
+    # Set up the page
+    grid.newpage()
+    pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout))))
+
+    # Make each plot, in the correct location
+    for (i in 1:numPlots) {
+      # Get the i,j matrix positions of the regions that contain this subplot
+      matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
+
+      print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
+                                      layout.pos.col = matchidx$col))
+    }
+  }
+}
+
+```
+
 <div style="margin-bottom:50px;"></div>
 # Import {.tabset}
 This section will go over how the data was imported for use in R. 
@@ -343,13 +393,214 @@ print(dfSummary(data[, c(1:5)], graph.magnif = 0.75), method = 'render')
 ```
 </div>
 
+<div style="margin-bottom:60px;"></div>
+## 2001: Tobacco and Tow Trucks
 
-## 2001
+Looking at the top 10 industries for new licenses in 2001 for the five boroughs: 
+
+* "Tobacco Retail Dealer" licenses were the most frequent across the five boroughs
+* "Home Improvement Salesperson and Contractor" were top industries for Brooklyn and Staten Island.
+* "Tow Truck Driver" was in the top 10 for all the boroughs except for Manhattan.
+
+![](https://raw.githubusercontent.com/logicalschema/DATA607/master/FinalProject/analysis/bronx_2001.png)
+
+![](https://raw.githubusercontent.com/logicalschema/DATA607/master/FinalProject/analysis/brooklyn_2001.png)
+![](https://raw.githubusercontent.com/logicalschema/DATA607/master/FinalProject/analysis/manhattan_2001.png)
+![](https://raw.githubusercontent.com/logicalschema/DATA607/master/FinalProject/analysis/queens_2001.png)
+![](https://raw.githubusercontent.com/logicalschema/DATA607/master/FinalProject/analysis/staten_island_2001.png)
 
 
-
+<div style="margin-bottom:60px;"></div>
 ## 2007 to 2009
 
+```{r, echo = FALSE, warning=FALSE, message=FALSE, fig.width=10, fig.height=11}
+
+# Histogram of licenses created by industry for a specific year by top 10 industry
+      freq2 <- data[as.numeric(format(data$License.Creation.Date, "%Y")) %in% c(2007:2009) & 
+                      data$Address.Borough %in% c("Bronx", "Brooklyn", "Manhattan", "Queens", "Staten Island"), ] %>%
+        group_by(Industry) %>%
+        tally() %>%
+        drop_na(Industry) %>%
+        top_n(10)
+
+
+      # Basic barplot for top 10 Industry licenses by Borough for the selected Year
+      q <- ggplot(data=freq2, aes(x=Industry, y=n)) + 
+        coord_flip() +
+        geom_bar(stat="identity", fill="#E65722") + 
+        labs(title = "2007 - 2009 Top Industry Licenses") + 
+        xlab("Industry") +
+        ylab("Count")
+      
+      q
+      
+      
+      # Top 10 for the Bronx 2007-2009
+      bronx <- data[as.numeric(format(data$License.Creation.Date, "%Y")) %in% c(2007:2009) & 
+                      data$Address.Borough == "Bronx", ] %>%
+      group_by(Industry) %>%
+      tally() %>%
+      drop_na(Industry) %>%
+      top_n(10)
+      
+      p1 <- ggplot(data=bronx, aes(x=Industry, y=n)) + 
+        coord_flip() +
+        geom_bar(stat="identity", fill="#005DAA") + 
+        labs(title = "2007 - 2009: Bronx") + 
+        xlab("Industry") +
+        ylab("Count")
+      
+       # Top 10 for the Brooklyn 2007-2009
+      brooklyn <- data[as.numeric(format(data$License.Creation.Date, "%Y")) %in% c(2007:2009) & 
+                      data$Address.Borough == "Brooklyn", ] %>%
+      group_by(Industry) %>%
+      tally() %>%
+      drop_na(Industry) %>%
+      top_n(10)
+      
+      p2 <- ggplot(data=brooklyn, aes(x=Industry, y=n)) + 
+        coord_flip() +
+        geom_bar(stat="identity", fill="#005DAA") + 
+        labs(title = "2007 - 2009: Brooklyn") + 
+        xlab("Industry") +
+        ylab("Count")
+      
+
+       # Top 10 for Manhattan 2007-2009
+      manhattan <- data[as.numeric(format(data$License.Creation.Date, "%Y")) %in% c(2007:2009) & 
+                      data$Address.Borough == "Manhattan", ] %>%
+      group_by(Industry) %>%
+      tally() %>%
+      drop_na(Industry) %>%
+      top_n(10)
+      
+      p3 <- ggplot(data=manhattan, aes(x=Industry, y=n)) + 
+        coord_flip() +
+        geom_bar(stat="identity", fill="#005DAA") + 
+        labs(title = "2007 - 2009: Manhattan") + 
+        xlab("Industry") +
+        ylab("Count")
+      
+      # Top 10 for Queens 2007-2009
+      queens <- data[as.numeric(format(data$License.Creation.Date, "%Y")) %in% c(2007:2009) & 
+                      data$Address.Borough == "Queens", ] %>%
+      group_by(Industry) %>%
+      tally() %>%
+      drop_na(Industry) %>%
+      top_n(10)
+      
+      p4 <- ggplot(data=queens, aes(x=Industry, y=n)) + 
+        coord_flip() +
+        geom_bar(stat="identity", fill="#005DAA") + 
+        labs(title = "2007 - 2009: Queens") + 
+        xlab("Industry") +
+        ylab("Count")
+      
+      
+      # Top 10 for Staten Island 2007-2009
+      staten_island <- data[as.numeric(format(data$License.Creation.Date, "%Y")) %in% c(2007:2009) & 
+                      data$Address.Borough == "Staten Island", ] %>%
+      group_by(Industry) %>%
+      tally() %>%
+      drop_na(Industry) %>%
+      top_n(10)
+      
+      p5 <- ggplot(data=staten_island, aes(x=Industry, y=n)) + 
+        coord_flip() +
+        geom_bar(stat="identity", fill="#005DAA") + 
+        labs(title = "2007 - 2009: Staten Island") + 
+        xlab("Industry") +
+        ylab("Count")
+      
+      multiplot(p1, p2, p3, p4, p5, cols=2)
+
+```
+
+
+<div style="margin-bottom:60px;"></div>
+## 2019 
+```{r, echo = FALSE, warning=FALSE, message=FALSE, fig.width=10, fig.height=11}
+     # Top 10 for the Bronx 2019
+      bronx <- data[as.numeric(format(data$License.Creation.Date, "%Y")) == 2019 & 
+                      data$Address.Borough == "Bronx", ] %>%
+      group_by(Industry) %>%
+      tally() %>%
+      drop_na(Industry) %>%
+      top_n(10)
+      
+      p1 <- ggplot(data=bronx, aes(x=Industry, y=n)) + 
+        coord_flip() +
+        geom_bar(stat="identity", fill="#FFB60F") + 
+        labs(title = "2019: Bronx") + 
+        xlab("Industry") +
+        ylab("Count")
+      
+       # Top 10 for Brooklyn 2019
+      brooklyn <- data[as.numeric(format(data$License.Creation.Date, "%Y")) == 2019 & 
+                      data$Address.Borough == "Brooklyn", ] %>%
+      group_by(Industry) %>%
+      tally() %>%
+      drop_na(Industry) %>%
+      top_n(10)
+      
+      p2 <- ggplot(data=brooklyn, aes(x=Industry, y=n)) + 
+        coord_flip() +
+        geom_bar(stat="identity", fill="#FFB60F") + 
+        labs(title = "2019: Brooklyn") + 
+        xlab("Industry") +
+        ylab("Count")
+      
+
+       # Top 10 for Manhattan 2019
+      manhattan <- data[as.numeric(format(data$License.Creation.Date, "%Y")) == 2019 & 
+                      data$Address.Borough == "Manhattan", ] %>%
+      group_by(Industry) %>%
+      tally() %>%
+      drop_na(Industry) %>%
+      top_n(10)
+      
+      p3 <- ggplot(data=manhattan, aes(x=Industry, y=n)) + 
+        coord_flip() +
+        geom_bar(stat="identity", fill="#FFB60F") + 
+        labs(title = "2019: Manhattan") + 
+        xlab("Industry") +
+        ylab("Count")
+      
+      # Top 10 for Queens 2019
+      queens <- data[as.numeric(format(data$License.Creation.Date, "%Y")) == 2019 & 
+                      data$Address.Borough == "Queens", ] %>%
+      group_by(Industry) %>%
+      tally() %>%
+      drop_na(Industry) %>%
+      top_n(10)
+      
+      p4 <- ggplot(data=queens, aes(x=Industry, y=n)) + 
+        coord_flip() +
+        geom_bar(stat="identity", fill="#FFB60F") + 
+        labs(title = "2019: Queens") + 
+        xlab("Industry") +
+        ylab("Count")
+      
+      
+      # Top 10 for Staten Island 2019
+      staten_island <- data[as.numeric(format(data$License.Creation.Date, "%Y")) == 2019 & 
+                      data$Address.Borough == "Staten Island", ] %>%
+      group_by(Industry) %>%
+      tally() %>%
+      drop_na(Industry) %>%
+      top_n(10)
+      
+      p5 <- ggplot(data=staten_island, aes(x=Industry, y=n)) + 
+        coord_flip() +
+        geom_bar(stat="identity", fill="#FFB60F") + 
+        labs(title = "2019: Staten Island") + 
+        xlab("Industry") +
+        ylab("Count")
+      
+      multiplot(p1, p2, p3, p4, p5, cols=2)
+
+
+```
 
 
 
@@ -467,6 +718,9 @@ A small app was constructed to understand the data by year and borough. It is lo
 <div style="margin-bottom:50px;"></div>
 # Conclusion  
 
- Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id mollis risus. Fusce sodales eros eget libero dapibus euismod. In luctus eros massa, vel lacinia dolor semper eu. Fusce nulla ipsum, mollis vel nisi a, pretium rhoncus sapien. Fusce ac sapien eu dolor fringilla placerat ut et velit. Proin massa odio, egestas quis pellentesque ut, tristique ut erat. Nam sit amet arcu ut quam commodo porta nec sed nulla. Vestibulum id elit non nibh mattis cursus. Integer auctor, ante a efficitur porta, lectus dui viverra massa, tincidunt hendrerit justo dolor id velit. Maecenas consectetur erat libero, vitae tincidunt lacus pellentesque in. Quisque mollis vehicula mi vel commodo. Duis faucibus purus ut eros efficitur sollicitudin eu id nisi. Donec orci justo, porta ut libero non, accumsan luctus quam. Proin facilisis, tellus ac ultricies finibus, sapien erat porttitor purus, eu pellentesque nunc ligula eu orci.
+I was not able to reach a conclusion with regards to finding a causal relationship between recessions and license data. There were only two recessions within the scope of the Open NYC Data. In the future, I would like to cross reference minority owned businesses and borough. I did enjoy learning how to use Shiny but was unable to reach conclusive observations about the data.
 
-Vivamus in enim ut felis pretium pulvinar. Nulla faucibus mi et mauris commodo aliquam. Nullam magna lorem, hendrerit ut est at, pharetra suscipit eros. Proin posuere ipsum viverra orci luctus, et semper lacus hendrerit. Nam ut eleifend augue. Sed nec eros non ante luctus viverra. Sed sit amet scelerisque nisi. Fusce tortor nunc, pretium non ex a, scelerisque finibus ex. Quisque viverra lobortis luctus. Morbi non sapien sit amet nisi congue volutpat ut ac neque. Integer et lobortis justo. Donec vulputate nisl id ex lobortis, rhoncus elementum sem auctor. Aliquam erat volutpat. Nullam id sapien pharetra, aliquam nisl non, placerat dolor. 
+
+
+
+
