@@ -1,20 +1,23 @@
 library(shiny)
 
 # Define server logic required to draw a histogram
+# boroughData <- c(Boro, Latitude, Longitude)
 shinyServer(function(input, output, session) {
 
-    output$nycmap <- renderLeaflet({
-        leaflet() %>% 
-            addTiles() %>%
-            setView(lng = -73.98925, lat = 40.75039, zoom = 11)
+    output$nycmap <- renderLeaflet({ 
+      leaflet() %>% 
+        addTiles() %>% 
+        setView(lng = -73.98925, lat = 40.75039, zoom = 11) %>% 
+        addMarkers(lat = 40.748367, lng = -73.990044, popup = "<B>CUNY SPS</B><br>119 W 31st Street<br>New York, NY 10001") %>%
+        addMarkers(data = boroughData, 
+                   lat = Latitude, 
+                   lng = Longitude, 
+                   popup = Boro)
     })
     
-
     
     
     output$distPlot <- renderPlot({
-      
-      
       withProgress(message = 'Calculations in progress',
                    detail = 'This may take a while...', value = 0, {
                      for (i in 1:15) {
@@ -66,6 +69,8 @@ shinyServer(function(input, output, session) {
       
       
     })
+    
+    
     
 })
 

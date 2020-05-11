@@ -368,6 +368,7 @@ p <- ggplot(data=freq, aes(x=year, y=n)) +
 p
 
 
+
 ```
 
 

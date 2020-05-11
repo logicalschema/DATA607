@@ -13,32 +13,6 @@ navbarPage(
     )
   ), 
 
-           tabPanel("Map", inputId = 'mapViewTab',
-                    div(class='outer',
-                        leafletOutput('nycmap', width = '100%', height = '600')
-                    ),
-                    
-                    # Panel options: 
-                    absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE,
-                                  draggable = TRUE, top = 60, left = "auto", right = 20, bottom = "auto",
-                                  width = 330, height = "auto",
-                                  
-                                  fluidRow(
-                                      column(6,
-                                             selectInput(inputId = 'mapYear',
-                                                         label = h4('Year'),
-                                                         choices = Year,
-                                                         selected = 2020)),
-                                      column(6,
-                                             selectInput(inputId = 'mapBoro',
-                                                         label = h4('Borough'),
-                                                         choices = Boro,
-                                                         selected = 'Brooklyn'))
-                                  )
-                                  
-                    )
-                    
-           ),
            
            tabPanel("Comparison", inputId = 'comparisonViewTab',
                     
@@ -67,7 +41,30 @@ navbarPage(
                         plotOutput("yearPlot")
                       )
                     )
-            )
+            ), 
+  
+  
+  tabPanel("Map", inputId = 'mapViewTab',
+           div(class='outer',
+               leafletOutput('nycmap', width = '100%', height = '600')
+           ),
+           
+           # Panel options: 
+           absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE,
+                         draggable = TRUE, top = 50, left = "auto", right = 20, bottom = "auto",
+                         width = 150, height = "auto",
+                         
+                         selectInput(inputId = 'mapYear',
+                                     label = h4('Year'),
+                                     choices = Year,
+                                     selected = 2020)
+                         
+                         
+           )
+           
+           
+           
+  )
            
            
            
