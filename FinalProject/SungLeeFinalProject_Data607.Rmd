@@ -417,7 +417,8 @@ Looking at the top 10 industries for new licenses in 2001 for the five boroughs:
 
 # Histogram of licenses created by industry for a specific year by top 10 industry
       freq2 <- data[as.numeric(format(data$License.Creation.Date, "%Y")) %in% c(2007:2009) & 
-                      data$Address.Borough %in% c("Bronx", "Brooklyn", "Manhattan", "Queens", "Staten Island"), ] %>%
+                      data$Address.Borough %in% c("Bronx", "Brooklyn", "Manhattan", "Queens", "Staten Island") & 
+                      data$License.Status == "Active", ] %>%
         group_by(Industry) %>%
         tally() %>%
         drop_na(Industry) %>%
@@ -437,7 +438,8 @@ Looking at the top 10 industries for new licenses in 2001 for the five boroughs:
       
       # Top 10 for the Bronx 2007-2009
       bronx <- data[as.numeric(format(data$License.Creation.Date, "%Y")) %in% c(2007:2009) & 
-                      data$Address.Borough == "Bronx", ] %>%
+                      data$Address.Borough == "Bronx" & 
+                      data$License.Status == "Active", ] %>%
       group_by(Industry) %>%
       tally() %>%
       drop_na(Industry) %>%
@@ -452,7 +454,8 @@ Looking at the top 10 industries for new licenses in 2001 for the five boroughs:
       
        # Top 10 for the Brooklyn 2007-2009
       brooklyn <- data[as.numeric(format(data$License.Creation.Date, "%Y")) %in% c(2007:2009) & 
-                      data$Address.Borough == "Brooklyn", ] %>%
+                      data$Address.Borough == "Brooklyn" &
+                      data$License.Status == "Active", ] %>%
       group_by(Industry) %>%
       tally() %>%
       drop_na(Industry) %>%
@@ -468,7 +471,8 @@ Looking at the top 10 industries for new licenses in 2001 for the five boroughs:
 
        # Top 10 for Manhattan 2007-2009
       manhattan <- data[as.numeric(format(data$License.Creation.Date, "%Y")) %in% c(2007:2009) & 
-                      data$Address.Borough == "Manhattan", ] %>%
+                      data$Address.Borough == "Manhattan" &
+                      data$License.Status == "Active", ] %>%
       group_by(Industry) %>%
       tally() %>%
       drop_na(Industry) %>%
@@ -483,7 +487,8 @@ Looking at the top 10 industries for new licenses in 2001 for the five boroughs:
       
       # Top 10 for Queens 2007-2009
       queens <- data[as.numeric(format(data$License.Creation.Date, "%Y")) %in% c(2007:2009) & 
-                      data$Address.Borough == "Queens", ] %>%
+                      data$Address.Borough == "Queens" &
+                      data$License.Status == "Active", ] %>%
       group_by(Industry) %>%
       tally() %>%
       drop_na(Industry) %>%
@@ -499,7 +504,8 @@ Looking at the top 10 industries for new licenses in 2001 for the five boroughs:
       
       # Top 10 for Staten Island 2007-2009
       staten_island <- data[as.numeric(format(data$License.Creation.Date, "%Y")) %in% c(2007:2009) & 
-                      data$Address.Borough == "Staten Island", ] %>%
+                      data$Address.Borough == "Staten Island" &
+                      data$License.Status == "Active", ] %>%
       group_by(Industry) %>%
       tally() %>%
       drop_na(Industry) %>%
@@ -522,7 +528,8 @@ Looking at the top 10 industries for new licenses in 2001 for the five boroughs:
 ```{r, echo = FALSE, warning=FALSE, message=FALSE, fig.width=10, fig.height=11}
      # Top 10 for the Bronx 2019
       bronx <- data[as.numeric(format(data$License.Creation.Date, "%Y")) == 2019 & 
-                      data$Address.Borough == "Bronx", ] %>%
+                      data$Address.Borough == "Bronx" &
+                      data$License.Status == "Active", ] %>%
       group_by(Industry) %>%
       tally() %>%
       drop_na(Industry) %>%
@@ -537,7 +544,8 @@ Looking at the top 10 industries for new licenses in 2001 for the five boroughs:
       
        # Top 10 for Brooklyn 2019
       brooklyn <- data[as.numeric(format(data$License.Creation.Date, "%Y")) == 2019 & 
-                      data$Address.Borough == "Brooklyn", ] %>%
+                      data$Address.Borough == "Brooklyn" &
+                      data$License.Status == "Active", ] %>%
       group_by(Industry) %>%
       tally() %>%
       drop_na(Industry) %>%
@@ -553,7 +561,8 @@ Looking at the top 10 industries for new licenses in 2001 for the five boroughs:
 
        # Top 10 for Manhattan 2019
       manhattan <- data[as.numeric(format(data$License.Creation.Date, "%Y")) == 2019 & 
-                      data$Address.Borough == "Manhattan", ] %>%
+                      data$Address.Borough == "Manhattan" &
+                      data$License.Status == "Active", ] %>%
       group_by(Industry) %>%
       tally() %>%
       drop_na(Industry) %>%
@@ -568,7 +577,8 @@ Looking at the top 10 industries for new licenses in 2001 for the five boroughs:
       
       # Top 10 for Queens 2019
       queens <- data[as.numeric(format(data$License.Creation.Date, "%Y")) == 2019 & 
-                      data$Address.Borough == "Queens", ] %>%
+                      data$Address.Borough == "Queens" &
+                      data$License.Status == "Active", ] %>%
       group_by(Industry) %>%
       tally() %>%
       drop_na(Industry) %>%
@@ -584,7 +594,8 @@ Looking at the top 10 industries for new licenses in 2001 for the five boroughs:
       
       # Top 10 for Staten Island 2019
       staten_island <- data[as.numeric(format(data$License.Creation.Date, "%Y")) == 2019 & 
-                      data$Address.Borough == "Staten Island", ] %>%
+                      data$Address.Borough == "Staten Island" &
+                      data$License.Status == "Active", ] %>%
       group_by(Industry) %>%
       tally() %>%
       drop_na(Industry) %>%
@@ -616,7 +627,7 @@ The following graph is the frequency of licenses created by year.
 
 
 # Histogram of licenses created by year
-freq <- data %>% 
+freq <- data %>% filter(License.Status == "Active") %>%
   mutate(year = as.numeric(format(License.Creation.Date, '%Y'))) %>%
   group_by(year) %>% 
   tally()

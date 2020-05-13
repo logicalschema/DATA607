@@ -38,7 +38,7 @@ data$License.Creation.Date <- as.Date(data$License.Creation.Date, "%Y-%m-%d")
 data$License.Expiration.Date <- as.Date(data$License.Expiration.Date, "%Y-%m-%d")
 
 
-data <- data[ as.numeric(format(data$License.Creation.Date, "%Y")) >= 1998 , c("Industry","License.Creation.Date", "License.Expiration.Date", "Address.Borough")]
+data <- data[ as.numeric(format(data$License.Creation.Date, "%Y")) >= 1998, c("Industry", "License.Status", "License.Creation.Date", "License.Expiration.Date", "Address.Borough")]
 
 #year, Address.Borough, n
 tallyData <- data %>% 

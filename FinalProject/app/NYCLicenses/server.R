@@ -29,7 +29,7 @@ shinyServer(function(input, output, session) {
       yearselect <- input$mapYear2
       
       # Histogram of licenses created by year
-      freq <- data[data$Address.Borough == input$mapBoro2, ] %>% 
+      freq <- data[data$Address.Borough == input$mapBoro2 & data$License.Status == "Active", ] %>% 
         mutate(year = as.numeric(format(License.Creation.Date, "%Y"))) %>%
         group_by(year) %>% 
         tally()
@@ -50,7 +50,7 @@ shinyServer(function(input, output, session) {
     
     output$yearPlot <- renderPlot({
       # Histogram of licenses created by industry for a specific year by top 10 industry
-      freq2 <- data[as.numeric(format(data$License.Creation.Date, "%Y")) == input$mapYear2 & data$Address.Borough == input$mapBoro2, ] %>%
+      freq2 <- data[as.numeric(format(data$License.Creation.Date, "%Y")) == input$mapYear2 & data$License.Status == "Active" & data$Address.Borough == input$mapBoro2, ] %>%
         group_by(Industry) %>%
         tally() %>%
         drop_na(Industry) %>%
