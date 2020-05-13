@@ -722,6 +722,8 @@ g + geom_bar(aes(fill=Address.Borough), width = 0.5) +
 
 ![](https://raw.githubusercontent.com/logicalschema/DATA607/master/FinalProject/shinyapp.png)  
 
+
+
 A small app was constructed to understand the data by year and borough. It is located here: https://logicalschema.shinyapps.io/NYCLicenses/
 
 
@@ -729,7 +731,10 @@ A small app was constructed to understand the data by year and borough. It is lo
 <div style="margin-bottom:50px;"></div>
 # Conclusion  
 
-I was not able to reach a conclusion with regards to finding a causal relationship between recessions and license data. There were only two recessions within the scope of the Open NYC Data. In the future, I would like to cross reference minority owned businesses and borough. I did enjoy learning how to use Shiny but was unable to reach conclusive observations about the data.
+I was not able to reach a conclusion with regards to finding a causal relationship between recessions and license data. There were only two recessions within the scope of the Open NYC Data. Overall, it seemed that NYC's license applications climbed within a year of a recession. Business licenses such as contractors and those associated with real estate flourished during downturns. In the future, I would like to cross reference minority owned businesses and borough in addition to a review of average mortgage applications.
+
+I did enjoy learning how to use Shiny but was unable to reach conclusive observations about the data. 
+
 
 
 
